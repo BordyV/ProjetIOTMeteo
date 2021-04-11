@@ -1,1 +1,11 @@
 # ProjetIOTMeteo
+
+
+DESCRIPTION
+
+
+PLAN
+
+ATTRIBUTION
+
+
