@@ -24,7 +24,7 @@ Interface ou l'on peut voir les donnees issus dautres reseaux.
 Creation d'alerte en fonction de la zone geographique et de la meteo.
 
 etape 4:
-Mise en place d'un systeme de qualité afin de verifier la certitude des donnees.
+Mise en place d'un systeme de qualité afin de verifier et lisser les donnees.
 
 ATTRIBUTION
 
