@@ -64,9 +64,12 @@ async function v0(){
 	//===============================================
 	// Connexion au broker MQTT distant
 	//
-	//const mqtt_url = 'http://192.168.1.11:1883'
-	const mqtt_url = 'http://broker.hivemq.com'
-	var client_mqtt = mqtt.connect(mqtt_url);
+	const mqtt_url = 'mqtt://127.0.0.1:1883'
+	//const mqtt_url = 'http://broker.hivemq.com'
+	var client_mqtt = mqtt.connect(mqtt_url, {
+		username: 'iot',
+		password: 'salutcestleprojetiot' 
+	});
 	
 	//===============================================
 	// Des la connexion, le serveur NodeJS s'abonne aux topics MQTT 
