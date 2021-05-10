@@ -7,8 +7,6 @@ const MeteoSchema = mongoose.Schema({
     altitude: String,
     lumiere: String,
     humidite: String
-}, {
-    timestamps: true
 });
 
-module.exports = mongoose.model('meteo', MeteoSchema);
+module.exports = mongoose.model('METEO_DATA', MeteoSchema,'METEO_DATA');

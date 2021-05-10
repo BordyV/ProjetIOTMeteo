@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
 });
 // Middlewares
 app.use(bodyParser.json());
-//app.use('/meteo', meteoRoutes);
+app.use('/meteo', meteoRoutes);
 
 
 // DB connection
