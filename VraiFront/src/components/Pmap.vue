@@ -57,8 +57,7 @@ import { LMap, LTileLayer, } from "vue2-leaflet";
 export default {
   name: "Pmap",
   
-   apikey:'e7c458aee407fe4d9be034c783939228',
-       url_base: 'https://api.openweathermap.org/data/2.5/',
+  
      
      
   components: {
@@ -68,6 +67,8 @@ export default {
   
   data() {
     return {
+       api_key:'d0f74ba55214c45401d7ae1941791222',
+       url_base: 'https://api.openweathermap.org/data/2.5/',
       esp: '',
   position:"",
       zoom: 13,
@@ -94,7 +95,7 @@ export default {
 
  
   mounted () {
-  this.dataEspFetcher();
+  //this.dataEspFetcher();
 }  ,
 
   methods: {
@@ -109,7 +110,7 @@ export default {
     }
   ,
     fetchWeather () {
-     
+     console.log(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
         fetch(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
           .then(res => {
             console.log(res, res.json())
