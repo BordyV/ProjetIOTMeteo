@@ -104,18 +104,18 @@ export default {
       await  fetch('http://localhost/meteo')
           .then(res => {
             console.log(res, res.json())
-            return res.json();
+          
           })
       
     }
   ,
-    fetchWeather () {
-     console.log(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
-        fetch(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
-          .then(res => {
-            console.log(res, res.json())
-            return res.json();
-          })
+    fetchWeather: async function () {
+        await fetch(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
+         .then(res => {
+          res.json().then(body => console.log(body));
+            
+
+    });
     },
     
    
