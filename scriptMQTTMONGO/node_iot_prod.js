@@ -31,7 +31,7 @@ async function listDatabases(client){
 // MongoDB cluster, call functions that query our database, and
 // disconnect from our cluster.
 async function v0(){
-    const mongoName = "lucioles"                   //Nom de la base
+    const mongoName = "METEO"                   //Nom de la base
     const mongoUri = 'mongodb://localhost:27017/'; //URL de connection		
     //const uri = 'mongodb://10.9.128.189:27017/'; //URL de connection		
     //const mongoUri = 'mongodb+srv://admin:admin@cluster0.qd2by.mongodb.net/test?retryWrites=true&w=majority';
