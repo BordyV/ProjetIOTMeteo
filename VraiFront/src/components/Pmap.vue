@@ -3,15 +3,15 @@
       
       
       <v-text-field
-      v-model="position"   label="Regular"
+      v-model="position" 
             placeholder="adresse"
           ></v-text-field>
 
- <v-text-field
+ <!-- <v-text-field
       v-model= "esp"
-            label="Regular"
+          
             placeholder="adresse d'un esp"
-          ></v-text-field>
+          ></v-text-field> -->
 
             <v-btn
       :disabled="!valid"
@@ -56,16 +56,24 @@ import { LMap, LTileLayer, } from "vue2-leaflet";
 
 export default {
   name: "Pmap",
-  position:"",
+  
+   apikey:'e7c458aee407fe4d9be034c783939228',
+       url_base: 'https://api.openweathermap.org/data/2.5/',
+     
+     
   components: {
     LMap,
     LTileLayer,
-   
   },
   
   data() {
     return {
+      esp: '',
+  position:"",
       zoom: 13,
+       weather: {},
+       dataEsp:{},
+     
       valid: true,
       center: latLng(47.41322, -1.219482),
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -84,11 +92,32 @@ export default {
     };
   },
 
- // mounted:async function(){
- //   await this.loca();
- // },
-  
+ 
+  mounted () {
+  this.dataEspFetcher();
+}  ,
+
   methods: {
+
+    dataEspFetcher: async function(){
+      await  fetch('http://localhost/meteo')
+          .then(res => {
+            console.log(res, res.json())
+            return res.json();
+          })
+      
+    }
+  ,
+    fetchWeather () {
+     
+        fetch(`${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`)
+          .then(res => {
+            console.log(res, res.json())
+            return res.json();
+          })
+    },
+    
+   
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
@@ -117,7 +146,7 @@ export default {
       })
      
      this.show= true;
-
+  this.fetchWeather();
     
     
   }
