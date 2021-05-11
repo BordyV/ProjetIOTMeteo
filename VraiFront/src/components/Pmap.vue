@@ -95,18 +95,19 @@ export default {
 
  
   mounted () {
-  //this.dataEspFetcher();
+  this.dataEspFetcher();
 }  ,
 
   methods: {
 
     dataEspFetcher: async function(){
-      await  fetch('http://localhost/meteo')
-          .then(res => {
-            console.log(res, res.json())
-          
-          })
-      
+      await  fetch('http://localhost:3000/meteo')
+         .then(res => {
+          res.json().then(body => {
+            console.log(body);
+            this.dataEsp = body;
+          });
+         });
     }
   ,
     fetchApiWeather: async function () {
