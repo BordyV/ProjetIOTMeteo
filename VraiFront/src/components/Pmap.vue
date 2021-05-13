@@ -68,9 +68,12 @@
         </div>
       </v-col>
       <v-col>
-        <div v-if="dataEsp">
-          <Pgraph v-bind:valEsp ="dataEsp"></Pgraph>
+        <div>
+          <v-card>
+            <Pgraph v-if="dataEsp" v-bind:valEsp="dataEsp"></Pgraph>
+          </v-card>
         </div>
+        <Pstat v-if="weather" v-bind:weatherbis="weather"></Pstat>
       </v-col>
     </v-row>
   </div>
@@ -85,6 +88,7 @@
 import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
+import Pstat from "./Pstat.vue";
 
 export default {
   name: "Pmap",
@@ -95,6 +99,7 @@ export default {
     LMarker,
     LPopup,
     Pgraph,
+    Pstat,
   },
 
   data() {
@@ -104,16 +109,8 @@ export default {
       esp: "",
       position: "",
       zoom: 13,
-      today: new Date(),
-      wind:"--",
-      city:"--",
-      temperature:"--",
-      humidity:"--",
-      latitude:"--",
-      longitude:"--",
-      tempicon:"",
-      weather: {},
-      dataEsp: {},
+      weather: undefined,
+      dataEsp: undefined,
       marker1: latLng(43.7101728, 7.2619532),
       markers: [
         {
@@ -133,11 +130,6 @@ export default {
           position: { lat: 50.7605, lng: -0.09 },
         },
       ],
-      forecast: [
-          { type: 'Temperature ressentie', icon: 'mdi-thermometer', value:"--"},
-          { type: 'Pression', icon: 'mdi-arrow-split-horizontal', value: '--' },
-        
-        ],
 
       valid: true,
       center: latLng(43.7101728, 7.2619532),
@@ -174,26 +166,6 @@ export default {
         res.json().then((body) => {
           console.log(body);
           this.weather = body;
-          this.temperature = this.weather.main.temp;
-          this.city = this.weather.name;
-          this.latitude = this.weather.coord.lat;
-          this.longitude = this.weather.coord.lon;
-          this.forecast[0].value = this.weather.main.feels_like +" \xB0";
-          this.humidity = this.weather.main.humidity +" %";
-          this.wind = this.weather.wind.speed +" km";
-          if(this.weather.weather[0].main == "Clouds"){
-            this.tempicon = "mdi-cloud";
-          }
-          else if (this.weather.weather[0].main == "Sunny"){
-            this.tempicon = "mdi-white-balance-sunny";
-          }
-          else if(this.weather.weather[0].main == "Rain"){
-            this.tempicon = "mdi-weather-pouring";
-          }
-          else if(this.weather.weather[0].main == "Snow"){
-            this.tempicon = "mdi-snowflake";
-          }
-          this.forecast[1].value = this.weather.main.pressure+" Pa";
         });
       });
     },
@@ -233,8 +205,4 @@ export default {
   width: 100%;
   height: 600px;
 }
-.card{
-  width: 50%;
-}
-
 </style>
