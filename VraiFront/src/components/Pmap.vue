@@ -83,11 +83,7 @@
            {{ temperature }} &deg;C
         </v-col>
         <v-col cols="6">
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/sun.png"
-            alt="Sunny image"
-            width="92"
-          ></v-img>
+          <v-icon class="icon"> {{tempicon}}</v-icon>
         </v-col>
       </v-row>
     </v-card-text>
@@ -160,6 +156,7 @@ export default {
       humidity:"--",
       latitude:"--",
       longitude:"--",
+      tempicon:"",
       weather: {},
       dataEsp: {},
       marker1: latLng(43.7101728, 7.2619532),
@@ -230,15 +227,18 @@ export default {
           this.humidity = this.weather.main.humidity +" %";
           this.wind = this.weather.wind.speed +" km";
           if(this.weather.weather[0].main == "Clouds"){
-            this.forecast[0].icon = "mdi-cloud";
+            this.tempicon = "mdi-cloud";
           }
-
-
+          else if (this.weather.weather[0].main == "Sunny"){
+            this.tempicon = "mdi-white-balance-sunny";
+          }
+          else if(this.weather.weather[0].main == "Rain"){
+            this.tempicon = "mdi-weather-pouring";
+          }
+          else if(this.weather.weather[0].main == "Snow"){
+            this.tempicon = "mdi-snowflake";
+          }
           this.forecast[1].value = this.weather.main.pressure+" Pa";
-
-
-
-          this.forecast[2].value = this.weather.coord.lat;
         });
       });
     },
@@ -283,4 +283,5 @@ export default {
 .card{
   width: 50%;
 }
+
 </style>
