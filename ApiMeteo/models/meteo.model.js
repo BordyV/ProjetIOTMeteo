@@ -9,4 +9,4 @@ const MeteoSchema = mongoose.Schema({
     humidite: String
 });
 
-module.exports = mongoose.model('METEO_DATA', MeteoSchema,'METEO_DATA');
+module.exports = mongoose.model('METEO_DATA', MeteoSchema,'datas');
