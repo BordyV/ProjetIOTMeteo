@@ -11,115 +11,68 @@
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
       Valider
     </v-btn>
-    
+    <v-row>
+      <v-col>
+        <div class="map">
+          <l-map
+            :zoom="zoom"
+            :center="center"
+            :options="mapOptions"
+            style="height: 80%; z-index: 1"
+            @update:center="centerUpdate"
+            @update:zoom="zoomUpdate"
+          >
+            <l-tile-layer :url="url" :attribution="attribution" />
 
-    <div class="map">
-      <l-map
-        :zoom="zoom"
-        :center="center"
-        :options="mapOptions"
-        style="height: 80%; z-index: 1"
-        @update:center="centerUpdate"
-        @update:zoom="zoomUpdate"
-      >
-        <l-tile-layer :url="url" :attribution="attribution" />
-
-        <l-marker
-          v-for="item in markers"
-            :key="item.id"
-            :lat-lng="item.position"
-        >
-        <l-popup>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title> Bienvenue à/chez : </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> Température : </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> Pression : </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> Ensoleillement :</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </l-popup>
-        </l-marker>
-        <l-marker :lat-lng="marker1">  
-          <l-popup>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title> Température : </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> Pression : </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> Ensoleillement :</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </l-popup>
-        </l-marker>
-      </l-map>
-    </div>
-    <v-card class="card">
-      
-      <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title class="headline">
-          {{city}}
-        </v-list-item-title>
-        <v-list-item-subtitle>{{"Latitude: "+latitude+" / Longitude: "+longitude}}</v-list-item-subtitle> <!-- Mettre la date-->
-      </v-list-item-content>
-    </v-list-item>
-
-<v-card-text>
-      <v-row align="center">
-        <v-col
-          class="display-3"
-          cols="6"
-        >
-           {{ temperature }} &deg;C
-        </v-col>
-        <v-col cols="6">
-          <v-icon class="icon"> {{tempicon}}</v-icon>
-        </v-col>
-      </v-row>
-    </v-card-text>
-
-    <v-list-item>
-      <v-list-item-icon>
-        <v-icon>mdi-send</v-icon>
-      </v-list-item-icon>
-      <v-list-item-subtitle>{{wind}}</v-list-item-subtitle>
-    </v-list-item>
-
-    <v-list-item>
-      <v-list-item-icon>
-        <v-icon>mdi-cloud-download</v-icon>
-      </v-list-item-icon>
-      <v-list-item-subtitle>{{humidity}}</v-list-item-subtitle>
-    </v-list-item>
-
-
-            <v-list class="transparent">
-      <v-list-item
-        v-for="item in forecast"
-        :key="item.day"
-      >
-        <v-list-item-title>{{ item.type }}</v-list-item-title>
-
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-subtitle class="text-right" >
-          {{ item.value }}
-        </v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
-    </v-card>
+            <l-marker
+              v-for="item in markers"
+              :key="item.id"
+              :lat-lng="item.position"
+            >
+              <l-popup>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title> Bienvenue à/chez : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Température : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Pression : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Ensoleillement :</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </l-popup>
+            </l-marker>
+            <l-marker :lat-lng="marker1">
+              <l-popup>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title> Bienvenue à/chez : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Température : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Pression : </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title> Ensoleillement :</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </l-popup>
+            </l-marker>
+          </l-map>
+        </div>
+      </v-col>
+      <v-col>
+        <div v-if="dataEsp">
+          <Pgraph v-bind:valEsp ="dataEsp"></Pgraph>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -130,7 +83,8 @@
 
 <script>
 import { latLng } from "leaflet";
-import { LMap, LTileLayer, LMarker,LPopup } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+import Pgraph from "./Pgraph.vue";
 
 export default {
   name: "Pmap",
@@ -139,7 +93,8 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LPopup,
+    Pgraph,
   },
 
   data() {
@@ -160,7 +115,7 @@ export default {
       weather: {},
       dataEsp: {},
       marker1: latLng(43.7101728, 7.2619532),
-       markers: [
+      markers: [
         {
           id: "m1",
           position: { lat: 51.505, lng: -0.09 },
@@ -171,12 +126,12 @@ export default {
         },
         {
           id: "m3",
-          position: { lat: 51.005, lng: -0.09 },     
+          position: { lat: 51.005, lng: -0.09 },
         },
         {
           id: "m4",
           position: { lat: 50.7605, lng: -0.09 },
-        }
+        },
       ],
       forecast: [
           { type: 'Temperature ressentie', icon: 'mdi-thermometer', value:"--"},
@@ -207,7 +162,7 @@ export default {
     dataEspFetcher: async function () {
       await fetch("http://localhost:3000/meteo").then((res) => {
         res.json().then((body) => {
-          console.log(body);
+          //console.log(body);
           this.dataEsp = body;
         });
       });
@@ -275,10 +230,8 @@ export default {
 </script>
 <style>
 .map {
-  width: 50%;
+  width: 100%;
   height: 600px;
-  position:relative;
-  left: 50%;
 }
 .card{
   width: 50%;
