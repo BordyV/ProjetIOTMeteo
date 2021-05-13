@@ -11,6 +11,7 @@
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
       Valider
     </v-btn>
+    
 
     <div class="map">
       <l-map
@@ -62,6 +63,67 @@
         </l-marker>
       </l-map>
     </div>
+    <v-card class="card">
+      
+      <v-list-item two-line>
+      <v-list-item-content>
+        <v-list-item-title class="headline">
+          {{city}}
+        </v-list-item-title>
+        <v-list-item-subtitle>{{"Latitude: "+latitude+" / Longitude: "+longitude}}</v-list-item-subtitle> <!-- Mettre la date-->
+      </v-list-item-content>
+    </v-list-item>
+
+<v-card-text>
+      <v-row align="center">
+        <v-col
+          class="display-3"
+          cols="6"
+        >
+           {{ temperature }} &deg;C
+        </v-col>
+        <v-col cols="6">
+          <v-img
+            src="https://cdn.vuetifyjs.com/images/cards/sun.png"
+            alt="Sunny image"
+            width="92"
+          ></v-img>
+        </v-col>
+      </v-row>
+    </v-card-text>
+
+    <v-list-item>
+      <v-list-item-icon>
+        <v-icon>mdi-send</v-icon>
+      </v-list-item-icon>
+      <v-list-item-subtitle>{{wind}}</v-list-item-subtitle>
+    </v-list-item>
+
+    <v-list-item>
+      <v-list-item-icon>
+        <v-icon>mdi-cloud-download</v-icon>
+      </v-list-item-icon>
+      <v-list-item-subtitle>{{humidity}}</v-list-item-subtitle>
+    </v-list-item>
+
+
+            <v-list class="transparent">
+      <v-list-item
+        v-for="item in forecast"
+        :key="item.day"
+      >
+        <v-list-item-title>{{ item.type }}</v-list-item-title>
+
+        <v-list-item-icon>
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-subtitle class="text-right" >
+          {{ item.value }}
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+    </v-card>
   </div>
 </template>
 
@@ -91,6 +153,13 @@ export default {
       esp: "",
       position: "",
       zoom: 13,
+      today: new Date(),
+      wind:"--",
+      city:"--",
+      temperature:"--",
+      humidity:"--",
+      latitude:"--",
+      longitude:"--",
       weather: {},
       dataEsp: {},
       marker1: latLng(43.7101728, 7.2619532),
@@ -112,6 +181,11 @@ export default {
           position: { lat: 50.7605, lng: -0.09 },
         }
       ],
+      forecast: [
+          { type: 'Temperature ressentie', icon: 'mdi-thermometer', value:"--"},
+          { type: 'Pression', icon: 'mdi-arrow-split-horizontal', value: '--' },
+        
+        ],
 
       valid: true,
       center: latLng(43.7101728, 7.2619532),
@@ -148,6 +222,23 @@ export default {
         res.json().then((body) => {
           console.log(body);
           this.weather = body;
+          this.temperature = this.weather.main.temp;
+          this.city = this.weather.name;
+          this.latitude = this.weather.coord.lat;
+          this.longitude = this.weather.coord.lon;
+          this.forecast[0].value = this.weather.main.feels_like +" \xB0";
+          this.humidity = this.weather.main.humidity +" %";
+          this.wind = this.weather.wind.speed +" km";
+          if(this.weather.weather[0].main == "Clouds"){
+            this.forecast[0].icon = "mdi-cloud";
+          }
+
+
+          this.forecast[1].value = this.weather.main.pressure+" Pa";
+
+
+
+          this.forecast[2].value = this.weather.coord.lat;
         });
       });
     },
@@ -184,7 +275,12 @@ export default {
 </script>
 <style>
 .map {
-  width: 2000px;
-  height: 1000px;
+  width: 50%;
+  height: 600px;
+  position:relative;
+  left: 50%;
+}
+.card{
+  width: 50%;
 }
 </style>
