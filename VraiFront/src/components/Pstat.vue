@@ -57,6 +57,7 @@ import { defineComponent } from "@vue/composition-api";
 export default defineComponent({
   props: {
     weatherbis: {},
+    
   },
   data() {
     return {
@@ -77,8 +78,15 @@ export default defineComponent({
   mounted() {
     this.setup();
   },
+  watch: {
+    
+      weatherbis: function(){
+        this.setup();
+      }
+    },
   methods: {
     setup() {
+      console.log("coucou");
       console.log(this.weatherbis);
       this.weather = this.weatherbis;
       this.temperature = this.weather.main.temp;
@@ -101,6 +109,8 @@ export default defineComponent({
       }
       this.forecast[1].value = this.weather.main.pressure + " Pa";
     },
+
+    
   },
 });
 </script>
