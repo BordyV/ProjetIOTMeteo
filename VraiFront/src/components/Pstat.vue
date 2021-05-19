@@ -79,7 +79,6 @@ export default defineComponent({
     this.setup();
   },
   watch: {
-    
       weatherbis: function(){
         this.setup();
       }
@@ -117,6 +116,6 @@ export default defineComponent({
 
 <style>
 .card {
-  width: 50%;
+  width: 80%;
 }
 </style>

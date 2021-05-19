@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-text-field v-model="position" placeholder="adresse"></v-text-field>
+    <div class="section1">
+    <v-flex class="saisir">
+      Veuillez saisir votre adresse : 
+    </v-flex>
+    <v-text-field v-model="position" placeholder="Exemple : (Nice, 2 Avenue sainte-claire, ...)" class="champ"></v-text-field>
 
     <!-- <v-text-field
       v-model= "esp"
@@ -11,14 +15,15 @@
     <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
       Valider
     </v-btn>
+    </div>
     <v-row>
-      <v-col>
+      <v-col class="col1">
         <div class="map">
           <l-map
             :zoom="zoom"
             :center="center"
             :options="mapOptions"
-            style="height: 80%; z-index: 1"
+            style="height: 60%;width:50%; z-index: 1"
             @update:center="centerUpdate"
             @update:zoom="zoomUpdate"
           >
@@ -68,14 +73,15 @@
         </div>
       </v-col>
       <v-col>
-        <div>
-          <v-card>
-            <Pgraph v-if="dataEsp" v-bind:valEsp="dataEsp"></Pgraph>
-          </v-card>
-        </div>
-        <Pstat v-if="weather" v-bind:weatherbis="weather"></Pstat>
+        
+          <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
+        
+      </v-col>
+      <v-col>
+         <Pgraph v-if="dataEsp" v-bind:valEsp="dataEsp" class="pgraph"></Pgraph>
       </v-col>
     </v-row>
+   
   </div>
 </template>
 
@@ -192,6 +198,7 @@ export default {
         .then((response) => response.json())
         .then((res) => {
           this.center = latLng(parseFloat(res[0].lat), parseFloat(res[0].lon));
+          
         });
 
       this.show = true;
@@ -204,5 +211,31 @@ export default {
 .map {
   width: 100%;
   height: 600px;
+ 
+  
 }
+.saisir{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.champ{
+  width: 40%;
+  
+}
+
+.col1{
+      position: absolute;
+    top: 80px;
+    /* display: block; */
+  
+    left: 700px;
+    /* bottom: 10px; */
+
+}
+.pgraph{
+ width: 70%;
+ height:70%;
+ margin-top: 15%;
+}
+
 </style>
