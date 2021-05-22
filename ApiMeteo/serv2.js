@@ -5,6 +5,7 @@ const port = 3000;
 const mongoose = require('mongoose');
 const DB_URI = require('./config/dbconfig');
 const meteoRoutes = require('./routes/meteo');
+const userRoutes = require('./routes/user');
 const uri = require('./config/dbconfig');
 
 app.use(function (req, res, next) {
@@ -29,6 +30,7 @@ app.use(function (req, res, next) {
 // Middlewares
 app.use(bodyParser.json());
 app.use('/meteo', meteoRoutes);
+app.use('/user', userRoutes);
 
 
 // DB connection
@@ -40,7 +42,6 @@ mongoose.connect(DB_URI,{
     else console.log('Connected to the database')
 })
 console.log(uri)
-
 app.get('/',  (req, res) => res.send('Hellow World!'));
 
 app.listen(port, () => console.log(`http://localhost:${port}/`));
