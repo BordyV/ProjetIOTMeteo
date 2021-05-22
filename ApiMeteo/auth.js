@@ -7,8 +7,7 @@ function auth(req,res,next){
         if(!token) {
             res.status(401).json({ message : "Connexion impossible, token manquant", code: res.statusCode  });
         }else{
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decodedToken;
+            req.user = jwt.verify(token, process.env.JWT_SECRET);
             next();
         }
         ///
