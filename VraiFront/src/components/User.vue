@@ -63,63 +63,86 @@
             cols="12"
             sm="7"       
           >
-          <Pmap v-if = "carte" v-bind:pos ="this.userInfos.userAddress" class="pa-2" />
+          
           <!-- <v-container > -->
-        <v-row>
-            <v-col cols="0">
-              <v-card outlined tile elevation="5" height="100%">
-              <v-card-text>
-          <h2>Liste des competences</h2>
-            <ul v-for="skill in this.skillListe" :key="skill.id">
-              <li>{{skill.skillName}}</li>
-            </ul>
-        </v-card-text>
-            </v-card>
-            
-            </v-col>
-        </v-row>
+        
+           
+        <v-card>
+            Ajouter mon esp
+            <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Open Dialog
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Paramètres de l'esp</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
             <v-row>
-          <v-col
-            v-for="proj in userProjects"
-            :key="proj.id"
-            cols="6"
-            rounded="lg"
+              <v-col cols="12">
+                <v-text-field
+                 v-model="nomEsp"
+                  label="Nom de votre esp*"
+
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="adresseMac"
+                  label="adresseMac*"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="adresse"
+                  label="adresse*"
+
+                  required
+                ></v-text-field>
+              </v-col>
+              
+              
+            </v-row>
+          </v-container>
+          <small>*Champs obligatoires</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
           >
-          <v-toolbar class="brown" >
-            <!-- <v-spacer></v-spacer> -->
-							<v-toolbar-title>{{proj.projectName}}</v-toolbar-title>
-
-					</v-toolbar>
-            <v-card elevation="5" class="pa-5">
-              <p> {{proj.shortDescription}}</p>
-              <hr>
-              <p> Language utilisé : </p>
-              <ul v-for="skill in proj.languagesInvolved" :key="skill.id">
-                <li>
-                  {{skill.skillName}}
-                </li>
-              </ul>
-              <v-btn
-                icon
-                @click="show = !show"
-              >
-              <v-tooltip bottom></v-tooltip>
-              <v-icon >{{ show ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
-              {{show ? "Moins" : "Plus"}}
-              </v-btn>
-
-                <v-expand-transition>
-              <div v-show="show">
-                <v-divider></v-divider>
-                  {{proj.longDescription}}
-                <v-card-text>
-                 
-                </v-card-text>
-              </div>
-            </v-expand-transition>
-            </v-card>
-          </v-col>
-        </v-row>
+           Fermer
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false;register"
+           
+          >
+            Ajouter
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+          </v-card>
       <!-- </v-container> -->
             <!-- <v-sheet
               min-height="70vh"
@@ -127,51 +150,9 @@
             >
             </v-sheet> -->
           </v-col>
-          <v-col
-            cols="12"
-            sm="2"
-          >
-            <v-card
-              rounded="lg"
-              height="268"
-              elevation="5"
-              class="pa-4"
-            >
-            
-               <v-card
-              height="30%"
-              elevation="4"
-              class="ma-2"
-              color="#007bb5"
-              :href="userLink.linkedin"
-              target="blank"
-            >
-            <div class="a"><v-icon dark large>mdi-linkedin </v-icon> Linkedin</div>
-            
-            </v-card>
-            
-            <v-card
-              height="30%"
-              elevation="4"
-              class="ma-2"
-              color="#24292e"
-              :href="userLink.github"
-              target="blank"
-            >
-            <div class="a pa-2"><v-icon dark large>mdi-github </v-icon>GitHub </div>
-            </v-card>
-            <v-card
-              height="30%"
-              elevation="4"
-              class="ma-2 insta"
-              :href="userLink.instagram"
-              target="blank"
-            >
-            <div class="pa-2 a"><v-icon dark large>mdi-instagram </v-icon> Instagram</div>
-            </v-card>
-            </v-card>
-            
-          </v-col>
+
+          
+          
         </v-row>
         
          
@@ -200,20 +181,23 @@
 <script>
 // Popup Import
 
-import Pmap from './Pmap'  
+
 
 
 
 
   export default {
-    components : {  Pmap},
+    components : { },
       name: 'user',
       
     data(){
         return {
-          
+          dialog : false,
           isAdmin: false,
           show: false,
+          adresseMac: "",
+          adresse: "",
+          nomEsp: "",
           carte : false,
             userInfos: '',
                        
@@ -223,6 +207,8 @@ import Pmap from './Pmap'
             skillName :'',
             skillListe:[]
         }
+        
+        
     },
     mounted: async function (){
         if(this.$session.get("userId")){
@@ -236,6 +222,21 @@ import Pmap from './Pmap'
         
     },
     methods: {
+      addEsp: async function() {
+        let body = {
+            nomEsp : this.nomEsp,
+            adresseMac : this.adresseMac,
+            adresse : this.adresse,
+        }
+        fetch('http://localhost:3000/esp/AddEsp', {
+            method: 'post',
+            body:    JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+        })
+         alert(`L'esp a été ajouté avec succès !`);
+        
+        
+    },
         getUserInfos: async function (){
            
             var jsonContent = await fetch(`http://localhost:3000/user/id/${this.$route.params.idUser}`);

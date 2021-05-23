@@ -14,31 +14,41 @@
         <v-icon>mdi-export</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer
-      v-model="drawer"
-      
-      bottom
-     
-    >
+   <v-navigation-drawer
+            v-model="drawer"
+            app
+            absolute 
+            bottom 
+            temporary
+    > 
+      <v-sheet
+              color="grey lighten-4"
+              class="pa-4">
+       <Profil>
+
+       </Profil>
+      </v-sheet>
+
+      <v-divider></v-divider>
       <v-list
-        nav
-        dense
-      >
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-title>MAP</v-list-item-title>
-          </v-list-item>
+      v-for="lien in navbarButtons"
+       :key="lien.href" 
+       >
+        <v-list-item :to="lien.href">
+          <!-- ICON -->
+          <v-list-item-icon>
+            <v-icon>{{ lien.icon }}</v-icon>
+          </v-list-item-icon>
 
-          <v-list-item>
-            <v-list-item-title>PROFIL</v-list-item-title>
-          </v-list-item>
-
-        </v-list-item-group>
+          <!-- Text -->
+          <v-list-item-content>
+            <v-list-item-title >{{ lien.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
+   
   </div>
 </template>
 
@@ -47,6 +57,19 @@ export default {
   data: () => ({
       drawer: false,
       group: null,
+      navbarButtons : {
+      Map :{
+        icon: 'mdi-google-maps',
+        title: 'Map',
+        href: '/map'
+      },
+      Profil :{
+        icon: 'mdi-account',
+        title: 'Profil',
+        href: '/user/:idUser'
+      },
+      
+    }
     }),
     watch: {
       group () {
