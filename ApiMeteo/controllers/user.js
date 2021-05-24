@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 const { Mongoose } = require('mongoose');
 const md5 = require('md5');
+const jwt = require('jsonwebtoken');
 
 const newUser = async (req,res) => {
     const data = req.body;
@@ -74,7 +75,7 @@ const connection = async (req,res) => {
         if(result.length > 0){
             if(md5(data.userPassword) === result[0].userPassword){
                 //res.status(200).send({message : `Great success ! ${result[0].userFirstName + " " + result[0].userLastName } is connected !`, userId: result[0]._id})
-                //console.log(process.env.JWT_SECRET);
+                console.log(process.env.JWT_SECRET);
                 jwt.sign(
                     { email : data.userEmail, id: result[0]._id },
                     process.env.JWT_SECRET,
@@ -83,12 +84,12 @@ const connection = async (req,res) => {
                         if (err) throw err;
                         res.status(200).json(
                             {
-                                //idUser celui s'incremente
                                 code: res.statusCode,
                                 token
                             });
                             }
                         );
+                        console.log(process.env.JWT_SECRET);                        
 
             }else{
                 res.status(401).send({message : "Wrong password"})

@@ -7,7 +7,7 @@ const token = require('../auth');
 router.post('/addUser', userController.newUser); // créer un nouvel utilisateur (voir le model pour le body)
 
 router.post('/connection', userController.connection); //connection
-router.post('/isAlreadyRegistered', userController.isAlreadyRegistered); // créer un nouvel utilisateur (voir le model pour le body)
+router.post('/isAlreadyRegistered', userController.isAlreadyRegistered); 
 // GET
 router.get('/',token, userController.getUsers); // renvoi tous les users
 router.get('/name/:name', token,userController.getUserByName);
