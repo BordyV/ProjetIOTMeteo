@@ -2,7 +2,6 @@ const userModel = require('../models/user.model');
 const { Mongoose } = require('mongoose');
 const md5 = require('md5');
 
-
 const newUser = async (req,res) => {
     const data = req.body;
     const newUser = new userModel({
@@ -69,13 +68,14 @@ const getUserById = async (req,res) => {
 
 const connection = async (req,res) => {
     const data = req.body;
+    console.log(process.env.JWT_SECRET);
     await userModel.find({userEmail : data.userEmail})
     .then(result => {
         if(result.length > 0){
             if(md5(data.userPassword) === result[0].userPassword){
-                res.status(200).send({message : `Great success ! ${result[0].userFirstName + " " + result[0].userLastName } is connected !`, userId: result[0]._id})
-                console.log(process.env.JWT_SECRET);
-                /*jwt.sign(
+                //res.status(200).send({message : `Great success ! ${result[0].userFirstName + " " + result[0].userLastName } is connected !`, userId: result[0]._id})
+                //console.log(process.env.JWT_SECRET);
+                jwt.sign(
                     { email : data.userEmail, id: result[0]._id },
                     process.env.JWT_SECRET,
                     { expiresIn: "1d"},
@@ -83,11 +83,12 @@ const connection = async (req,res) => {
                         if (err) throw err;
                         res.status(200).json(
                             {
+                                //idUser celui s'incremente
                                 code: res.statusCode,
                                 token
                             });
                             }
-                        );*/
+                        );
 
             }else{
                 res.status(401).send({message : "Wrong password"})
@@ -100,42 +101,7 @@ const connection = async (req,res) => {
         res.status(400).send({message : error.message})
     })
 }
-/* const connection = async (req,res) => {
-    const body = req.body;
-    try {
-        const email = body.email;
-        const motDePasse = body.motDePasse;
-        let query = 'SELECT "motDePasse", "idIntervenant" FROM "Intervenant" WHERE "email" = $1';
-        const result = await pool.query(
-            query,
-            [email]);
-        if(result.rowCount > 0){
-            if(result.rows[0].motDePasse === motDePasse){
-                console.log(process.env.JWT_SECRET);
-                jwt.sign(
-                    { email : email, id: result.rows[0].idIntervenant },
-                    process.env.JWT_SECRET,
-                    { expiresIn: "1d"},
-                    (err, token) => {
-                        if(err) throw err;
-                        res.status(200).json(
-                            {
-                                code:res.statusCode,
-                                token
-                            }
-                        );
-                    }
-                )
-            }else{
-                res.status(401).json({error: "Mot de passe inccorect", code: res.statusCode});
-            }
-        }else{
-            res.status(401).json({result: "Email inconnu", code: res.statusCode});
-        }
-    } catch (error) {
-        let message = {"error": error.message, code: res.statusCode};
-        res.send(message);
-    }*/
+
 
 const setUserPicture = async (req,res) => {
     const idUser = req.params.id;

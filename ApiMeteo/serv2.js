@@ -8,6 +8,9 @@ const meteoRoutes = require('./routes/meteo');
 const userRoutes = require('./routes/user');
 const espRoutes = require('./routes/esp');
 const uri = require('./config/dbconfig');
+const dotenv = require('dotenv').config()
+
+
 
 app.use(function (req, res, next) {
 
