@@ -180,7 +180,10 @@ export default {
             // this.$router.push({name : `user/${res.json()}`});
             
             res.json().then(data => {
+                console.log()
                 this.$session.start();
+                console.log(data.token);
+                this.$session.set("token",data.token);
                 this.$session.set("userId", data.userId);
                 this.$router.replace({
                 name : `user`,

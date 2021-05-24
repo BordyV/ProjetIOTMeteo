@@ -193,19 +193,14 @@
     data(){
         return {
           dialog : false,
-          isAdmin: false,
           show: false,
           adresseMac: "",
           adresse: "",
           nomEsp: "",
           carte : false,
-            userInfos: '',
-                       
+            userInfos: '',       
             userId: '',
-            userProjects: {},
-            userLink: [],
-            skillName :'',
-            skillListe:[]
+           
         }
         
         
@@ -215,8 +210,7 @@
           this.isAdmin = true;
         }
         await this.getUserInfos();
-        await this.getUserProjects();
-       
+               
         this.userInfos.userFirstName = this.capitalizeFirstLetter(this.userInfos.userFirstName);
        
         
@@ -246,11 +240,7 @@
             
             
         },
-        getUserProjects: async function(){
-            var jsonContent = await fetch(`http://localhost:3000/user/id/${this.userInfos._id}/projects`);
-            var json = await jsonContent.json();
-            this.userProjects = json;
-        },
+        
         capitalizeFirstLetter: function(string) {
             string = string.toLowerCase();
             return string.charAt(0).toUpperCase() + string.slice(1);
