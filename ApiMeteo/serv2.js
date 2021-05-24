@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
+const https = require('https');
 const mongoose = require('mongoose');
 const DB_URI = require('./config/dbconfig');
 const meteoRoutes = require('./routes/meteo');
@@ -9,8 +10,7 @@ const userRoutes = require('./routes/user');
 const espRoutes = require('./routes/esp');
 const uri = require('./config/dbconfig');
 const dotenv = require('dotenv').config()
-
-
+const fs = require('fs');
 
 app.use(function (req, res, next) {
 
@@ -49,4 +49,10 @@ mongoose.connect(DB_URI,{
 console.log(uri)
 app.get('/',  (req, res) => res.send('Hellow World!'));
 
+//const options = {
+//    key: fs.readFileSync('./key.pem'),
+//    cert: fs.readFileSync('./cert.pem'),
+//    passphrase: 'salut_timmy_mon_ami_pour_la_vie_tmtc_1214_bitch'
+//  };
+//https.createServer(options, app).listen(port);
 app.listen(port, () => console.log(`http://localhost:${port}/`));
