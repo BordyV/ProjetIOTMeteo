@@ -120,7 +120,6 @@ export default {
       esp: "",
       position: "",
       zoom: 13,
-      selection: 0,
       weather: undefined,
       dataEsp: undefined,
       marker1: latLng(43.7101728, 7.2619532),

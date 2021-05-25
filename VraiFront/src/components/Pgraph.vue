@@ -1,5 +1,7 @@
 <template>
   <div class="small">
+    <v-icon large>mdi-image-filter-hdr </v-icon>
+    <h3>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }}</h3>
     <line-chart :chart-data="datacollection"></line-chart>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative </v-icon>
@@ -17,6 +19,8 @@
         <v-chip @click="dataHumi()">Humidité</v-chip>
 
         <v-chip @click="dataTemp()">Température</v-chip>
+
+        <v-chip><input v-model="nbValeur">Nb de Val</v-chip>
       </v-chip-group>
     </v-app-bar>
   </div>
@@ -34,6 +38,8 @@ export default {
   data() {
     return {
       datacollection: null,
+      selection: 0,
+      nbValeur: 50, //A changer pour changer le nb de valeur du graph
     };
   },
   props: {
@@ -60,7 +66,9 @@ export default {
     },
     splitListLum() {
       let res = [];
-      for (let index = 0; index < 10; index++) {
+      let i = this.valEsp.length - this.nbValeur;
+      let imax = this.valEsp.length;
+      for (let index = i; index < imax; index++) {
         res.push(this.valEsp[index].lumiere);
       }
       return res;
@@ -82,7 +90,9 @@ export default {
     },
     splitListPres() {
       let res = [];
-      for (let index = 0; index < 10; index++) {
+      let i = this.valEsp.length - this.nbValeur;
+      let imax = this.valEsp.length;
+      for (let index = i; index < imax; index++) {
         res.push(this.valEsp[index].pression);
       }
       return res;
@@ -105,7 +115,9 @@ export default {
 
     splitListHumi() {
       let res = [];
-      for (let index = 0; index < 10; index++) {
+      let i = this.valEsp.length - this.nbValeur;
+      let imax = this.valEsp.length;
+      for (let index = i; index < imax; index++) {
         res.push(this.valEsp[index].humidite);
       }
       return res;
@@ -125,10 +137,12 @@ export default {
         ],
       };
     },
-    
+
     splitListTemp() {
       let res = [];
-      for (let index = 0; index < 10; index++) {
+      let i = this.valEsp.length - this.nbValeur;
+      let imax = this.valEsp.length;
+      for (let index = i; index < imax; index++) {
         res.push(this.valEsp[index].temperature);
       }
       return res;
@@ -136,7 +150,9 @@ export default {
 
     getDate() {
       let res = [];
-      for (let index = 0; index < 10; index++) {
+      let i = this.valEsp.length - this.nbValeur;
+      let imax = this.valEsp.length;
+      for (let index = i; index < imax; index++) {
         res.push(this.valEsp[index].date);
       }
       return res;
