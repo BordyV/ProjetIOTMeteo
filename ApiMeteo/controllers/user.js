@@ -84,6 +84,7 @@ const connection = async (req,res) => {
                         if (err) throw err;
                         res.status(200).json(
                             {
+                                userId: result[0]._id,
                                 code: res.statusCode,
                                 token
                             });

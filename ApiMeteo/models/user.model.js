@@ -29,7 +29,7 @@ const UserSchema = mongoose.Schema({
     picUrl: {
         type: String,
         required: false,
-        default: "https://vignette.wikia.nocookie.net/heros/images/a/a5/Winnie_l%27Ourson_Infobox.jpeg/revision/latest?cb=20200607154813&path-prefix=fr"
+        default: "https://i.redd.it/aqrwgqlaaw851.jpg"
     },
 });
 

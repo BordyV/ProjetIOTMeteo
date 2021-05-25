@@ -10,7 +10,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon @click="logout" href="/">
+      <v-btn icon @click="logout" >
         <v-icon>mdi-export</v-icon>
       </v-btn>
     </v-app-bar>
@@ -66,20 +66,31 @@ export default {
       Profil :{
         icon: 'mdi-account',
         title: 'Profil',
-        href: '/user/:idUser'
+        href: '/user/'
       },
       
     }
     }),
+   mounted() {
+     this.drawer =  false;
+    if(this.$session.get('token')){
+      this.Profil.href = this.connecte;
+    }
+    else{
+      this.Profil.href = this.haveToCo;
+    }
+   },
     watch: {
+     
       group () {
         this.drawer = false
       },
     },
   methods: {
     logout: function() {
-            this.$session.destroy();
-            window.location.reload();
+             this.$session.destroy();
+      console.log("cancel")
+       this.$router.go('/login');
         }
   }
 };
