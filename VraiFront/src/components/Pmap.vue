@@ -1,20 +1,22 @@
 <template>
   <div>
     <div class="section1">
-    <v-flex class="saisir">
-      Veuillez saisir votre adresse : 
-    </v-flex>
-    <v-text-field v-model="position" placeholder="Exemple : (Nice, 2 Avenue sainte-claire, ...)" class="champ"></v-text-field>
+      <v-flex class="saisir"> Veuillez saisir votre adresse : </v-flex>
+      <v-text-field
+        v-model="position"
+        placeholder="Exemple : (Nice, 2 Avenue sainte-claire, ...)"
+        class="champ"
+      ></v-text-field>
 
-    <!-- <v-text-field
+      <!-- <v-text-field
       v-model= "esp"
           
             placeholder="adresse d'un esp"
           ></v-text-field> -->
 
-    <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
-      Valider
-    </v-btn>
+      <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
+        Valider
+      </v-btn>
     </div>
     <v-row>
       <v-col class="col1">
@@ -23,7 +25,7 @@
             :zoom="zoom"
             :center="center"
             :options="mapOptions"
-            style="height: 60%;width:50%; z-index: 1"
+            style="height: 60%; width: 50%; z-index: 1"
             @update:center="centerUpdate"
             @update:zoom="zoomUpdate"
           >
@@ -73,15 +75,18 @@
         </div>
       </v-col>
       <v-col>
-        
-          <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
-        
+        <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
       <v-col>
-         <Pgraph v-if="dataEsp" v-bind:valEsp="dataEsp" class="pgraph"></Pgraph>
+        <v-card>
+          <Pgraph
+            v-if="dataEsp"
+            v-bind:valEsp="dataEsp"
+            class="pgraph"
+          ></Pgraph>
+        </v-card>
       </v-col>
     </v-row>
-   
   </div>
 </template>
 
@@ -115,6 +120,7 @@ export default {
       esp: "",
       position: "",
       zoom: 13,
+      selection: 0,
       weather: undefined,
       dataEsp: undefined,
       marker1: latLng(43.7101728, 7.2619532),
@@ -198,12 +204,12 @@ export default {
         .then((response) => response.json())
         .then((res) => {
           this.center = latLng(parseFloat(res[0].lat), parseFloat(res[0].lon));
-          
         });
 
       this.show = true;
       this.fetchApiWeather();
     },
+    
   },
 };
 </script>
@@ -211,31 +217,26 @@ export default {
 .map {
   width: 100%;
   height: 600px;
- 
-  
 }
-.saisir{
+.saisir {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.champ{
+.champ {
   width: 40%;
-  
 }
 
-.col1{
-      position: absolute;
-    top: 80px;
-    /* display: block; */
-  
-    left: 700px;
-    /* bottom: 10px; */
+.col1 {
+  position: absolute;
+  top: 80px;
+  /* display: block; */
 
+  left: 700px;
+  /* bottom: 10px; */
 }
-.pgraph{
- width: 70%;
- height:70%;
- margin-top: 15%;
+.pgraph {
+  width: 70%;
+  height: 70%;
+  margin-top: 15%;
 }
-
 </style>
