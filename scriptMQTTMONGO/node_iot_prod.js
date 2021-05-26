@@ -1,5 +1,6 @@
 // Importation des modules
 var path = require('path');
+var ObjectId = require('mongodb').ObjectID;
 
 // var, const, let :
 // https://medium.com/@vincent.bocquet/var-let-const-en-js-quelles-diff%C3%A9rences-b0f14caa2049
@@ -104,6 +105,7 @@ async function v0(){
 	    }
 	    console.log("wholist using the node server :", wholist);
 
+
 	    // Mise en forme de la donnee � stocker => dictionnaire
 	    // Le format de la date est iomportant => compatible avec le
 	    // parsing qui sera realise par hightcharts dans l'UI
@@ -112,17 +114,37 @@ async function v0(){
 	    // var frTime = new Date().toLocaleString("fr-FR", {timeZone: "Europe/Paris"});
 	    var frTime = new Date().toLocaleString("sv-SE", {timeZone: "Europe/Paris"});
 			message.date = frTime; 
-			var new_entry = message;
 	    
-	    // On recupere le nom basique du topic du message
-	    var key = path.parse(topic.toString()).base;
-	    // Stocker le dictionnaire qui vient d'etre cr�� dans la BD
-	    // en utilisant le nom du topic comme key de collection
-	    dbo.collection(key).insertOne(new_entry, function(err, res) {
-		if (err) throw err;
-		console.log("\nItem : ", new_entry, 
-		"\ninserted in db in collection :", key);
-	    });
+			//myquery permet de verifier si l'userId et l'adresseMac sont les memes que données par l'esp
+			let myquery = { "userId": message.userId, "adresseMac": message.id };
+
+			dbo.collection("ESP_DATA")
+				.findOne(myquery, function (err, data) {
+					
+					//si il n'y a pas d'erreur
+					if (!err) {
+						if(data)
+						{
+							//on ajoute l'adresse de ESP_DATA dans message
+							message.adresse = data.adresse;
+							var new_entry = message;
+							// On recupere le nom basique du topic du message
+							var key = path.parse(topic.toString()).base;
+							// Stocker le dictionnaire qui vient d'etre cr�� dans la BD
+							// en utilisant le nom du topic comme key de collection
+							dbo.collection(key).insertOne(new_entry, function(err, res) {
+						if (err) throw err;
+						console.log("\nItem : ", new_entry, 
+						"\ninserted in db in collection :", key);
+							});
+						}
+						else {
+							console.log("aucun esp ne correspond a l'utilisateur donné par l'esp");
+						}
+					}
+				});
+
+				
 
 	    // Debug : voir les collections de la DB 
 	    //dbo.listCollections().toArray(function(err, collInfos) {
