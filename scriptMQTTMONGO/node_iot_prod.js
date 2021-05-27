@@ -27,6 +27,7 @@ async function listDatabases(client){
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
 
+
 //----------------------------------------------------------------
 // asynchronous function named main() where we will connect to our
 // MongoDB cluster, call functions that query our database, and
@@ -93,6 +94,11 @@ async function v0(){
 	    console.log("\nMQTT msg on topic : ", topic.toString());
 	    console.log("Msg payload : ", message.toString());
 
+			var isValidJSON = true;
+			try { JSON.parse(message) } catch { isValidJSON = false }
+
+			if(isValidJSON)
+			{
 	    // Parsing du message suppos� recu au format JSON
 	    message = JSON.parse(message);
 	    wh = message.id
@@ -142,9 +148,8 @@ async function v0(){
 							console.log("aucun esp ne correspond a l'utilisateur donné par l'esp");
 						}
 					}
-				});
-
-				
+				});	
+			}//end if JSON
 
 	    // Debug : voir les collections de la DB 
 	    //dbo.listCollections().toArray(function(err, collInfos) {
@@ -190,6 +195,9 @@ app.use(function(request, response, next) { //Pour eviter les problemes de CORS/
     response.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     next();
 });
+
+
+
 
 //================================================================
 //==== Demarrage du serveur Web  =======================
