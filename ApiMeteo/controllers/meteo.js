@@ -1,6 +1,8 @@
 
 const MeteoModel= require('../models/meteo.model.js');
 
+
+
 const getMeteo = async (req,res) => {
     console.log('alooo')
     await   MeteoModel.find()
@@ -16,7 +18,7 @@ const getMeteo = async (req,res) => {
 
 const getMeteoById = async (req,res) => {
     const addMac = req.params.id;
-    await userModel.find({adresseMac : addMac})
+    await MeteoModel.find({id : addMac})
     .then(rslt => {
         rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur : "ESP inconnu ...."})
     })

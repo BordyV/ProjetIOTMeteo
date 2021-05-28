@@ -47,16 +47,19 @@ export default {
     valEsp: {},
   },
   mounted() {
-    this.dataType("lumiere");
+    if(this.valEsp){
+      this.dataType("lumiere");
+    }
+
     console.log(this.valEsp);
   },
   methods: {
     //permet d'actualiser le Graph en fonction du type de data
-    //les ypes de data possible: lumiere, pression, humidite, temperature 
+    //les ypes de data possible: lumiere, pression, humidite, temperature
     dataType(typeData) {
-      //permet de définir quel est le type de données en fonction du label 
+      //permet de définir quel est le type de données en fonction du label
       let labelData = typeData == 'lumiere' ? 'Lumière en Lumens': typeData == 'pression' ?
-       'Pression en Pascal': typeData == 'humidite' ? 'Humidité en %': 'Température en °C';  
+       'Pression en Pascal': typeData == 'humidite' ? 'Humidité en %': 'Température en °C';
       //défini le type de data en cours d'utilisation
       this.typeDataActuel = typeData;
       this.datacollection = {
