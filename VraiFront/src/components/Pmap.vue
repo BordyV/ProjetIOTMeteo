@@ -112,7 +112,7 @@
         </div>
       </v-col>
       <v-col>
-        <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
+        <Pstat v-if="appelMeteo"  v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
       <div class="dialog">
         <v-dialog v-model="dialog" width="1000">
@@ -177,6 +177,7 @@ export default {
 
   data() {
     return {
+      appelMeteo :false,
       selected: null,
       options: {
         apiKey: process.env.VUE_APP_PLACE_API_KEY,
@@ -246,6 +247,7 @@ export default {
       });
     },
     fetchApiWeather: async function () {
+      this.appelMeteo = true;
       await fetch(
         `${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`
       ).then((res) => {

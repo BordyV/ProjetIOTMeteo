@@ -57,7 +57,7 @@ import { defineComponent } from "@vue/composition-api";
 export default defineComponent({
   props: {
     weatherbis: {},
-    
+
   },
   data() {
     return {
@@ -95,23 +95,23 @@ export default defineComponent({
       this.forecast[0].value = this.weather.main.feels_like + " \xB0";
       this.humidity = this.weather.main.humidity + " %";
       this.wind = this.weather.wind.speed + " km";
-      
-      if (this.weather.weather[0].main == "Clouds") {
+
+      if (this.weather.weather[0].main === "Clouds") {
         this.tempicon = "mdi-cloud";
-      
-      } else if (this.weather.weather[0].main == "Sunny") {
+
+      } else if (this.weather.weather[0].main === "Sunny") {
         this.tempicon = "mdi-white-balance-sunny";
-      } else if (this.weather.weather[0].main == "Rain") {
+      } else if (this.weather.weather[0].main === "Rain") {
         this.tempicon = "mdi-weather-pouring";
-      } else if (this.weather.weather[0].main == "Snow") {
+      } else if (this.weather.weather[0].main === "Snow") {
         this.tempicon = "mdi-snowflake";
-      } else if (this.weather.weather[0].main == "Clear") {
+      } else if (this.weather.weather[0].main === "Clear") {
         this.tempicon = "mdi-weather-partly-cloudy";
       }
       this.forecast[1].value = this.weather.main.pressure + " Pa";
     },
 
-    
+
   },
 });
 </script>

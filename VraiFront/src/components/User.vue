@@ -102,7 +102,7 @@
                       text
                       @click="addEsp"
                         dialog = false;
-                        register;
+
                     >
                       Ajouter
                     </v-btn>
