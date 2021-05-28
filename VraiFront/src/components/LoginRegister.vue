@@ -194,8 +194,9 @@ export default {
   },
   computed: {
     passwordMatch() {
-      return () => this.password === this.verify || "Password must match";
-    },
+      return () => this.password === this.verify || "Le mot de passe n'est pas le meme.";
+    }
+
   },
   methods: {
     validate() {
@@ -280,7 +281,7 @@ export default {
           //
         } else {
           this.loginPassword = "";
-          alert("Wrong credentials");
+          alert("Mauvais identifiants");
         }
       });
     },
@@ -311,21 +312,23 @@ export default {
     loginPassword: "",
     loginEmail: "",
     loginEmailRules: [
-      (v) => !!v || "Required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+
+      v => !!v || "Requis.",
+      v => /.+@.+\..+/.test(v) || "l'E-mail doit être valide"
     ],
     emailRules: [
-      (v) => !!v || "Required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      v => !!v || "Requis.",
+      v => /.+@.+\..+/.test(v) || "l'E-mail doit être valide"
     ],
 
     show1: false,
     rules: {
-      required: (value) => !!value || "Required.",
-      min: (v) => (v && v.length >= 8) || "Min 8 characters",
-    },
-  }),
-};
+      required: value => !!value || "Requis.",
+      min: v => (v && v.length >= 8) || "Minimum de 8 caractères"
+    }
+})
+}
+
 </script>
 <style>
 </style>
