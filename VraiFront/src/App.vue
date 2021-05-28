@@ -3,11 +3,9 @@
       
     <PHeader/>
     <router-view/>
-    <!-- <recherchePersonne/> -->
+    
 
-    <footer>
-     
-    </footer>
+    
   
   </v-app>
   
@@ -36,15 +34,11 @@ export default {
   },
   components: {
     "PHeader" : PHeader,
-    //"Pmap" : Pmap,
-    // "recherchePersonne" : recherchePersonne,
-   
     
-    //"LoginRegister" : LoginRegister
   },
   data () {
     return {
-      // component : "recherchePersonne",
+     
       authenticated : false,
       userId : ''
     }
@@ -58,9 +52,5 @@ methods :
 </script>
 
 <style>
-#footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
+
 </style>
