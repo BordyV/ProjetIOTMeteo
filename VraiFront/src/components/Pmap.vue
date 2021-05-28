@@ -162,6 +162,8 @@ import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
 
+
+
 export default {
   name: "Pmap",
 
@@ -199,24 +201,7 @@ export default {
       dataEsp: undefined,
       dialog: false,
       marker1: latLng(43.7101728, 7.2619532),
-      markers: [
-        {
-          id: "m1",
-          position: { lat: 51.505, lng: -0.09 },
-        },
-        {
-          id: "m2",
-          position: { lat: 51.8905, lng: -0.09 },
-        },
-        {
-          id: "m3",
-          position: { lat: 51.005, lng: -0.09 },
-        },
-        {
-          id: "m4",
-          position: { lat: 50.7605, lng: -0.09 },
-        },
-      ],
+      markers:[],
 
       valid: true,
       center: latLng(43.7101728, 7.2619532),
@@ -235,6 +220,7 @@ export default {
 
   mounted() {
     this.dataEspFetcher();
+    this.getInfoEsp();
   },
 
   methods: {
@@ -269,6 +255,7 @@ export default {
     },
 
     loca: async function () {
+
       var adr = this.position;
 
       adr.replaceAll(" ", "%20");
@@ -285,6 +272,21 @@ export default {
       this.show = true;
       this.fetchApiWeather();
     },
+
+
+    getInfoEsp(){
+      let index =1;
+      fetch("http://localhost:3000/esp/").then((response) => response.json())
+          .then((res) => {
+            console.log(res)
+
+            res.forEach((e)=>
+            {
+              index+=1
+              this.markers.push({id:index,position: e.adresse});
+            })
+          });
+    }
   },
 };
 </script>
