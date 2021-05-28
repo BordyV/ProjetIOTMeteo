@@ -116,8 +116,6 @@ export default {
   data() {
     return {
       errorApi :false,
-      api_key: "d0f74ba55214c45401d7ae1941791222",
-      url_base: "https://api.openweathermap.org/data/2.5/",
       esp: "",
       position: "",
       zoom: 13,
@@ -159,14 +157,15 @@ export default {
     },
 
     fetchApiWeather: async function () {
-      await fetch(
-          `${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`
-      ).then((res) => {
+      await fetch("http://localhost:3000/meteo/openWeatherMeteo/"+ this.position)
+      .then((res) => {
+        console.log("prout", res)
         res.json().then((body) => {
           if (body.cod === "404") {
             this.errorApi = true;
           }
           console.log(body);
+
           this.weather = body;
           //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
           this.markerOpenWeather = latLng(this.weather.coord.lat, this.weather.coord.lon);

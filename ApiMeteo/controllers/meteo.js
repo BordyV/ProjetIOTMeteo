@@ -1,5 +1,8 @@
 
 const MeteoModel= require('../models/meteo.model.js');
+const openWeatherConfig = require('../config/openWeatherConfig');
+const fetch = require("node-fetch");
+
 
 
 
@@ -27,7 +30,26 @@ const getMeteoById = async (req,res) => {
     })
 }
 
+//Permet de récuperer les données de l'api openWeather
+const getMeteoOpenWeatherByAdress = async (req,res) => {
+    //adresse envoyé par l'utilisateur
+    const adress = req.params.adress;
+    //fetch sur l'api openWeatherMap
+    await fetch(
+        `${openWeatherConfig.openWeather_url}weather?q=${adress}&units=metric&APPID=${openWeatherConfig.openWeatherKey}`)
+        .then((resFetch) => {
+            resFetch.json().then((body)=> {
+                res.status(200).send(body);
+            });
+          }).catch(err => {
+            res.send(err);
+        });
+
+    
+}
+
 module.exports = {
     getMeteo : getMeteo,
     getMeteoById: getMeteoById,
+    getMeteoOpenWeatherByAdress: getMeteoOpenWeatherByAdress
 }
