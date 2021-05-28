@@ -112,7 +112,7 @@
         </div>
       </v-col>
       <v-col>
-        <Pstat v-if="appelMeteo"  v-bind:weatherbis="weather" class="pstat"></Pstat>
+        <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
       <div class="dialog">
         <v-dialog v-model="dialog" width="1000">
@@ -179,19 +179,6 @@ export default {
 
   data() {
     return {
-      appelMeteo :false,
-      selected: null,
-      options: {
-        apiKey: process.env.VUE_APP_PLACE_API_KEY,
-        deepSearch: true,
-        cors: true,
-        focus: false,
-        params: {
-          location: "45.52345,-122.67621",
-          radius: 1000,
-          language: "en",
-        },
-      },
       api_key: "d0f74ba55214c45401d7ae1941791222",
       url_base: "https://api.openweathermap.org/data/2.5/",
       esp: "",
@@ -233,7 +220,6 @@ export default {
       });
     },
     fetchApiWeather: async function () {
-      this.appelMeteo = true;
       await fetch(
         `${this.url_base}weather?q=${this.position}&units=metric&APPID=${this.api_key}`
       ).then((res) => {

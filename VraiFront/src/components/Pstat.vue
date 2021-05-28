@@ -76,7 +76,10 @@ export default defineComponent({
     };
   },
   mounted() {
+    if(this.weatherbis)
+    {
     this.setup();
+    }
   },
   watch: {
       weatherbis: function(){
