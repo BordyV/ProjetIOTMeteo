@@ -37,7 +37,7 @@
             <l-tile-layer :url="url" :attribution="attribution" />
 
             <l-marker
-              v-for="item in markers"
+              v-for="item in listMarkersESP"
               :key="item.id"
               :lat-lng="item.position"
             >
@@ -74,7 +74,7 @@
                 </v-dialog>
               </l-popup>
             </l-marker>
-            <l-marker :lat-lng="marker1">
+            <l-marker v-if="weather" :lat-lng="markerOpenWeather">
               <l-popup>
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
@@ -200,8 +200,8 @@ export default {
       weather: undefined,
       dataEsp: undefined,
       dialog: false,
-      marker1: latLng(43.7101728, 7.2619532),
-      markers:[],
+      markerOpenWeather: null,
+      listMarkersESP: [],
 
       valid: true,
       center: latLng(43.7101728, 7.2619532),
@@ -240,6 +240,9 @@ export default {
         res.json().then((body) => {
           console.log(body);
           this.weather = body;
+          //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
+          this.markerOpenWeather = latLng(this.weather.coord.lat,this.weather.coord.lon);
+          this.center = latLng(this.weather.coord.lat,this.weather.coord.lon);
         });
       });
     },
@@ -255,20 +258,6 @@ export default {
     },
 
     loca: async function () {
-
-      var adr = this.position;
-
-      adr.replaceAll(" ", "%20");
-      adr.replaceAll(",", "%2C");
-
-      const key = "pk.2a042f7fb2119042d73b548892eac47e";
-      var url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${this.position}&limit=1&accept-language=fr&countrycodes=fr&format=json`;
-      fetch(url)
-        .then((response) => response.json())
-        .then((res) => {
-          this.center = latLng(parseFloat(res[0].lat), parseFloat(res[0].lon));
-        });
-
       this.show = true;
       this.fetchApiWeather();
     },
@@ -283,7 +272,7 @@ export default {
             res.forEach((e)=>
             {
               index+=1
-              this.markers.push({id:index,position: e.adresse});
+              this.listMarkersESP.push({id:index,position: e.adresse});
             })
           });
     }
