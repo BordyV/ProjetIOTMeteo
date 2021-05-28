@@ -1,24 +1,24 @@
 <template>
   <div class="small">
     <v-icon large>mdi-image-filter-hdr </v-icon>
-    <h3>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }}</h3>
-    <line-chart :chart-data="datacollection"></line-chart>
+    <h3>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }} m</h3>
+    <line-chart :chart-data="datacollection" id="graph"></line-chart>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative </v-icon>
       <h3>Valeur</h3>
       <v-chip-group
         v-model="selection"
         active-class="teal accent-4 white--text"
-        class="ma-8"
+        class="ma-1"
         mandatory
       >
-        <v-chip @click="dataType('Lumière')">Lumière</v-chip>
+        <v-chip @click="dataType('lumiere')">Lumière</v-chip>
 
-        <v-chip @click="dataType('Pression')">Pression</v-chip>
+        <v-chip @click="dataType('pression')">Pression</v-chip>
 
-        <v-chip @click="dataType('Humidité')">Humidité</v-chip>
+        <v-chip @click="dataType('humidite')">Humidité</v-chip>
 
-        <v-chip @click="dataType('Température')">Température</v-chip>
+        <v-chip @click="dataType('temperature')">Température</v-chip>
 
         <v-chip><input v-model="nbValeur">Nb de Val</v-chip>
       </v-chip-group>
@@ -40,25 +40,25 @@ export default {
       datacollection: null,
       selection: 0,
       nbValeur: 50, //A changer pour changer le nb de valeur du graph
-      labelDataActuel : undefined
+      typeDataActuel : undefined
     };
   },
   props: {
     valEsp: {},
   },
   mounted() {
-    this.dataType("Lumière");
+    this.dataType("lumiere");
     console.log(this.valEsp);
   },
   methods: {
-    //permet d'actualiser le Graph en fonction du label de data
-    //les labels de data possible: Lumière, Pression, Humidité, Température 
-    dataType(labelData) {
-      //défini le label en cours d'utilisation
-      this.labelDataActuel = labelData;
+    //permet d'actualiser le Graph en fonction du type de data
+    //les ypes de data possible: lumiere, pression, humidite, temperature 
+    dataType(typeData) {
       //permet de définir quel est le type de données en fonction du label 
-      let typeData = labelData == 'Lumière' ? 'lumiere': labelData == 'Pression' ?
-       'pression': labelData == 'Humidité' ? 'humidite': 'temperature';  
+      let labelData = typeData == 'lumiere' ? 'Lumière en Lumens': typeData == 'pression' ?
+       'Pression en Pascal': typeData == 'humidite' ? 'Humidité en %': 'Température en °C';  
+      //défini le type de data en cours d'utilisation
+      this.typeDataActuel = typeData;
       this.datacollection = {
         labels: this.getDate(),
         datasets: [
@@ -96,8 +96,14 @@ export default {
   //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property
   watch: {
     nbValeur: function () {
-     this.dataType(this.labelDataActuel);
+     this.dataType(this.typeDataActuel);
     }
   }
 };
 </script>
+
+<style>
+ #graph{
+   width: 60%;
+ }
+</style>

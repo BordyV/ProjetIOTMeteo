@@ -1,30 +1,27 @@
 <template>
   <div class="page">
-    
     <div class="section1">
-     
-      <v-flex class="saisir" style="color:white"> Veuillez saisir votre ville : </v-flex>
+      <v-flex class="saisir" style="color: white">
+        Veuillez saisir votre ville :
+      </v-flex>
       <v-text-field
         v-model="position"
         placeholder="Exemple : (Nice, Paris, Guingamp ...)"
         label="Votre ville"
-            filled
-            rounded
-            dense
+        filled
+        rounded
+        dense
         class="champ"
-        :append-icon="marker = 'mdi-magnify'"
+        :append-icon="(marker = 'mdi-magnify')"
         @click:append="loca"
       >
-      
       </v-text-field>
-      
+
       <!-- <v-text-field
       v-model= "esp"
           
             placeholder="adresse d'un esp"
           ></v-text-field> -->
-
-     
     </div>
     <v-row>
       <v-col class="col1">
@@ -45,94 +42,70 @@
               :lat-lng="item.position"
             >
               <l-popup>
-                <v-dialog
-      v-model="dialog"
-      width="1000"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="#191970"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Voir Détails
-        </v-btn>
-      </template>
+                <v-dialog v-model="dialog" width="1000">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="#191970" dark v-bind="attrs" v-on="on">
+                      Voir Détails
+                    </v-btn>
+                  </template>
 
-      <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Graphiques de votre recherche
-        </v-card-title>
+                  <v-card>
+                    <v-card-title class="headline grey lighten-2">
+                      Graphiques de votre recherche
+                    </v-card-title>
 
-        <v-card-text>
-          <Pgraph
-            v-if="dataEsp"
-            v-bind:valEsp="dataEsp"
-            class="pgraph"
-          ></Pgraph>
-        </v-card-text>
+                    <v-card-text>
+                      <Pgraph
+                        v-if="dataEsp"
+                        v-bind:valEsp="dataEsp"
+                        class="pgraph"
+                      ></Pgraph>
+                    </v-card-text>
 
-        <v-divider></v-divider>
+                    <v-divider></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-           Retour
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="dialog = false">
+                        Retour
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </l-popup>
             </l-marker>
             <l-marker :lat-lng="marker1">
               <l-popup>
-                <v-dialog
-      v-model="dialog"
-      width="1000"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="#191970"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Voir Détails 
-        </v-btn>
-      </template>
+                <v-dialog v-model="dialog" width="1000">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="#191970" dark v-bind="attrs" v-on="on">
+                      Voir Détails
+                    </v-btn>
+                  </template>
 
-      <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Graphiques de votre recherche
-        </v-card-title>
+                  <v-card>
+                    <v-card-title class="headline grey lighten-2">
+                      Graphiques de votre recherche
+                    </v-card-title>
 
-        <v-card-text>
-          <Pgraph
-            v-if="dataEsp"
-            v-bind:valEsp="dataEsp"
-            class="pgraph"
-          ></Pgraph>
-        </v-card-text>
+                    <v-card-text>
+                      <Pgraph
+                        v-if="dataEsp"
+                        v-bind:valEsp="dataEsp"
+                        class="pgraph"
+                      ></Pgraph>
+                    </v-card-text>
 
-        <v-divider></v-divider>
+                    <v-divider></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-           Retour
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="dialog = false">
+                        Retour
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </l-popup>
             </l-marker>
           </l-map>
@@ -142,56 +115,40 @@
         <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
       <div class="dialog">
-    <v-dialog
-      v-model="dialog"
-      width="1000"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="#191970"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Voir Détails De La Recherche Actuelle
-        </v-btn>
-      </template>
+        <v-dialog v-model="dialog" width="1000">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="#191970" dark v-bind="attrs" v-on="on">
+              Voir Détails De La Recherche Actuelle
+            </v-btn>
+          </template>
 
-      <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Graphiques de votre recherche
-        </v-card-title>
+          <v-card>
+            <v-card-title class="headline grey lighten-2">
+              Graphiques de votre recherche
+            </v-card-title>
 
-        <v-card-text>
-          <Pgraph
-            v-if="dataEsp"
-            v-bind:valEsp="dataEsp"
-            class="pgraph"
-          ></Pgraph>
-        </v-card-text>
+            <v-card-text>
+              <Pgraph
+                v-if="dataEsp"
+                v-bind:valEsp="dataEsp"
+                class="pgraph"
+              ></Pgraph>
+            </v-card-text>
 
-        <v-divider></v-divider>
+            <v-divider></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-           Retour
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="dialog = false">
+                Retour
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
     </v-row>
-      <!--<bootstrap-dropdown(:options="options" @select="selected = $event" ) name="input-name">  -->
-  
-  
-
+    <!--<bootstrap-dropdown(:options="options" @select="selected = $event" ) name="input-name">  -->
   </div>
-  
 </template>
 
 
@@ -205,37 +162,32 @@ import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
 
-
-
-
-
 export default {
   name: "Pmap",
 
   components: {
     LMap,
     LTileLayer,
-    
+
     LMarker,
     LPopup,
     Pgraph,
     Pstat,
-   
   },
 
   data() {
     return {
-       selected: null,
+      selected: null,
       options: {
         apiKey: process.env.VUE_APP_PLACE_API_KEY,
         deepSearch: true,
         cors: true,
         focus: false,
         params: {
-          location: '45.52345,-122.67621',
+          location: "45.52345,-122.67621",
           radius: 1000,
-          language: 'en'
-        }
+          language: "en",
+        },
       },
       api_key: "d0f74ba55214c45401d7ae1941791222",
       url_base: "https://api.openweathermap.org/data/2.5/",
@@ -244,7 +196,7 @@ export default {
       zoom: 13,
       weather: undefined,
       dataEsp: undefined,
-      dialog : false,
+      dialog: false,
       marker1: latLng(43.7101728, 7.2619532),
       markers: [
         {
@@ -277,13 +229,11 @@ export default {
         zoomSnap: 0.5,
       },
       showMap: true,
-      
     };
   },
 
   mounted() {
     this.dataEspFetcher();
-    
   },
 
   methods: {
@@ -305,7 +255,7 @@ export default {
         });
       });
     },
-    
+
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
@@ -318,7 +268,7 @@ export default {
 
     loca: async function () {
       var adr = this.position;
-      
+
       adr.replaceAll(" ", "%20");
       adr.replaceAll(",", "%2C");
 
@@ -333,16 +283,14 @@ export default {
       this.show = true;
       this.fetchApiWeather();
     },
-    
   },
 };
 </script>
 <style>
-
-.section1{
+.section1 {
   margin-left: 20px;
 }
-.title{
+.title {
   text-align: center;
 }
 .map {
@@ -355,7 +303,6 @@ export default {
 }
 .champ {
   width: 39%;
-  
 }
 
 .col1 {
@@ -367,29 +314,28 @@ export default {
   /* bottom: 10px; */
 }
 .pgraph {
-  width: 90%;
+  position: relative;
+  width: 100%;
   height: 70%;
-  margin-top: 15%;
 }
-.dialog{
-      position: relative;
-    top: 400px;
-    right: 250px;
-    height: 20%;
+.dialog {
+  position: relative;
+  top: 400px;
+  right: 250px;
+  height: 20%;
 }
-.pstat{
+.pstat {
   margin-left: 40px;
   margin-top: 30px;
 }
-.mr-4{
+.mr-4 {
   margin-left: 20px;
-  
 }
-.page{
- background-color: #4299e1;
+.page {
+  background-color: #4299e1;
   /*width: 120%;*/
 }
-.v-input__slot{
+.v-input__slot {
   margin-left: 20px;
 }
 @import url(https://cdn.syncfusion.com/ej2/material.css);
