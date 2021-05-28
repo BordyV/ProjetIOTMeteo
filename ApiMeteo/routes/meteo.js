@@ -4,5 +4,6 @@ const router = express.Router();
 
 
 router.get('/', meteoController.getMeteo);
+router.get('/adresseMac/:id', meteoController.getMeteoById);
 
 module.exports = router;

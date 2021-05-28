@@ -14,6 +14,18 @@ const getMeteo = async (req,res) => {
         })
 }
 
+const getMeteoById = async (req,res) => {
+    const addMac = req.params.id;
+    await userModel.find({adresseMac : addMac})
+    .then(rslt => {
+        rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur : "ESP inconnu ...."})
+    })
+    .catch(err => {
+        res.status(400).send({message : err.message});
+    })
+}
+
 module.exports = {
     getMeteo : getMeteo,
+    getMeteoById: getMeteoById,
 }
