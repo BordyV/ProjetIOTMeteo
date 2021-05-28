@@ -6,7 +6,7 @@
     <!-- <recherchePersonne/> -->
 
     <footer>
-      <Pfoot/>
+     
     </footer>
   
   </v-app>
@@ -17,7 +17,7 @@
 
  import PHeader from "./components/PHeader";
 
- import Pfoot from "./components/Pfoot";
+
 
 
 
@@ -38,7 +38,7 @@ export default {
     "PHeader" : PHeader,
     //"Pmap" : Pmap,
     // "recherchePersonne" : recherchePersonne,
-    "Pfoot" : Pfoot,
+   
     
     //"LoginRegister" : LoginRegister
   },

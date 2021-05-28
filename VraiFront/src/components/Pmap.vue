@@ -3,15 +3,17 @@
     
     <div class="section1">
      
-      <v-flex class="saisir"> Veuillez saisir votre adresse : </v-flex>
+      <v-flex class="saisir" style="color:white"> Veuillez saisir votre ville : </v-flex>
       <v-text-field
         v-model="position"
-        placeholder="Exemple : (Nice, 2 Avenue sainte-claire, ...)"
-        label="Votre adresse"
+        placeholder="Exemple : (Nice, Paris, Guingamp ...)"
+        label="Votre ville"
             filled
             rounded
             dense
         class="champ"
+        :append-icon="marker = 'mdi-magnify'"
+        @click:append="loca"
       >
       
       </v-text-field>
@@ -22,15 +24,7 @@
             placeholder="adresse d'un esp"
           ></v-text-field> -->
 
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="loca">
-        Valider
-         <v-icon
-          dark
-          right
-        >
-          mdi-checkbox-marked-circle
-        </v-icon>
-      </v-btn>
+     
     </div>
     <v-row>
       <v-col class="col1">
@@ -39,7 +33,7 @@
             :zoom="zoom"
             :center="center"
             :options="mapOptions"
-            style="height: 60%; width: 50%; z-index: 1"
+            style="height: 100%; width: 50%; z-index: 1"
             @update:center="centerUpdate"
             @update:zoom="zoomUpdate"
           >
@@ -57,7 +51,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="red lighten-2"
+          color="#191970"
           dark
           v-bind="attrs"
           v-on="on"
@@ -103,7 +97,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="red lighten-2"
+          color="#191970"
           dark
           v-bind="attrs"
           v-on="on"
@@ -147,14 +141,14 @@
       <v-col>
         <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
-      <div class="text-center">
+      <div class="dialog">
     <v-dialog
       v-model="dialog"
       width="1000"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="red lighten-2"
+          color="#191970"
           dark
           v-bind="attrs"
           v-on="on"
@@ -192,7 +186,10 @@
     </v-dialog>
   </div>
     </v-row>
-      
+      <!--<bootstrap-dropdown(:options="options" @select="selected = $event" ) name="input-name">  -->
+  
+  
+
   </div>
   
 </template>
@@ -209,12 +206,16 @@ import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
 
 
+
+
+
 export default {
   name: "Pmap",
 
   components: {
     LMap,
     LTileLayer,
+    
     LMarker,
     LPopup,
     Pgraph,
@@ -224,6 +225,18 @@ export default {
 
   data() {
     return {
+       selected: null,
+      options: {
+        apiKey: process.env.VUE_APP_PLACE_API_KEY,
+        deepSearch: true,
+        cors: true,
+        focus: false,
+        params: {
+          location: '45.52345,-122.67621',
+          radius: 1000,
+          language: 'en'
+        }
+      },
       api_key: "d0f74ba55214c45401d7ae1941791222",
       url_base: "https://api.openweathermap.org/data/2.5/",
       esp: "",
@@ -264,11 +277,13 @@ export default {
         zoomSnap: 0.5,
       },
       showMap: true,
+      
     };
   },
 
   mounted() {
     this.dataEspFetcher();
+    
   },
 
   methods: {
@@ -290,7 +305,7 @@ export default {
         });
       });
     },
-
+    
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
     },
@@ -303,7 +318,7 @@ export default {
 
     loca: async function () {
       var adr = this.position;
-
+      
       adr.replaceAll(" ", "%20");
       adr.replaceAll(",", "%2C");
 
@@ -323,9 +338,7 @@ export default {
 };
 </script>
 <style>
-.page{
-  width: 90%;
-}
+
 .section1{
   margin-left: 20px;
 }
@@ -334,14 +347,15 @@ export default {
 }
 .map {
   width: 100%;
-  height: 600px;
+  height: 500px;
 }
 .saisir {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .champ {
-  width: 40%;
+  width: 39%;
+  
 }
 
 .col1 {
@@ -353,21 +367,30 @@ export default {
   /* bottom: 10px; */
 }
 .pgraph {
-  width: 70%;
+  width: 90%;
   height: 70%;
   margin-top: 15%;
 }
-.text-center{
+.dialog{
       position: relative;
-    top: 250px;
-    right: 100px;
+    top: 400px;
+    right: 250px;
+    height: 20%;
 }
 .pstat{
-  margin-left: 100px;
+  margin-left: 40px;
   margin-top: 30px;
 }
 .mr-4{
-  margin-left: 200px;
+  margin-left: 20px;
+  
 }
-
+.page{
+ background-color: #4299e1;
+  /*width: 120%;*/
+}
+.v-input__slot{
+  margin-left: 20px;
+}
+@import url(https://cdn.syncfusion.com/ej2/material.css);
 </style>

@@ -2,6 +2,7 @@
   <div>
     <v-app-bar
       dark
+      style="background-color:#191970"
       
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
