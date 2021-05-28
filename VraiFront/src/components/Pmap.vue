@@ -19,7 +19,7 @@
 
       <!-- <v-text-field
       v-model= "esp"
-          
+
             placeholder="adresse d'un esp"
           ></v-text-field> -->
     </div>
@@ -338,5 +338,5 @@ export default {
 .v-input__slot {
   margin-left: 20px;
 }
-@import url(https://cdn.syncfusion.com/ej2/material.css);
+
 </style>
