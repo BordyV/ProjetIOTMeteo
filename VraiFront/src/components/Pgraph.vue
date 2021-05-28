@@ -12,13 +12,13 @@
         class="ma-8"
         mandatory
       >
-        <v-chip @click="dataLum()">Lumière</v-chip>
+        <v-chip @click="dataType('Lumière')">Lumière</v-chip>
 
-        <v-chip @click="dataPres()">Pression</v-chip>
+        <v-chip @click="dataType('Pression')">Pression</v-chip>
 
-        <v-chip @click="dataHumi()">Humidité</v-chip>
+        <v-chip @click="dataType('Humidité')">Humidité</v-chip>
 
-        <v-chip @click="dataTemp()">Température</v-chip>
+        <v-chip @click="dataType('Température')">Température</v-chip>
 
         <v-chip><input v-model="nbValeur">Nb de Val</v-chip>
       </v-chip-group>
@@ -40,23 +40,31 @@ export default {
       datacollection: null,
       selection: 0,
       nbValeur: 50, //A changer pour changer le nb de valeur du graph
+      labelDataActuel : undefined
     };
   },
   props: {
     valEsp: {},
   },
   mounted() {
-    this.dataLum();
+    this.dataType("Lumière");
     console.log(this.valEsp);
   },
   methods: {
-    dataLum() {
+    //permet d'actualiser le Graph en fonction du label de data
+    //les labels de data possible: Lumière, Pression, Humidité, Température 
+    dataType(labelData) {
+      //défini le label en cours d'utilisation
+      this.labelDataActuel = labelData;
+      //permet de définir quel est le type de données en fonction du label 
+      let typeData = labelData == 'Lumière' ? 'lumiere': labelData == 'Pression' ?
+       'pression': labelData == 'Humidité' ? 'humidite': 'temperature';  
       this.datacollection = {
         labels: this.getDate(),
         datasets: [
           {
-            label: "Lumière",
-            data: this.splitListLum(),
+            label: labelData,
+            data: this.splitListData(typeData),
             backgroundColor: "transparent",
             borderColor: "rgba(1, 116, 188, 0.50)",
             pointBackgroundColor: "rgba(171, 71, 188, 1)",
@@ -64,90 +72,16 @@ export default {
         ],
       };
     },
-    splitListLum() {
+    //permet de prendre les données correspondantes au label donné par dataType(labelData);
+    splitListData(typeData) {
       let res = [];
       let i = this.valEsp.length - this.nbValeur;
       let imax = this.valEsp.length;
       for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].lumiere);
+        res.push(this.valEsp[index][typeData]);
       }
       return res;
     },
-
-    dataPres() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Pression",
-            data: this.splitListPres(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-    splitListPres() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].pression);
-      }
-      return res;
-    },
-
-    dataHumi() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Humidité",
-            data: this.splitListHumi(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-
-    splitListHumi() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].humidite);
-      }
-      return res;
-    },
-
-    dataTemp() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Température",
-            data: this.splitListTemp(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-
-    splitListTemp() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].temperature);
-      }
-      return res;
-    },
-
     getDate() {
       let res = [];
       let i = this.valEsp.length - this.nbValeur;
@@ -158,5 +92,12 @@ export default {
       return res;
     },
   },
+  //permet de regarder la valeur d'une data dans le composant
+  //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property
+  watch: {
+    nbValeur: function () {
+     this.dataType(this.labelDataActuel);
+    }
+  }
 };
 </script>
