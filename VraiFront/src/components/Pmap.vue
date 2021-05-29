@@ -46,7 +46,6 @@
               <l-popup>
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn color="#191970" dark v-bind="attrs" v-on="on">
                       Voir Détails
                     </v-btn>
                   </template>
@@ -170,16 +169,22 @@ export default {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       console.log("ESP ID: ", mac);
-      await fetch(`http://localhost:3000/meteo/freshData/${mac}`).then(
-        (res) => {
+      await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
+        .then((res) => {
           res.json().then((body) => {
             this.dataEsp = body;
             console.log(body);
             //on cache le spinner une fois qu'on a les données
             this.showSpinner = false;
           });
-        }
-      );
+        })
+        .catch((err) => {
+          console.error(err);
+          //on set les data de l'esp qu'on veut recup a null pour désactiver le bouton si aucune données trouvés
+          this.dataEsp = null;
+          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
+          this.showSpinner = false;
+        });
     },
 
     fetchApiWeather: async function () {
@@ -187,29 +192,38 @@ export default {
       this.showSpinner = true;
       await fetch(
         "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
-      ).then((res) => {
-        console.log("prout", res);
-        res.json().then((body) => {
-          if (body.cod === "404") {
-            this.snackbarErrorCity = true;
-            //on cache le spinner avant de sortir
-            this.showSpinner = false;
-            //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
-            return;
-          }
-          console.log(body);
+      )
+        .then((res) => {
+          console.log("prout", res);
+          res.json().then((body) => {
+            if (body.cod === "404") {
+              this.snackbarErrorCity = true;
+              //on cache le spinner avant de sortir
+              this.showSpinner = false;
+              //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
+              return;
+            }
+            console.log(body);
 
-          this.weather = body;
-          //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
-          this.markerOpenWeather = latLng(
-            this.weather.coord.lat,
-            this.weather.coord.lon
-          );
-          this.center = latLng(this.weather.coord.lat, this.weather.coord.lon);
-          //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
+            this.weather = body;
+            //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
+            this.markerOpenWeather = latLng(
+              this.weather.coord.lat,
+              this.weather.coord.lon
+            );
+            this.center = latLng(
+              this.weather.coord.lat,
+              this.weather.coord.lon
+            );
+            //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
+            this.showSpinner = false;
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
           this.showSpinner = false;
         });
-      });
     },
 
     zoomUpdate(zoom) {
@@ -231,15 +245,24 @@ export default {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       fetch("http://localhost:3000/esp/")
-        .then((response) => response.json())
-        .then((res) => {
-          console.log(res);
+        .then((response) => {
+          response.json().then((res) => {
+            console.log(res);
 
-          res.forEach((e) => {
-            this.listMarkersESP.push({ id: e.adresseMac, position: e.adresse });
-            //on cache le spinner une fois qu'on a les données
-            this.showSpinner = false;
+            res.forEach((e) => {
+              this.listMarkersESP.push({
+                id: e.adresseMac,
+                position: e.adresse,
+              });
+              //on cache le spinner une fois qu'on a les données
+              this.showSpinner = false;
+            });
           });
+        })
+        .catch((err) => {
+          console.error(err);
+          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
+          this.showSpinner = false;
         });
     },
   },
