@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div v-if="token === undefined">
+    <div v-if="token === undefined"  class="pasCo">
       <v-btn href="/iotMeteo/#/login"> Veuillez vous connecter pour acceder a ce contenu</v-btn>
     </div>
     <div v-if="token">
@@ -263,6 +263,11 @@ export default {
 <style lang="css" scoped>
 h3.capitalize {
   text-transform: capitalize;
+}
+.pasCo{
+  display: flex;
+  justify-content: center;
+  margin-top: 300px;
 }
 
 </style>
