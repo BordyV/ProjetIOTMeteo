@@ -71,7 +71,13 @@
                 </v-dialog>
               </l-popup>
             </l-marker>
-            <l-marker v-if="weather" :lat-lng="markerOpenWeather"> </l-marker>
+            <l-marker v-if="weather" :lat-lng="markerOpenWeather">
+              <l-icon
+                :icon-size="dynamicSize"
+                :icon-anchor="dynamicAnchor"
+                :icon-url="iconOpenWeatherRed"
+              />
+            </l-marker>
           </l-map>
         </div>
       </v-col>
@@ -82,7 +88,12 @@
     <v-snackbar absolute top v-model="snackbarErrorCity">
       Ville Inconnue
       <template v-slot:action="{ attrs }">
-        <v-btn color="blue" text v-bind="attrs" @click="snackbarErrorCity = false">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbarErrorCity = false"
+        >
           Close
         </v-btn>
       </template>
@@ -94,7 +105,7 @@
 
 <script>
 import { latLng } from "leaflet";
-import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
 
@@ -104,7 +115,7 @@ export default {
   components: {
     LMap,
     LTileLayer,
-
+    LIcon,
     LMarker,
     LPopup,
     Pgraph,
@@ -120,6 +131,7 @@ export default {
       dataEsp: undefined,
       dialog: false,
       markerOpenWeather: null,
+      iconOpenWeatherRed: null,
       listMarkersESP: [],
       snackbarErrorCity: false,
       valid: true,
@@ -138,9 +150,17 @@ export default {
   },
 
   mounted() {
+    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");
     this.getInfoEsp();
   },
-
+  computed: {
+    dynamicSize() {
+      return [this.iconSize, this.iconSize * 1.15];
+    },
+    dynamicAnchor() {
+      return [this.iconSize / 2, this.iconSize * 1.15];
+    },
+  },
   methods: {
     dataEspFetcherbyId: async function (mac) {
       console.log("ESP ID: ", mac);
