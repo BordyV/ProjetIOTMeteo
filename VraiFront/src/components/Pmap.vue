@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <spinner :showSpinner="showSpinner"></spinner>
     <div class="section1">
       <v-flex class="saisir" style="color: white">
         Veuillez saisir votre ville :
@@ -108,6 +109,7 @@ import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
+import Spinner from "./Spinner.vue";
 
 export default {
   name: "Pmap",
@@ -120,6 +122,7 @@ export default {
     LPopup,
     Pgraph,
     Pstat,
+    Spinner,
   },
 
   data() {
@@ -130,6 +133,7 @@ export default {
       weather: undefined,
       dataEsp: undefined,
       dialog: false,
+      showSpinner: false,
       markerOpenWeather: null,
       iconOpenWeatherRed: null,
       listMarkersESP: [],
@@ -163,18 +167,24 @@ export default {
   },
   methods: {
     dataEspFetcherbyId: async function (mac) {
+      //on affiche le spinner qui sert de loader
+      this.showSpinner = true;
       console.log("ESP ID: ", mac);
       await fetch(`http://localhost:3000/meteo/freshData/${mac}`).then(
         (res) => {
           res.json().then((body) => {
             this.dataEsp = body;
             console.log(body);
+            //on cache le spinner une fois qu'on a les données
+            this.showSpinner = false;
           });
         }
       );
     },
 
     fetchApiWeather: async function () {
+      //on affiche le spinner qui sert de loader
+      this.showSpinner = true;
       await fetch(
         "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
       ).then((res) => {
@@ -182,6 +192,8 @@ export default {
         res.json().then((body) => {
           if (body.cod === "404") {
             this.snackbarErrorCity = true;
+            //on cache le spinner avant de sortir
+            this.showSpinner = false;
             //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
             return;
           }
@@ -194,6 +206,8 @@ export default {
             this.weather.coord.lon
           );
           this.center = latLng(this.weather.coord.lat, this.weather.coord.lon);
+          //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
+          this.showSpinner = false;
         });
       });
     },
@@ -214,6 +228,8 @@ export default {
     },
 
     getInfoEsp() {
+      //on affiche le spinner qui sert de loader
+      this.showSpinner = true;
       fetch("http://localhost:3000/esp/")
         .then((response) => response.json())
         .then((res) => {
@@ -221,6 +237,8 @@ export default {
 
           res.forEach((e) => {
             this.listMarkersESP.push({ id: e.adresseMac, position: e.adresse });
+            //on cache le spinner une fois qu'on a les données
+            this.showSpinner = false;
           });
         });
     },
