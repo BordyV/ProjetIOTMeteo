@@ -1,6 +1,9 @@
 
 const MeteoModel= require('../models/meteo.model.js');
 const openWeatherConfig = require('../config/openWeatherConfig');
+const weatherBitConfig = require('../config/weatherBitConfig');
+
+
 const fetch = require("node-fetch");
 
 
@@ -47,6 +50,28 @@ const getMeteoOpenWeatherByAdress = async (req,res) => {
 
 
 }
+//https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
+
+const getMeteoWeatherBitByAdress = async (req,res) => {
+    
+
+    //adresse envoyé par l'utilisateur
+    const lat = req.params.lat;
+    const lon = req.params.lon;
+    console.log(`${weatherBitConfig.weatherBit_url}?${lat}&${lon}&key=${weatherBitConfig.weatherBitKey}`);
+    //fetch sur l'api openWeatherMap
+    await fetch(
+        `${weatherBitConfig.weatherBit_url}?${lat}&${lon}&key=${weatherBitConfig.weatherBitKey}`)
+        .then((resFetch) => {
+            resFetch.json().then((body)=> {
+                res.status(200).send(body);
+            });
+          }).catch(err => {
+            res.send(err);
+        });
+
+
+}
 
 const getFreshMeteoById = async (req,res) => {
     const addMac = req.params.id;
@@ -61,9 +86,15 @@ const getFreshMeteoById = async (req,res) => {
             res.status(400).send({message : err.message});
         })
 }
+
+const verificationDonnes = async (req,res) => {
+
+}
 module.exports = {
     getMeteo : getMeteo,
     getMeteoById: getMeteoById,
     getFreshMeteoById:getFreshMeteoById,
-    getMeteoOpenWeatherByAdress: getMeteoOpenWeatherByAdress
+    getMeteoOpenWeatherByAdress: getMeteoOpenWeatherByAdress,
+    getMeteoWeatherBitByAdress : getMeteoWeatherBitByAdress,
+    verificationDonnes : verificationDonnes
 }
