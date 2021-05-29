@@ -270,9 +270,9 @@ export default {
             this.$session.set("token", data.token);
             this.$session.set("userId", data.userId);
             console.log(this.$session.get("token"));
-             this.$router.go('user/id/'+ data.userId) 
+             this.$router.go('user/'+ data.userId)
             /*this.$router.replace({
-              name: `user`, 
+              name: `user`,
               params: {
                 idUser: data.userId,
               },
