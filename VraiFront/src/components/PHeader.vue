@@ -89,7 +89,7 @@ export default {
     logout: function () {
       this.$session.destroy();
       console.log("cancel")
-      this.router.push({ name: 'login'})
+      this.$router.replace('login');
     }
   }
 };
