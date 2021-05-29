@@ -148,7 +148,7 @@ export default {
   methods: {
     dataEspFetcherbyId: async function (mac) {
       console.log('ESP ID: ',mac);
-      await fetch(`http://localhost:3000/meteo/adresseMac/${mac}`).then((res) => {
+      await fetch(`http://localhost:3000/meteo/freshData/${mac}`).then((res) => {
         res.json().then((body) => {
           this.dataEsp = body;
           console.log(body);

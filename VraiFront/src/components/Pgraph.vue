@@ -1,7 +1,9 @@
 <template>
-  <div class="small">
-    <v-icon large>mdi-image-filter-hdr </v-icon>
-    <h3>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }} m</h3>
+  <div class="small"> <h2 v-if="prenom">Esp de l'utilisateur: {{nom}} {{prenom}}</h2>
+
+
+
+    <h3><v-icon large>mdi-image-filter-hdr </v-icon>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }} m</h3>
     <line-chart :chart-data="datacollection" id="graph"></line-chart>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative </v-icon>
@@ -38,6 +40,8 @@ export default {
   data() {
     return {
       datacollection: null,
+      prenom: undefined,
+      nom: undefined,
       selection: 0,
       nbValeur: 50, //A changer pour changer le nb de valeur du graph
       typeDataActuel : undefined
@@ -48,7 +52,9 @@ export default {
   },
   mounted() {
     if(this.valEsp){
+      console.log(this.valEsp)
       this.dataType("lumiere");
+      this.getName();
     }
 
     console.log(this.valEsp);
@@ -58,8 +64,8 @@ export default {
     //les ypes de data possible: lumiere, pression, humidite, temperature
     dataType(typeData) {
       //permet de définir quel est le type de données en fonction du label
-      let labelData = typeData == 'lumiere' ? 'Lumière en Lumens': typeData == 'pression' ?
-       'Pression en Pascal': typeData == 'humidite' ? 'Humidité en %': 'Température en °C';
+      let labelData = typeData === 'lumiere' ? 'Lumière en Lumens': typeData === 'pression' ?
+       'Pression en Pascal': typeData === 'humidite' ? 'Humidité en %': 'Température en °C';
       //défini le type de data en cours d'utilisation
       this.typeDataActuel = typeData;
       this.datacollection = {
@@ -85,6 +91,7 @@ export default {
       }
       return res;
     },
+
     getDate() {
       let res = [];
       let i = this.valEsp.length - this.nbValeur;
@@ -94,6 +101,16 @@ export default {
       }
       return res;
     },
+
+    getName(){
+      fetch(`http://localhost:3000/user/name/${this.valEsp[this.valEsp.length - 1].userId}`).then((res) =>
+        res.json().then((e)=>{
+        console.log('user: ',e);
+        this.prenom = e.userFirstName;
+        this.nom = e.userLastName;
+      })
+    );
+    }
   },
   //permet de regarder la valeur d'une data dans le composant
   //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property
@@ -108,5 +125,8 @@ export default {
 <style>
  #graph{
    width: 60%;
+ }
+ h2{
+   color: #4299E1;
  }
 </style>

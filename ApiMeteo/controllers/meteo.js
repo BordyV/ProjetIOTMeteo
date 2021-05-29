@@ -45,11 +45,25 @@ const getMeteoOpenWeatherByAdress = async (req,res) => {
             res.send(err);
         });
 
-    
+
 }
 
+const getFreshMeteoById = async (req,res) => {
+    const addMac = req.params.id;
+    const today = new Date();
+    today.setDate( today.getDate() - 14 );
+    await MeteoModel.find({id : addMac,date : { $gte : today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}})
+        .then(rslt => {
+
+            rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur : "ESP inconnu ...."})
+        })
+        .catch(err => {
+            res.status(400).send({message : err.message});
+        })
+}
 module.exports = {
     getMeteo : getMeteo,
     getMeteoById: getMeteoById,
+    getFreshMeteoById:getFreshMeteoById,
     getMeteoOpenWeatherByAdress: getMeteoOpenWeatherByAdress
 }

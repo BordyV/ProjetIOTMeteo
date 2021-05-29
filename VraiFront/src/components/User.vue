@@ -111,12 +111,22 @@
               </v-dialog>
             </v-row>
           </v-card>
-          <!-- </v-container> -->
-          <!-- <v-sheet
-              min-height="70vh"
-              rounded="lg"
+
+          <v-card >
+            <v-col
+                v-for="esp in listEsp"
+                :key="esp.adresseMac"
+                cols="6"
+                rounded="lg"
             >
-            </v-sheet> -->
+              <v-card elevation="5" class="pa-5">
+                <p> {{esp.adresseMac}}</p>
+                <hr>
+                <p> Position: latitude  {{esp.adresse.lat}}, longitude {{esp.adresse.lng}}</p>
+              </v-card>
+            </v-col>
+          </v-card>
+
         </v-col>
       </v-row>
     </v-container>
@@ -150,6 +160,7 @@ export default {
 
   data() {
     return {
+      listEsp: [],
       dialog: false,
       show: false,
       adresseMac: "",
@@ -159,6 +170,7 @@ export default {
     };
   },
   mounted: async function () {
+    this.getMyEsps();
     if (this.$session.get("userId")) {
       this.isAdmin = true;
     }
@@ -215,7 +227,24 @@ export default {
       console.log("cancel")
       this.$router.go('/');
     },
-  },
+    getMyEsps: async function (){
+      console.log(this.$route.params.idUser);
+      var jsonContent = await fetch(
+          `http://localhost:3000/esp/getEsp/${this.$route.params.idUser}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": this.$session.get("token"),
+            },
+          }
+      );
+
+      var json = await jsonContent.json();
+      this.listEsp = json;
+    },
+
+
+  }
 };
 </script>
 <style lang="css" scoped>

@@ -32,16 +32,7 @@ const getUsers = async (req,res) => {
         res.send({message : error.message})
     })
 }
-const getUserByName = async (req,res) => {
-    const name = req.params.name;
-    await userModel.find({userName : name})
-    .then(rslt => {
-        rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur : "Utilisateur inconnu ...."})
-    })
-    .catch(err => {
-        res.status(400).send({message : err.message});
-    })
-}
+
 const isAlreadyRegistered = async (req,res) => {
     const body = req.body;
     await userModel.find({userEmail : body.userEmail})
@@ -67,6 +58,28 @@ const getUserById = async (req,res) => {
 
 
 
+const getUserNameById = async (req,res) => {
+    const id = req.params.id;
+    await userModel.find({_id : id})
+        .then((rslt) => {
+            let body;
+
+                body = {
+                    userFirstName: rslt[0].userFirstName,
+                    userLastName: rslt[0].userLastName
+                }
+
+
+
+            console.log('qpres',rslt);
+
+            rslt.length ? res.status(200).send(body) : res.status(200).json({erreur : "Utilisateur inconnu ...."})
+        })
+        .catch(err => {
+            res.status(400).send({message : err.message});
+        })
+}
+
 const connection = async (req,res) => {
     const data = req.body;
     console.log(process.env.JWT_SECRET);
@@ -90,7 +103,7 @@ const connection = async (req,res) => {
                             });
                             }
                         );
-                        console.log(process.env.JWT_SECRET);                        
+                        console.log(process.env.JWT_SECRET);
 
             }else{
                 res.status(401).send({message : "Wrong password"})
@@ -118,10 +131,10 @@ const setUserPicture = async (req,res) => {
 module.exports = {
     newUser : newUser,
     getUsers : getUsers,
-    getUserByName : getUserByName,
     getUserById : getUserById,
     connection : connection,
     isAlreadyRegistered: isAlreadyRegistered,
     setUserPicture : setUserPicture,
+    getUserNameById:getUserNameById
 
 }
