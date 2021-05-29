@@ -2,7 +2,8 @@
   <div>
     <v-app-bar
       dark
-      
+      style="background-color:#191970"
+
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
@@ -17,22 +18,20 @@
    <v-navigation-drawer
             v-model="drawer"
             app
-            absolute 
-            bottom 
+            absolute
+            bottom
             temporary
-    > 
+    >
       <v-sheet
               color="grey lighten-4"
               class="pa-4">
-       <Profil>
 
-       </Profil>
       </v-sheet>
 
       <v-divider></v-divider>
       <v-list
       v-for="lien in navbarButtons"
-       :key="lien.href" 
+       :key="lien.href"
        >
         <v-list-item :to="lien.href">
           <!-- ICON -->
@@ -48,7 +47,7 @@
       </v-list>
     </v-navigation-drawer>
 
-   
+
   </div>
 </template>
 
@@ -68,20 +67,15 @@ export default {
         title: 'Profil',
         href: '/user/'
       },
-      
+
     }
     }),
    mounted() {
      this.drawer =  false;
-    if(this.$session.get('token')){
-      this.Profil.href = this.connecte;
-    }
-    else{
-      this.Profil.href = this.haveToCo;
-    }
+
    },
     watch: {
-     
+
       group () {
         this.drawer = false
       },

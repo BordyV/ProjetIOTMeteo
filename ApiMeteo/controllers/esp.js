@@ -28,7 +28,21 @@ const newEsp= async (req,res) => {
         res.status(400).json({message : err.message});
     })
 }
+
+
+const getEspById = async (req,res) => {
+    const idUser = req.params.id;
+    await EspModel.find({userId : idUser})
+        .then(rslt => {
+            rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur : "pas d'ESP connu ...."})
+        })
+        .catch(err => {
+            res.status(400).send({message : err.message});
+        })
+}
+
 module.exports = {
     getAll : getAll,
     newEsp : newEsp,
+    getEspById:getEspById
 }

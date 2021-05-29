@@ -1,6 +1,6 @@
 <template>
   <v-card class="card">
-    <v-list-item two-line>
+    <v-list-item two-line >
       <v-list-item-content>
         <v-list-item-title class="headline">
           {{ city }}
@@ -12,7 +12,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-card-text>
+    <v-card-text >
       <v-row align="center">
         <v-col class="display-3" cols="6"> {{ temperature }} &deg;C </v-col>
         <v-col cols="6">
@@ -21,22 +21,22 @@
       </v-row>
     </v-card-text>
 
-    <v-list-item>
+    <v-list-item >
       <v-list-item-icon>
         <v-icon>mdi-weather-windy</v-icon>
       </v-list-item-icon>
       <v-list-item-subtitle>{{ wind }}</v-list-item-subtitle>
     </v-list-item>
 
-    <v-list-item>
+    <v-list-item >
       <v-list-item-icon>
         <v-icon>mdi-cloud-download</v-icon>
       </v-list-item-icon>
       <v-list-item-subtitle>{{ humidity }}</v-list-item-subtitle>
     </v-list-item>
 
-    <v-list class="transparent">
-      <v-list-item v-for="item in forecast" :key="item.day">
+    <v-list class="transparent" >
+      <v-list-item v-for="item in forecast" :key="item.day" >
         <v-list-item-title>{{ item.type }}</v-list-item-title>
 
         <v-list-item-icon>
@@ -57,7 +57,7 @@ import { defineComponent } from "@vue/composition-api";
 export default defineComponent({
   props: {
     weatherbis: {},
-    
+
   },
   data() {
     return {
@@ -76,7 +76,10 @@ export default defineComponent({
     };
   },
   mounted() {
+    if(this.weatherbis)
+    {
     this.setup();
+    }
   },
   watch: {
       weatherbis: function(){
@@ -95,21 +98,23 @@ export default defineComponent({
       this.forecast[0].value = this.weather.main.feels_like + " \xB0";
       this.humidity = this.weather.main.humidity + " %";
       this.wind = this.weather.wind.speed + " km";
-      if (this.weather.weather[0].main == "Clouds") {
+
+      if (this.weather.weather[0].main === "Clouds") {
         this.tempicon = "mdi-cloud";
-      } else if (this.weather.weather[0].main == "Sunny") {
+
+      } else if (this.weather.weather[0].main === "Sunny") {
         this.tempicon = "mdi-white-balance-sunny";
-      } else if (this.weather.weather[0].main == "Rain") {
+      } else if (this.weather.weather[0].main === "Rain") {
         this.tempicon = "mdi-weather-pouring";
-      } else if (this.weather.weather[0].main == "Snow") {
+      } else if (this.weather.weather[0].main === "Snow") {
         this.tempicon = "mdi-snowflake";
-      } else if (this.weather.weather[0].main == "Clear") {
+      } else if (this.weather.weather[0].main === "Clear") {
         this.tempicon = "mdi-weather-partly-cloudy";
       }
       this.forecast[1].value = this.weather.main.pressure + " Pa";
     },
 
-    
+
   },
 });
 </script>
@@ -118,4 +123,9 @@ export default defineComponent({
 .card {
   width: 50%;
 }
+.icon{
+  transform: scale(5);
+  margin-left: 100px;
+}
+
 </style>

@@ -1,24 +1,26 @@
 <template>
-  <div class="small">
-    <v-icon large>mdi-image-filter-hdr </v-icon>
-    <h3>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }}</h3>
-    <line-chart :chart-data="datacollection"></line-chart>
+  <div class="small"> <h2 v-if="prenom">Esp de l'utilisateur: {{nom}} {{prenom}}</h2>
+
+
+
+    <h3><v-icon large>mdi-image-filter-hdr </v-icon>Altitude : {{ this.valEsp[this.valEsp.length - 1].altitude }} m</h3>
+    <line-chart :chart-data="datacollection" id="graph"></line-chart>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative </v-icon>
       <h3>Valeur</h3>
       <v-chip-group
         v-model="selection"
         active-class="teal accent-4 white--text"
-        class="ma-8"
+        class="ma-1"
         mandatory
       >
-        <v-chip @click="dataLum()">Lumière</v-chip>
+        <v-chip @click="dataType('lumiere')">Lumière</v-chip>
 
-        <v-chip @click="dataPres()">Pression</v-chip>
+        <v-chip @click="dataType('pression')">Pression</v-chip>
 
-        <v-chip @click="dataHumi()">Humidité</v-chip>
+        <v-chip @click="dataType('humidite')">Humidité</v-chip>
 
-        <v-chip @click="dataTemp()">Température</v-chip>
+        <v-chip @click="dataType('temperature')">Température</v-chip>
 
         <v-chip><input v-model="nbValeur">Nb de Val</v-chip>
       </v-chip-group>
@@ -38,25 +40,40 @@ export default {
   data() {
     return {
       datacollection: null,
+      prenom: undefined,
+      nom: undefined,
       selection: 0,
       nbValeur: 50, //A changer pour changer le nb de valeur du graph
+      typeDataActuel : undefined
     };
   },
   props: {
     valEsp: {},
   },
   mounted() {
-    this.dataLum();
+    if(this.valEsp){
+      console.log(this.valEsp)
+      this.dataType("lumiere");
+      this.getName();
+    }
+
     console.log(this.valEsp);
   },
   methods: {
-    dataLum() {
+    //permet d'actualiser le Graph en fonction du type de data
+    //les ypes de data possible: lumiere, pression, humidite, temperature
+    dataType(typeData) {
+      //permet de définir quel est le type de données en fonction du label
+      let labelData = typeData === 'lumiere' ? 'Lumière en Lumens': typeData === 'pression' ?
+       'Pression en Pascal': typeData === 'humidite' ? 'Humidité en %': 'Température en °C';
+      //défini le type de data en cours d'utilisation
+      this.typeDataActuel = typeData;
       this.datacollection = {
         labels: this.getDate(),
         datasets: [
           {
-            label: "Lumière",
-            data: this.splitListLum(),
+            label: labelData,
+            data: this.splitListData(typeData),
             backgroundColor: "transparent",
             borderColor: "rgba(1, 116, 188, 0.50)",
             pointBackgroundColor: "rgba(171, 71, 188, 1)",
@@ -64,86 +81,13 @@ export default {
         ],
       };
     },
-    splitListLum() {
+    //permet de prendre les données correspondantes au label donné par dataType(labelData);
+    splitListData(typeData) {
       let res = [];
       let i = this.valEsp.length - this.nbValeur;
       let imax = this.valEsp.length;
       for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].lumiere);
-      }
-      return res;
-    },
-
-    dataPres() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Pression",
-            data: this.splitListPres(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-    splitListPres() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].pression);
-      }
-      return res;
-    },
-
-    dataHumi() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Humidité",
-            data: this.splitListHumi(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-
-    splitListHumi() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].humidite);
-      }
-      return res;
-    },
-
-    dataTemp() {
-      this.datacollection = {
-        labels: this.getDate(),
-        datasets: [
-          {
-            label: "Température",
-            data: this.splitListTemp(),
-            backgroundColor: "transparent",
-            borderColor: "rgba(1, 116, 188, 0.50)",
-            pointBackgroundColor: "rgba(171, 71, 188, 1)",
-          },
-        ],
-      };
-    },
-
-    splitListTemp() {
-      let res = [];
-      let i = this.valEsp.length - this.nbValeur;
-      let imax = this.valEsp.length;
-      for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index].temperature);
+        res.push(this.valEsp[index][typeData]);
       }
       return res;
     },
@@ -157,6 +101,32 @@ export default {
       }
       return res;
     },
+
+    getName(){
+      fetch(`http://localhost:3000/user/name/${this.valEsp[this.valEsp.length - 1].userId}`).then((res) =>
+        res.json().then((e)=>{
+        console.log('user: ',e);
+        this.prenom = e.userFirstName;
+        this.nom = e.userLastName;
+      })
+    );
+    }
   },
+  //permet de regarder la valeur d'une data dans le composant
+  //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property
+  watch: {
+    nbValeur: function () {
+     this.dataType(this.typeDataActuel);
+    }
+  }
 };
 </script>
+
+<style>
+ #graph{
+   width: 60%;
+ }
+ h2{
+   color: #4299E1;
+ }
+</style>
