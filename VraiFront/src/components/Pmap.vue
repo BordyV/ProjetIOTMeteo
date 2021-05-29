@@ -46,6 +46,13 @@
               <l-popup>
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="#191970"
+                      dark
+                      v-bind="attrs"
+                      v-on="on"
+                      :disabled="dataEsp == null"
+                    >
                       Voir Détails
                     </v-btn>
                   </template>
