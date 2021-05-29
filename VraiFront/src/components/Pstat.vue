@@ -121,7 +121,7 @@ export default defineComponent({
 
 <style>
 .card {
-  width: 50%;
+  width: 40%;
 }
 .icon{
   transform: scale(5);
