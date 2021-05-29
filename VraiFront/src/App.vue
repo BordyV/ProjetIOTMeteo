@@ -52,5 +52,7 @@ methods :
 </script>
 
 <style>
-
+#app{
+  background-color: #4299e1;
+}
 </style>

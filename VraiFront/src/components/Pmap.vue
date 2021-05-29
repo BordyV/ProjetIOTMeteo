@@ -300,10 +300,10 @@ export default {
 
 .col1 {
   position: absolute;
-  top: 80px;
+  top: 15%;
   /* display: block; */
 
-  left: 700px;
+  left: 48%;
   /* bottom: 10px; */
 }
 
@@ -336,5 +336,9 @@ export default {
 
 .v-input__slot {
   margin-left: 20px;
+  background-color: white;
+}
+body{
+  background-color: #191970;
 }
 </style>

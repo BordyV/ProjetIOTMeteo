@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import LoginComponent from '../components/LoginRegister.vue'
 import UserComponent from '../components/User.vue'
 import MapComponent from '../components/Pmap.vue'
+import GuideComponent from '../components/Pguide.vue'
 // Packages import
 import VueSession from 'vue-session'
 
@@ -27,6 +28,11 @@ export default new VueRouter({
         path: "/map",
         name: "map",
         component: MapComponent
+    },
+    {
+        path: "/guide",
+        name: "guide",
+        component: GuideComponent
     },
          {
         path: "/user/:idUser",

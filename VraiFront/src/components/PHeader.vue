@@ -7,7 +7,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Projet MERGUEZ</v-toolbar-title>
+      <v-toolbar-title>PROJET METEO</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -66,6 +66,11 @@ export default {
         icon: 'mdi-account',
         title: 'Profil',
         href: '/user/'
+      },
+      Guide :{
+        icon: 'mdi-help-circle-outline',
+        title: 'Guide',
+        href: '/guide/'
       },
 
     }
