@@ -4,20 +4,18 @@
       <v-flex class="saisir" style="color: white">
         Veuillez saisir votre ville :
       </v-flex>
-      <span v-if="errorApi" style="color: red"> Ville Inconnue</span>
       <v-text-field
-          v-model="position"
-          placeholder="Exemple : (Nice, Paris, Guingamp ...)"
-          label="Votre ville"
-          filled
-          rounded
-          dense
-          class="champ"
-          :append-icon="(marker = 'mdi-magnify')"
-          @click:append="loca"
+        v-model="position"
+        placeholder="Exemple : (Nice, Paris, Guingamp ...)"
+        label="Votre ville"
+        filled
+        rounded
+        dense
+        class="champ"
+        :append-icon="(marker = 'mdi-magnify')"
+        @click:append="loca"
       >
       </v-text-field>
-
 
       <!-- <v-text-field
       v-model= "esp"
@@ -29,23 +27,22 @@
       <v-col class="col1">
         <div class="map">
           <l-map
-              :zoom="zoom"
-              :center="center"
-              :options="mapOptions"
-              style="height: 100%; width: 50%; z-index: 1"
-              @update:center="centerUpdate"
-              @update:zoom="zoomUpdate"
+            :zoom="zoom"
+            :center="center"
+            :options="mapOptions"
+            style="height: 100%; width: 50%; z-index: 1"
+            @update:center="centerUpdate"
+            @update:zoom="zoomUpdate"
           >
-            <l-tile-layer :url="url" :attribution="attribution"/>
+            <l-tile-layer :url="url" :attribution="attribution" />
 
             <l-marker
-                v-for="item in listMarkersESP"
-                :key="item.id"
-                :lat-lng="item.position"
-                @click="dataEspFetcherbyId(item.id)"
+              v-for="item in listMarkersESP"
+              :key="item.id"
+              :lat-lng="item.position"
+              @click="dataEspFetcherbyId(item.id)"
             >
               <l-popup>
-
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="#191970" dark v-bind="attrs" v-on="on">
@@ -59,10 +56,7 @@
                     </v-card-title>
 
                     <v-card-text>
-                      <Pgraph
-                          v-bind:valEsp="dataEsp"
-                          class="pgraph"
-                      ></Pgraph>
+                      <Pgraph v-bind:valEsp="dataEsp" class="pgraph"></Pgraph>
                     </v-card-text>
 
                     <v-divider></v-divider>
@@ -77,28 +71,32 @@
                 </v-dialog>
               </l-popup>
             </l-marker>
-            <l-marker v-if="weather" :lat-lng="markerOpenWeather">
-
-            </l-marker>
+            <l-marker v-if="weather" :lat-lng="markerOpenWeather"> </l-marker>
           </l-map>
         </div>
       </v-col>
       <v-col>
         <Pstat v-bind:weatherbis="weather" class="pstat"></Pstat>
       </v-col>
-
     </v-row>
+    <v-snackbar absolute top v-model="snackbarErrorCity">
+      Ville Inconnue
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="snackbarErrorCity = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <!--<bootstrap-dropdown(:options="options" @select="selected = $event" ) name="input-name">  -->
   </div>
 </template>
 
 
 <script>
-import {latLng} from "leaflet";
-import {LMap, LTileLayer, LMarker, LPopup} from "vue2-leaflet";
+import { latLng } from "leaflet";
+import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
-
 
 export default {
   name: "Pmap",
@@ -115,7 +113,6 @@ export default {
 
   data() {
     return {
-      errorApi :false,
       esp: "",
       position: "",
       zoom: 13,
@@ -124,12 +121,12 @@ export default {
       dialog: false,
       markerOpenWeather: null,
       listMarkersESP: [],
-
+      snackbarErrorCity: false,
       valid: true,
       center: latLng(43.7101728, 7.2619532),
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
-          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 
       currentZoom: 11.5,
 
@@ -138,7 +135,6 @@ export default {
       },
       showMap: true,
     };
-
   },
 
   mounted() {
@@ -147,28 +143,36 @@ export default {
 
   methods: {
     dataEspFetcherbyId: async function (mac) {
-      console.log('ESP ID: ',mac);
-      await fetch(`http://localhost:3000/meteo/freshData/${mac}`).then((res) => {
-        res.json().then((body) => {
-          this.dataEsp = body;
-          console.log(body);
-        });
-      });
+      console.log("ESP ID: ", mac);
+      await fetch(`http://localhost:3000/meteo/freshData/${mac}`).then(
+        (res) => {
+          res.json().then((body) => {
+            this.dataEsp = body;
+            console.log(body);
+          });
+        }
+      );
     },
 
     fetchApiWeather: async function () {
-      await fetch("http://localhost:3000/meteo/openWeatherMeteo/"+ this.position)
-      .then((res) => {
-        console.log("prout", res)
+      await fetch(
+        "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
+      ).then((res) => {
+        console.log("prout", res);
         res.json().then((body) => {
           if (body.cod === "404") {
-            this.errorApi = true;
+            this.snackbarErrorCity = true;
+            //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
+            return;
           }
           console.log(body);
 
           this.weather = body;
           //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
-          this.markerOpenWeather = latLng(this.weather.coord.lat, this.weather.coord.lon);
+          this.markerOpenWeather = latLng(
+            this.weather.coord.lat,
+            this.weather.coord.lon
+          );
           this.center = latLng(this.weather.coord.lat, this.weather.coord.lon);
         });
       });
@@ -189,19 +193,17 @@ export default {
       this.fetchApiWeather();
     },
 
-
     getInfoEsp() {
+      fetch("http://localhost:3000/esp/")
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
 
-      fetch("http://localhost:3000/esp/").then((response) => response.json())
-          .then((res) => {
-            console.log(res)
-
-            res.forEach((e) => {
-
-              this.listMarkersESP.push({id: e.adresseMac, position: e.adresse});
-            })
+          res.forEach((e) => {
+            this.listMarkersESP.push({ id: e.adresseMac, position: e.adresse });
           });
-    }
+        });
+    },
   },
 };
 </script>
@@ -267,5 +269,4 @@ export default {
 .v-input__slot {
   margin-left: 20px;
 }
-
 </style>
