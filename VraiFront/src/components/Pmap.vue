@@ -179,7 +179,7 @@ export default {
       console.log("ESP ID: ", mac);
       await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
         .then((res) => {
-          res.json().then((body) => {
+          res.json().then((body) => { 
             this.dataEsp = body;
             console.log(body);
             //on cache le spinner une fois qu'on a les données
