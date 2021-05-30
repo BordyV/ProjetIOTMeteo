@@ -12,12 +12,13 @@
       </v-flex>
       <v-flex class="introguide">  La page map permet de rechercher la météo d'une ville en particulier en France et d'en ressortir la position sur la carte et les résultats sous forme de statistiques : 
       </v-flex>
-      <img src="./../assets/map.png" class="image1">
+      <v-img :src="image1" class="image1"></v-img>
+      
 <v-flex class="introguide">De plus, comme vous pouvez voir le marqueur rouge permet de connaître l'emplacement de la recherche avec des statistiques comme la température, l'humidité ou la pression de la ville.
       </v-flex>
       <v-flex class="introguide">Enfin, on peut voir des marqueurs bleus qui représente les esp de chaque utilisateur et on peut voir les détails de données en cliquant sur le marqueur.
       </v-flex>
-       <img src="./../assets/map2.png" class="image1">
+       <v-img :src="map2" class="image1"></v-img>
 
 
 
@@ -26,15 +27,15 @@
       </v-flex>
       <v-flex class="introguide">  La page profil affiche les informations de l'utilisateur à gauche de la page et affiche les esp que l'utilisateur a ajouté avec l'adresse mac et leur localisation : 
       </v-flex>
-      <img src="./../assets/profil.png" class="image1">
+      <v-img :src="profil" class="image1"></v-img>
 
       <v-flex class="introguide">  En clickant sur un de nos esp on peut voir sa localisation avec un marqueur sur la carte : 
       </v-flex>
-      <img src="./../assets/esp.png" class="image1">
+      <v-img :src="esp" class="image1"></v-img>
 
       <v-flex class="introguide">  Et si on voudrait ajouter un nouveau esp, il faudra renseigner son adresse mac et pointer la position sur la carte: 
       </v-flex>
-      <img src="./../assets/ajouteesp.png" class="image1">
+      <v-img :src="ajouteesp" class="image1"></v-img>
 
         <v-flex class="fin">  Merci pour votre attention, bonne navigation...
       </v-flex>
@@ -55,7 +56,11 @@ export default {
   
 data: () => ({
   image1:null,
-    navbarButtons : {
+  map2:null,
+  profil:null,
+  esp:null,
+  ajouteesp:null,
+      navbarButtons : {
       PMap :{
        
         href: '/map'
@@ -68,6 +73,13 @@ data: () => ({
 
     }
 }),
+mounted(){
+  this.image1 = require("@/assets/map.png");
+  this.map2 = require("@/assets/map2.png");
+  this.profil= require("@/assets/profil.png");
+  this.esp= require("@/assets/esp.png");
+  this.ajouteesp= require("@/assets/ajouteesp.png");
+}
 
 }
 </script>
@@ -124,7 +136,5 @@ data: () => ({
      margin-bottom: 20px;
      font-size: 20px;
 }
-*{
-  
-}
+
 </style>
