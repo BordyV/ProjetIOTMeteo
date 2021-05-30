@@ -8,5 +8,5 @@ router.get('/', espController.getAll);
 router.get('/getEsp/:id', token, espController.getEspById);
 router.post('/addEsp', token, espController.newEsp);
 router.delete('/delete/:id', token, espController.deleteEsp);
-
+router.put('/put',token,espController.updateEsp);
 module.exports = router;

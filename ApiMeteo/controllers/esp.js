@@ -19,6 +19,7 @@ const newEsp = async (req, res) => {
         console.log('---------esp existant-------')
 
         res.status(400).json({message: "il existe deja un esp avec la meme signature"});
+
     } else {
         console.log('---------nouvel esp-------')
         const newEsp = new EspModel({
@@ -38,12 +39,40 @@ const newEsp = async (req, res) => {
 
 const deleteEsp = async (req, res) => {
     const id = req.params.id;
-    await EspModel.deleteOne({_id : id})
+    await EspModel.deleteOne({_id: id})
         .then(rslt => {
-            res.status(200).send({message : "Great Success ! ESP has been deleted !"})        })
+            res.status(200).send({message: "Great Success ! ESP has been deleted !"})
+        })
         .catch(err => {
             res.status(400).send({message: err.message});
         })
+}
+
+const updateEsp = async (req, res) => {
+    let id = req.body._id;
+    let update = req.body;
+
+    if (!req.body) {
+        return res.status(400).json({
+            success: false,
+            error: 'pas de bo(r)dy :hihi',
+        })
+    }
+    EspModel.findByIdAndUpdate(id, {$set: update}, function (err, result) {
+        if (err) {
+            console.log(err);
+            return res.status(404).json({
+                error,
+                message: 'Esp not updated.',
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            id: id,
+            message: 'Esp updated successfully.',
+        })
+    });
 }
 
 const getEspById = async (req, res) => {
@@ -61,5 +90,6 @@ module.exports = {
     getAll: getAll,
     newEsp: newEsp,
     getEspById: getEspById,
-    deleteEsp: deleteEsp
+    deleteEsp: deleteEsp,
+    updateEsp: updateEsp
 }
