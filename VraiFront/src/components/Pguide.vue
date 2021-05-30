@@ -78,7 +78,7 @@ mounted(){
   this.map2 = require("@/assets/map2.png");
   this.profil= require("@/assets/profil.png");
   this.esp= require("@/assets/esp.png");
-  this.ajouteesp= require("@/assets/ajouteesp.png");
+  this.ajouteesp= require("@/assets/ajouteesp.png"); 
 }
 
 }
