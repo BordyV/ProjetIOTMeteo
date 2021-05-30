@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <div v-if="token === undefined" class="pasCo">
       <v-btn href="/iotMeteo/#/login">
         Veuillez vous connecter pour acceder a ce contenu
@@ -8,7 +8,7 @@
     </div>
     <div v-if="token">
       <spinner :showSpinner="showSpinner"></spinner>
-      <v-main class="grey lighten-3">
+      <v-main>
         <v-container>
           <v-row>
             <v-col cols="12" sm="3">
@@ -415,11 +415,12 @@ export default {
       //TODO FIX CENTRE LORS DE L'AJOUT D'UN ESP
       if (!this.markerNewEsp) {
         this.center = latLng(48.866667, 2.333333);
-        this.zoom = 4;
+        this.zoom = 6;
       } else {
         console.log(this.markerNewEsp);
         this.center = latLng(this.markerNewEsp.lat, this.markerNewEsp.lng);
       }
+      
     },
     addMarker(event) {
       this.markerNewEsp = event.latlng;

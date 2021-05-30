@@ -136,7 +136,7 @@ export default {
     return {
       esp: "",
       position: "",
-      zoom: 13,
+      zoom: 5,
       weather: undefined,
       dataEsp: undefined,
       dialog: false,
@@ -146,7 +146,7 @@ export default {
       listMarkersESP: [],
       snackbarErrorCity: false,
       valid: true,
-      center: latLng(43.7101728, 7.2619532),
+      center: latLng(46.232192999999995, 2.209666999999996),
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -212,8 +212,9 @@ export default {
               return;
             }
             console.log(body);
-
+            
             this.weather = body;
+            
             //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
             this.markerOpenWeather = latLng(
               this.weather.coord.lat,
@@ -223,8 +224,10 @@ export default {
               this.weather.coord.lat,
               this.weather.coord.lon
             );
+            
             //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
             this.showSpinner = false;
+            
           });
         })
         .catch((err) => {
@@ -232,6 +235,7 @@ export default {
           //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
           this.showSpinner = false;
         });
+        this.zoom = 12;
     },
 
     zoomUpdate(zoom) {

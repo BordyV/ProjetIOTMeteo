@@ -6,35 +6,44 @@
 
       </h1>
       
-      <v-flex class="introguide">  Le but de l'application est de d'observer les données météorologiques données depuis l'api de openWeatherMeteo grâce à la page MAP qui nous permet de faire une recherche par ville en France, mais aussi d'analyser les données météorologiques qu'émettent les esp ajoutés par chaque utilisateur.
+      <v-flex class="butappli">  Le but de l'application est de d'observer les données météorologiques données depuis l'api de openWeatherMeteo grâce à la page MAP qui nous permet de faire une recherche par ville en France, mais aussi d'analyser les données météorologiques qu'émettent les esp ajoutés par chaque utilisateur.
       </v-flex>
       <v-flex class="fonce"> La page MAP : 
       </v-flex>
       <v-flex class="introguide">  La page map permet de rechercher la météo d'une ville en particulier en France et d'en ressortir la position sur la carte et les résultats sous forme de statistiques : 
       </v-flex>
-      <v-img
-  
-  src="/../assets/map.PNG"
-></v-img>
+      <img src="./../assets/map.png" class="image1">
 <v-flex class="introguide">De plus, comme vous pouvez voir le marqueur rouge permet de connaître l'emplacement de la recherche avec des statistiques comme la température, l'humidité ou la pression de la ville.
       </v-flex>
       <v-flex class="introguide">Enfin, on peut voir des marqueurs bleus qui représente les esp de chaque utilisateur et on peut voir les détails de données en cliquant sur le marqueur.
       </v-flex>
-<!-- METTRE IMAGE-->
+       <img src="./../assets/map2.png" class="image1">
+
+
 
 
 <v-flex class="fonce"> La page PROFIL : 
       </v-flex>
-      <v-flex class="introguide">  La page profil permet de gérer son compte et d'ajouter les esp qu'ils possédent : 
+      <v-flex class="introguide">  La page profil affiche les informations de l'utilisateur à gauche de la page et affiche les esp que l'utilisateur a ajouté avec l'adresse mac et leur localisation : 
       </v-flex>
-      <!-- METTRE IMAGE-->
+      <img src="./../assets/profil.png" class="image1">
+
+      <v-flex class="introguide">  En clickant sur un de nos esp on peut voir sa localisation avec un marqueur sur la carte : 
+      </v-flex>
+      <img src="./../assets/esp.png" class="image1">
+
+      <v-flex class="introguide">  Et si on voudrait ajouter un nouveau esp, il faudra renseigner son adresse mac et pointer la position sur la carte: 
+      </v-flex>
+      <img src="./../assets/ajouteesp.png" class="image1">
+
+        <v-flex class="fin">  Merci pour votre attention, bonne navigation...
+      </v-flex>
 
 
 
-        <div class="flexguide">
-      <v-flex>Pour accéder à la page météo afin de rechercher la météo dans les villes <br> cliquez <br> <v-btn style="background-color:#191970;color:white" class="boutonguide" :to="navbarButtons.PMap.href">ICI</v-btn></v-flex>
-      <v-flex>Pour accéder à la page User afin de modifier vos données personnelles et ajouter vos ESP <br> cliquez <br>  <v-btn style="background-color:#191970;color:white" class="boutonguide" :to="navbarButtons.Profil.href">ICI</v-btn></v-flex>
-        </div>
+
+
+
   
           
     </div>
@@ -43,7 +52,9 @@
 
 <script>
 export default {
+  
 data: () => ({
+  image1:null,
     navbarButtons : {
       PMap :{
        
@@ -57,6 +68,7 @@ data: () => ({
 
     }
 }),
+
 }
 </script>
 
@@ -67,9 +79,10 @@ data: () => ({
     margin-bottom: 20px;
 }
 .introguide{
+      font-weight: 500;
      
-     font-weight: 600;
      margin-bottom: 20px;
+     
 }
 .flexguide{
     display: flex;
@@ -87,6 +100,31 @@ data: () => ({
 .fonce{
    font-weight: 600;
    font-size: 30px;
+   margin-bottom: 20px;
+   margin-top: 10px;
+}
+.image1{
+  width: 50%;
+  height: 50%;
+  border: solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
+ 
+}
+.fin{
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 50px;
 }
 
+.butappli{
+     
+     font-weight: 600;
+     margin-bottom: 20px;
+     font-size: 20px;
+}
+*{
+  
+}
 </style>
