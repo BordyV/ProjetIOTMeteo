@@ -11,10 +11,10 @@
       <line-chart :chart-data="datacollection" id="graph"></line-chart>
       <div class="liStyle" v-if="etatValiditeData">
 
-        lumiere: {{etatValiditeData.lumiere}}
-        temperature: {{etatValiditeData.temperature}}
-        pression: {{etatValiditeData.pression}}
-        humidity: {{etatValiditeData.humidity}}
+        lumiere: {{ etatValiditeData.lumiere }}
+        temperature: {{ etatValiditeData.temperature }}
+        pression: {{ etatValiditeData.pression }}
+        humidity: {{ etatValiditeData.humidity }}
 
       </div>
     </div>
@@ -58,7 +58,7 @@ export default {
       prenom: undefined,
       nom: undefined,
       selection: 0,
-      nbValeur: 50, //A changer pour changer le nb de valeur du graph
+      nbValeur: undefined, //A changer pour changer le nb de valeur du graph
       typeDataActuel: undefined
     };
   },
@@ -71,10 +71,13 @@ export default {
       this.dataType("lumiere");
       this.getName();
       this.validationData();
-
-
+      if (this.valEsp.length < 50) {
+        this.nbValeur = 10;
+      }
+      else{
+        this.nbValeur = 50;
+      }
     }
-
     console.log(this.valEsp);
   },
   methods: {
@@ -141,14 +144,14 @@ export default {
           res.json().then((data) => {
             console.log(data)
             this.etatValiditeData = data;
+            this.aJour = true;
 
           });
           //
-        } catch(err)
-          {
-            this.aJour = false;
-            console.log('erreur')
-          }
+        } catch (err) {
+          this.aJour = false;
+          console.log('erreur')
+        }
 
       });
     }
@@ -158,6 +161,16 @@ export default {
   watch: {
     nbValeur: function () {
       this.dataType(this.typeDataActuel);
+    },
+    valEsp: function (val) {
+      if (val) {
+        console.log(val)
+        this.dataType("lumiere");
+        this.getName();
+        this.validationData();
+      }
+
+      console.log(val);
     }
   }
 };

@@ -49,25 +49,7 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 }
 //https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
 
-const getMeteoWeatherBitByAdress = async (latitude, longitude) => {
 
-
-    //adresse envoyé par l'utilisateur
-
-    console.log(`${weatherBitConfig.weatherBit_url}?lat=${latitude}&lon=${longitude}&key=${weatherBitConfig.weatherBitKey}`);
-    //fetch sur l'api openWeatherMap
-    await fetch(
-        `${weatherBitConfig.weatherBit_url}?lat=${latitude}&lon=${longitude}&key=${weatherBitConfig.weatherBitKey}`)
-        .then((resFetch) => {
-            resFetch.json().then((body) => {
-                //console.log(body)
-                res.status(200).send(body);
-
-            });
-        }).catch(err => {
-            console.error()
-        });
-}
 
 const getFreshMeteoById = async (req, res) => {
     const addMac = req.params.id;
@@ -97,7 +79,6 @@ const verificationDonnes = async (req, res) => {
 
         let dataApi1 = undefined;
         let dataApi2 = undefined;
-
 
         await fetch(
             `${openWeatherConfig.openWeather_url}weather?lat=${adresse.lat}&lon=${adresse.lon}&APPID=${openWeatherConfig.openWeatherKey}`)
