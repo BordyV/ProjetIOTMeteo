@@ -48,6 +48,7 @@
                 <v-dialog v-model="dialog" width="1000">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
+                    id="custom-disabled"
                       color="#191970"
                       dark
                       v-bind="attrs"
@@ -180,7 +181,13 @@ export default {
       await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
         .then((res) => {
           res.json().then((body) => { 
-            this.dataEsp = body;
+            if(body.erreur)
+            {
+              this.dataEsp = null;
+            }
+            else {
+              this.dataEsp = body;
+            }
             console.log(body);
             //on cache le spinner une fois qu'on a les données
             this.showSpinner = false;
@@ -350,5 +357,10 @@ body{
   background: white;
 }
 
+/*vuetify cache les boutons disabled sur un fond blanc pour parer ça il faut suivre la règle de priorité du css
+https://stackoverflow.com/a/63762909*/
+#custom-disabled.v-btn--disabled {
+  background-color: #78797a !important;
+}
 
 </style>
