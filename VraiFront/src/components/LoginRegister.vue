@@ -40,7 +40,7 @@
                       @click:append="show1 = !show1"
                     ></v-text-field>
                   </v-col>
-                  <v-col class="d-flex" cols="12" sm="6" xsm="12"> </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" xsm="12"></v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex" cols="12" sm="4" xsm="12" align-end>
                     <v-btn
@@ -49,8 +49,8 @@
                       :disabled="!valid"
                       color="success"
                       @click="checkConnection"
-                      >Connexion</v-btn
-                    >
+                      >Connexion
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -137,8 +137,8 @@
                       :disabled="!valid"
                       color="success"
                       @click="register"
-                      >Envoyer</v-btn
-                    >
+                      >Envoyer
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -194,9 +194,9 @@ export default {
   },
   computed: {
     passwordMatch() {
-      return () => this.password === this.verify || "Le mot de passe n'est pas le meme.";
-    }
-
+      return () =>
+        this.password === this.verify || "Le mot de passe n'est pas le meme.";
+    },
   },
   methods: {
     validate() {
@@ -223,12 +223,13 @@ export default {
           latitude: 0.0,
         },
       };
+      console.log("creation", body);
       fetch("http://localhost:3000/user/isAlreadyRegistered", {
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           fetch("http://localhost:3000/user/addUser", {
             method: "post",
             body: JSON.stringify(body),
@@ -241,7 +242,7 @@ export default {
           );
           this.$refs.registerForm.reset();
           this.$router.go("/");
-        } else if (res.status == 403) {
+        } else if (res.status === 403) {
           alert("Deja inscrit");
           this.$refs.registerForm.reset();
           this.$router.go("/");
@@ -270,7 +271,7 @@ export default {
             this.$session.set("token", data.token);
             this.$session.set("userId", data.userId);
             console.log(this.$session.get("token"));
-             this.$router.go('user/'+ data.userId)
+            this.$router.go("user/" + data.userId);
             /*this.$router.replace({
               name: `user`,
               params: {
@@ -312,23 +313,21 @@ export default {
     loginPassword: "",
     loginEmail: "",
     loginEmailRules: [
-
-      v => !!v || "Requis.",
-      v => /.+@.+\..+/.test(v) || "l'E-mail doit être valide"
+      (v) => !!v || "Requis.",
+      (v) => /.+@.+\..+/.test(v) || "l'E-mail doit être valide",
     ],
     emailRules: [
-      v => !!v || "Requis.",
-      v => /.+@.+\..+/.test(v) || "l'E-mail doit être valide"
+      (v) => !!v || "Requis.",
+      (v) => /.+@.+\..+/.test(v) || "l'E-mail doit être valide",
     ],
 
     show1: false,
     rules: {
-      required: value => !!value || "Requis.",
-      min: v => (v && v.length >= 8) || "Minimum de 8 caractères"
-    }
-})
-}
-
+      required: (value) => !!value || "Requis.",
+      min: (v) => (v && v.length >= 8) || "Minimum de 8 caractères",
+    },
+  }),
+};
 </script>
 <style>
 </style>

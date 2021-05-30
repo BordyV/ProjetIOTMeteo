@@ -2,7 +2,7 @@
   <div class="page">
     <spinner :showSpinner="showSpinner"></spinner>
     <div class="section1">
-      <v-flex class="saisir" style="color: white">
+      <v-flex class="saisir" style="color: white;">
         Veuillez saisir votre ville :
       </v-flex>
       <v-text-field
@@ -15,6 +15,7 @@
         class="champ"
         :append-icon="(marker = 'mdi-magnify')"
         @click:append="loca"
+
       >
       </v-text-field>
 
@@ -178,7 +179,7 @@ export default {
       console.log("ESP ID: ", mac);
       await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
         .then((res) => {
-          res.json().then((body) => {
+          res.json().then((body) => { 
             this.dataEsp = body;
             console.log(body);
             //on cache le spinner une fois qu'on a les données
@@ -277,7 +278,8 @@ export default {
 </script>
 <style>
 .section1 {
-  margin-left: 20px;
+  margin-left: 40px;
+
 }
 
 .title {
@@ -334,11 +336,15 @@ export default {
   /*width: 120%;*/
 }
 
-.v-input__slot {
-  margin-left: 20px;
-  background-color: white;
-}
+
 body{
   background-color: #191970;
 }
+
+.v-text-field--filled.v-input--dense > .v-input__control > .v-input__slot, .v-text-field--full-width.v-input--dense > .v-input__control > .v-input__slot, .v-text-field--outlined.v-input--dense > .v-input__control > .v-input__slot {
+  min-height: 52px;
+  background: white;
+}
+
+
 </style>
