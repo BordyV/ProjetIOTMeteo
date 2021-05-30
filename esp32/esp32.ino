@@ -229,7 +229,7 @@ void setup () {
   const char index_html[] PROGMEM = R"rawliteral(
     <!DOCTYPE HTML><html><head>
     <title>Configuration ESP </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     </head><body>
     <form action="/get" class="form">
         <label for="ssid">
@@ -306,7 +306,7 @@ label, input, textarea{
     const char enregistre[] PROGMEM = R"rawliteral(
       <!DOCTYPE HTML><html><head>
     <title>Configuration ESP </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     </head><body>
     <div>Vos preferences ont bien ete sauvegardes</div>
     <br>
