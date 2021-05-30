@@ -267,7 +267,7 @@ export default {
       markerEspEnCoursMap: undefined,
       center: undefined,
       bounds: null,
-      zoom: 15,
+      zoom: 10,
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -369,12 +369,13 @@ export default {
 
       //on centre sur paris pour ne pas avoir des coordonées dans l'océan si aucun marker n'est encore posé
       //TODO FIX CENTRE LORS DE L'AJOUT D'UN ESP
-      // if (!this.markerNewEsp) {
-      // this.center = LatLng(48.866667, 2.333333);
-      // } else {
-      // console.log(this.markerNewEsp);
-      // this.center = LatLng(this.markerNewEsp.lat, this.markerNewEsp.lng);
-      // }
+      if (!this.markerNewEsp) {
+        this.center = latLng(48.866667, 2.333333);
+        this.zoom = 4;
+      } else {
+        console.log(this.markerNewEsp);
+        this.center = latLng(this.markerNewEsp.lat, this.markerNewEsp.lng);
+      }
     },
     addMarker(event) {
       this.markerNewEsp = event.latlng;
