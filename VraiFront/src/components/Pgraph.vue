@@ -71,6 +71,8 @@ export default {
       this.dataType("lumiere");
       this.getName();
       this.validationData();
+
+
     }
 
     console.log(this.valEsp);
@@ -156,16 +158,6 @@ export default {
   watch: {
     nbValeur: function () {
       this.dataType(this.typeDataActuel);
-    },
-    valEsp: function (val) {
-          if (val) {
-      console.log(val)
-      this.dataType("lumiere");
-      this.getName();
-      this.validationData();
-    }
-
-    console.log(val);
     }
   }
 };
