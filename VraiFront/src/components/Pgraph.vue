@@ -11,7 +11,7 @@
       <line-chart :chart-data="datacollection" id="graph"></line-chart>
       <div class="liStyle" v-if="etatValiditeData">
 
-        lumiere: {{ etatValiditeData.lumiere }}
+
         temperature: {{ etatValiditeData.temperature }}
         pression: {{ etatValiditeData.pression }}
         humidity: {{ etatValiditeData.humidity }}
@@ -134,7 +134,7 @@ export default {
     },
 
     validationData() {
-
+      console.log('validation')
       fetch("http://localhost:3000/meteo/verif", {
         method: "post",
         body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),

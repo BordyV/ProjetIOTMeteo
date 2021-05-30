@@ -50,7 +50,6 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 //https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
 
 
-
 const getFreshMeteoById = async (req, res) => {
     const addMac = req.params.id;
     const today = new Date();
@@ -65,40 +64,68 @@ const getFreshMeteoById = async (req, res) => {
         })
 }
 
+function distance(lat1, lat2, lon1, lon2) {
+    const R = 6371e3; // metres
+    const p1 = lat1 * Math.PI / 180; // φ, λ in radians
+    const p2 = lat2 * Math.PI / 180;
+    const dp = (lat2 - lat1) * Math.PI / 180;
+    const dy = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(dp / 2) * Math.sin(dp / 2) +
+        Math.cos(p1) * Math.cos(p2) *
+        Math.sin(dy / 2) * Math.sin(dy / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // in metres
+}
+
+function testHumidity(espH1, h2) {
+    //console.log('humid : ',espH1, h2)
+    return (espH1 <= h2 + 10) && (espH1 >= h2 - 10);
+}
+
+function testTemp(espT1, t2) {
+    //console.log('temp : ',espT1, t2)
+    return (espT1 <= t2 + 2.5) && (espT1 >= t2 - 2.5);
+}
+
+function testPression(espP1, p2) {
+    //console.log('pression: ',espP1, p2)
+    return (espP1 <= p2 + 5) && (espP1 >= p2 - 5);
+}
+
 const verificationDonnes = async (req, res) => {
     const esp = req.body;
     if (moment(esp.date).day() !== moment().day()) {
         console.log('pas frais')
-        res.status(400).json({data:'data de l esp pas a jour'})
+        res.status(400).json({data: 'data de l esp pas a jour'})
     } else {
         console.log(esp);
         const adresse = {
             lat: esp.adresse.lat,
-            lon: esp.adresse.lat
+            lon: esp.adresse.lng
         }
 
         let dataApi1 = undefined;
         let dataApi2 = undefined;
 
         await fetch(
-            `${openWeatherConfig.openWeather_url}weather?lat=${adresse.lat}&lon=${adresse.lon}&APPID=${openWeatherConfig.openWeatherKey}`)
+            `${openWeatherConfig.openWeather_url}weather?lat=${adresse.lat}&lon=${adresse.lon}&units=metric&APPID=${openWeatherConfig.openWeatherKey}`)
             .then((resFetch) => {
                 resFetch.json().then((body) => {
                     dataApi2 = body;
                     fetch(
-                        `${weatherBitConfig.weatherBit_url}?lat=${adresse.lat}&lon=${adresse.lonx}&key=${weatherBitConfig.weatherBitKey}`)
+                        `${weatherBitConfig.weatherBit_url}?lat=${adresse.lat}&lon=${adresse.lon}&key=${weatherBitConfig.weatherBitKey}`)
                         .then((resFetch) => {
                             resFetch.json().then((body) => {
                                 //console.log(body)
                                 dataApi1 = body;
-                                console.log('donnee biss: ', dataApi1)
-                                console.log('donnee open: ', dataApi2)
                                 let objetValid = {
-                                    lumiere: true,
-                                    temperature:false,
-                                    pression:true,
-                                    humidity:false
+                                    temperature: testTemp(esp.temperature, dataApi1.data[0].temp) || testTemp(esp.temperature, dataApi2.main.temp),
+                                    pression: testPression(esp.pression, dataApi1.data[0].pres) || testPression(esp.temperature, dataApi2.main.pressure),
+                                    humidity: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
                                 }
+                                //console.log(objetValid);
                                 res.status(200).json(objetValid)
 
                             });
