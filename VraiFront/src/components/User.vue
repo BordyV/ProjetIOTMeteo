@@ -97,6 +97,7 @@
                                 @update:center="centerUpdate"
                                 @update:zoom="zoomUpdate"
                                 @update:bounds="boundsUpdated"
+                                @click="addMarkerModif"
                                 v-if="espEnCoursMap"
                             >
                               <l-tile-layer
@@ -106,6 +107,13 @@
 
                               <l-marker :lat-lng="markerEspEnCoursMap">
                               </l-marker>
+                              <l-marker v-if="modifEspPosition" :lat-lng="markerModifEsp">
+                                <l-icon
+                                  :icon-size="dynamicSize"
+                                  :icon-anchor="dynamicAnchor"
+                                  :icon-url="iconOpenWeatherRed"
+                                />
+                              </l-marker>
                             </l-map>
                           </div>
                         </v-col>
@@ -114,6 +122,22 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-btn
+                        v-if="!modifierPosition"
+                        color="blue darken-1"
+                        text
+                        @click="modifierPosition = true"
+                    >
+                      Modifier
+                    </v-btn>
+                    <v-btn
+                    v-if="modifierPosition"
+                        color="blue darken-1"
+                        text
+                        @click="modifierEsp(espEnCoursMap)"
+                    >
+                      Envoyer
+                    </v-btn>
                     <v-btn
                         color="blue darken-1"
                         text
@@ -212,6 +236,11 @@
                                   v-if="markerNewEsp"
                                   :lat-lng="markerNewEsp"
                               >
+                                <l-icon
+                                  :icon-size="dynamicSize"
+                                  :icon-anchor="dynamicAnchor"
+                                  :icon-url="iconOpenWeatherRed"
+                                />
                               </l-marker>
                             </l-map>
                           </div>
@@ -243,16 +272,17 @@
 <script>
 // Popup Import
 import Spinner from "@/components/Spinner";
-import {LatLng, latLng} from "leaflet";
-import {LMap, LTileLayer, LMarker} from "vue2-leaflet";
+import {latLng} from "leaflet";
+import {LMap, LTileLayer, LMarker, LIcon} from "vue2-leaflet";
 
 export default {
-  components: {Spinner, LMap, LTileLayer, LMarker},
+  components: {Spinner, LMap, LTileLayer, LMarker, LIcon},
   name: "user",
 
   data() {
     return {
       listEsp: [],
+      iconOpenWeatherRed: null,
       showSpinner: false,
       dialog: false,
       show: false,
@@ -284,10 +314,14 @@ export default {
       newEspPosition: null, //second champ du formulaire d'ajout d'esp champ position ( latlng )
       modalCarteNewEsp: false, //modal a afficher ou non pour l'esp
       markerNewEsp: null,
+      //partie modif position esp: 
+      markerModifEsp: null,
+      modifEspPosition : null,
+      modifierPosition: false,
     };
   },
   mounted() {
-    LatLng;
+    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");
     console.log("tokenSession", this.$session.get("token"));
     if (this.$session.get("userId")) {
       this.token = this.$session.get("token");
@@ -295,6 +329,14 @@ export default {
       this.getMyEsps();
       this.getUserInfos();
     }
+  },
+  computed: {
+    dynamicSize() {
+      return [this.iconSize, this.iconSize * 1.15];
+    },
+    dynamicAnchor() {
+      return [this.iconSize / 2, this.iconSize * 1.15];
+    },
   },
   methods: {
     getUserInfos: function () {
@@ -350,6 +392,7 @@ export default {
       }, 250);
       this.espEnCoursMap = esp;
       this.afficherCarte = true;
+      this.modifierPosition = false; 
       //on set la position du marker
       this.markerEspEnCoursMap = latLng(
           this.espEnCoursMap.adresse.lat,
@@ -381,6 +424,13 @@ export default {
     addMarker(event) {
       this.markerNewEsp = event.latlng;
       this.newEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
+    },
+    addMarkerModif(event) {
+      if(this.modifierPosition)
+      {
+      this.markerModifEsp = event.latlng;
+      this.modifEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
+      }
     },
     getMyEsps: async function () {
       this.showSpinner = true;
@@ -425,8 +475,44 @@ export default {
             this.listEsp = this.listEsp.filter(esp => esp._id !== id)
             console.log('delete: ', data)
           })
-          .catch(err => console.log(err))
+          .catch(err =>  {
+            console.log(err);
+            this.showSpinner = false;
+})
 
+    },
+    modifierEsp(esp) {      
+      this.showSpinner = true;
+      const putMethod = {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": this.$session.get("token"),
+        },
+        body: JSON.stringify({
+          _id: esp._id,
+          adresseMac: esp.adresseMac,
+          adresse: {lng: this.modifEspPosition.lng, lat: this.modifEspPosition.lat},
+          userId: esp.userId,
+        })
+      }
+      console.log(putMethod.body)
+      fetch(`http://localhost:3000/esp/put`, putMethod)
+          .then(response => response.json())
+          .then(data => {
+            this.showSpinner = false;
+            alert('la position de votre esp a bien été modifié.')
+            console.log('put: ', data);
+            //on remet tout a 0
+            this.markerModifEsp = null; 
+            this.modifEspPosition = false;
+            this.afficherCarte = false;
+            this.getMyEsps();
+          })
+          .catch(err => {
+            this.showSpinner=false;
+            console.log(err)
+          })
     },
     //permet d'ajouter l'esp
     validateNewEsp() {

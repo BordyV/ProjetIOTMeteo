@@ -51,7 +51,6 @@ const deleteEsp = async (req, res) => {
 const updateEsp = async (req, res) => {
     let id = req.body._id;
     let update = req.body;
-
     if (!req.body) {
         return res.status(400).json({
             success: false,
