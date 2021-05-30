@@ -6,16 +6,17 @@ import vuetify from './plugins/vuetify';
 
 import VueGeolocation from 'vue-browser-geolocation';
 
-import * as VueGoogleMaps from 'vue2-google-maps';
+
+// leaflet bibliotheque
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
+import 'leaflet-defaulticon-compatibility';
+
+
+
 Vue.config.productionTip = false;
 Vue.use(vuetify);
 Vue.use(VueGeolocation);
-Vue.use(VueGoogleMaps,{
-  load:{
-    key:'AIzaSyDQtfP3hdGPz588Tsx9ZgLluNkV2MrfjXU'
-  },
-  installComponents: false
-});
 
 
 new Vue({
