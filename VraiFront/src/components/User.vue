@@ -2,7 +2,8 @@
   <div>
     <div v-if="token === undefined" class="pasCo">
       <v-btn href="/iotMeteo/#/login">
-        Veuillez vous connecter pour acceder a ce contenu</v-btn
+        Veuillez vous connecter pour acceder a ce contenu
+      </v-btn
       >
     </div>
     <div v-if="token">
@@ -12,10 +13,10 @@
           <v-row>
             <v-col cols="12" sm="3">
               <v-card
-                rounded="lg"
-                v-if="userInfos"
-                min-height="268"
-                elevation="5"
+                  rounded="lg"
+                  v-if="userInfos"
+                  min-height="268"
+                  elevation="5"
               >
                 <v-img rounded="lg" :src="`${userInfos.picUrl}`"></v-img>
                 <!--  -->
@@ -26,8 +27,8 @@
                   <div>
                     <a :href="`mailto:${userInfos.userEmail}`">
                       {{ userInfos.userEmail }}</a
-                    ><br />
-                    {{ userInfos.userAddress }}<br />
+                    ><br/>
+                    {{ userInfos.userAddress }}<br/>
                     {{ userInfos.userPhoneNumber }}
                   </div>
                 </v-card-text>
@@ -48,26 +49,26 @@
 
               <v-card v-if="listEsp">
                 <v-col
-                  v-for="(esp, index) in listEsp"
-                  :key="esp.adresseMac"
-                  cols="12"
-                  rounded="lg"
+                    v-for="(esp, index) in listEsp"
+                    :key="esp.adresseMac"
+                    cols="12"
+                    rounded="lg"
                 >
                   <v-card elevation="5" class="pa-5" v-if="listEsp">
                     <p>
                       <v-btn
-                        class="mx-2"
-                        fab
-                        dark
-                        x-small
-                        color="red"
-                        @click="deleteEsp(esp)"
+                          class="mx-2"
+                          fab
+                          dark
+                          x-small
+                          color="red"
+                          @click="deleteEsp(esp._id)"
                       >
-                        <v-icon dark> mdi-delete </v-icon>
+                        <v-icon dark> mdi-delete</v-icon>
                       </v-btn>
                       <b>Esp n° {{ index + 1 }} : </b> {{ esp.adresseMac }}
                     </p>
-                    <hr />
+                    <hr/>
                     <a @click="afficherModalCarte(esp)">
                       <span>
                         Localisation de l'esp :
@@ -90,17 +91,17 @@
                         <v-col cols="12">
                           <div class="map">
                             <l-map
-                              :zoom="zoom"
-                              :center="center"
-                              style="height: 100%; width: 100%; z-index: 1"
-                              @update:center="centerUpdate"
-                              @update:zoom="zoomUpdate"
-                              @update:bounds="boundsUpdated"
-                              v-if="espEnCoursMap"
+                                :zoom="zoom"
+                                :center="center"
+                                style="height: 100%; width: 100%; z-index: 1"
+                                @update:center="centerUpdate"
+                                @update:zoom="zoomUpdate"
+                                @update:bounds="boundsUpdated"
+                                v-if="espEnCoursMap"
                             >
                               <l-tile-layer
-                                :url="url"
-                                :attribution="attribution"
+                                  :url="url"
+                                  :attribution="attribution"
                               />
 
                               <l-marker :lat-lng="markerEspEnCoursMap">
@@ -114,9 +115,9 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="afficherCarte = false"
+                        color="blue darken-1"
+                        text
+                        @click="afficherCarte = false"
                     >
                       Fermer
                     </v-btn>
@@ -129,18 +130,18 @@
               <v-card>
                 <v-card-subtitle> Ajouter un esp:</v-card-subtitle>
                 <v-form
-                  @submit.prevent="validateNewEsp()"
-                  ref="form"
-                  v-model="valid"
+                    @submit.prevent="validateNewEsp()"
+                    ref="form"
+                    v-model="valid"
                 >
                   <v-container>
                     <v-row>
                       <v-col cols="12" md="4">
                         <v-text-field
-                          v-model="newEspAdressMac"
-                          :rules="adressMacRules"
-                          label="Adresse Mac de votre esp"
-                          required
+                            v-model="newEspAdressMac"
+                            :rules="adressMacRules"
+                            label="Adresse Mac de votre esp"
+                            required
                         ></v-text-field>
                       </v-col>
 
@@ -161,16 +162,16 @@
                       </v-col>
                       <v-col cols="12" md="2">
                         <v-btn
-                          id="custom-disabled"
-                          class="mx-2"
-                          fab
-                          dark
-                          x-small
-                          color="green"
-                          type="submit"
-                          :disabled="!valid"
+                            id="custom-disabled"
+                            class="mx-2"
+                            fab
+                            dark
+                            x-small
+                            color="green"
+                            type="submit"
+                            :disabled="!valid"
                         >
-                          <v-icon dark> mdi-plus </v-icon>
+                          <v-icon dark> mdi-plus</v-icon>
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -184,7 +185,7 @@
                 <v-card>
                   <v-card-title>
                     <span class="headline"
-                      >Cliquez sur la carte pour ajouter la localisation de
+                    >Cliquez sur la carte pour ajouter la localisation de
                       votre esp :
                     </span>
                   </v-card-title>
@@ -194,22 +195,22 @@
                         <v-col cols="12">
                           <div class="map">
                             <l-map
-                              :zoom="zoom"
-                              :center="center"
-                              style="height: 100%; width: 100%; z-index: 1"
-                              @update:center="centerUpdate"
-                              @update:zoom="zoomUpdate"
-                              @update:bounds="boundsUpdated"
-                              @click="addMarker"
+                                :zoom="zoom"
+                                :center="center"
+                                style="height: 100%; width: 100%; z-index: 1"
+                                @update:center="centerUpdate"
+                                @update:zoom="zoomUpdate"
+                                @update:bounds="boundsUpdated"
+                                @click="addMarker"
                             >
                               <l-tile-layer
-                                :url="url"
-                                :attribution="attribution"
+                                  :url="url"
+                                  :attribution="attribution"
                               />
 
                               <l-marker
-                                v-if="markerNewEsp"
-                                :lat-lng="markerNewEsp"
+                                  v-if="markerNewEsp"
+                                  :lat-lng="markerNewEsp"
                               >
                               </l-marker>
                             </l-map>
@@ -221,9 +222,9 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="modalCarteNewEsp = false"
+                        color="blue darken-1"
+                        text
+                        @click="modalCarteNewEsp = false"
                     >
                       Fermer
                     </v-btn>
@@ -242,11 +243,11 @@
 <script>
 // Popup Import
 import Spinner from "@/components/Spinner";
-import { LatLng, latLng } from "leaflet";
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import {LatLng, latLng} from "leaflet";
+import {LMap, LTileLayer, LMarker} from "vue2-leaflet";
 
 export default {
-  components: { Spinner, LMap, LTileLayer, LMarker },
+  components: {Spinner, LMap, LTileLayer, LMarker},
   name: "user",
 
   data() {
@@ -270,15 +271,15 @@ export default {
       zoom: 10,
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       //partie formulaire add esp
       valid: false, //si le formulaire est valide ou non
       newEspAdressMac: null, //premier champ du formulaire d'ajout d'esp champ adresseMac
       adressMacRules: [
         (v) => !!v || "l'adresse mac est requises",
         (v) =>
-          /^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$/.test(v) ||
-          "L'adresse mac n'est pas valide.", //permet de tester avec un regex si l'adresse mac a un bon format
+            /^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$/.test(v) ||
+            "L'adresse mac n'est pas valide.", //permet de tester avec un regex si l'adresse mac a un bon format
       ],
       newEspPosition: null, //second champ du formulaire d'ajout d'esp champ position ( latlng )
       modalCarteNewEsp: false, //modal a afficher ou non pour l'esp
@@ -304,21 +305,21 @@ export default {
           "x-auth-token": this.$session.get("token"),
         },
       })
-        .then((e) => {
-          e.json().then((json) => {
-            this.userInfos = json[0];
-            console.log("les donnees user: ", this.userInfos);
+          .then((e) => {
+            e.json().then((json) => {
+              this.userInfos = json[0];
+              console.log("les donnees user: ", this.userInfos);
 
-            this.nom = this.capitalizeFirstLetter(json[0].userFirstName);
-            this.nom = json[0].userLastName;
+              this.nom = this.capitalizeFirstLetter(json[0].userFirstName);
+              this.nom = json[0].userLastName;
+              this.showSpinner = false;
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
             this.showSpinner = false;
           });
-        })
-        .catch((err) => {
-          console.error(err);
-          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
-          this.showSpinner = false;
-        });
     },
     zoomUpdate(zoom) {
       this.zoom = zoom;
@@ -351,13 +352,13 @@ export default {
       this.afficherCarte = true;
       //on set la position du marker
       this.markerEspEnCoursMap = latLng(
-        this.espEnCoursMap.adresse.lat,
-        this.espEnCoursMap.adresse.lng
+          this.espEnCoursMap.adresse.lat,
+          this.espEnCoursMap.adresse.lng
       );
       //on set la position du centre
       this.center = latLng(
-        this.espEnCoursMap.adresse.lat,
-        this.espEnCoursMap.adresse.lng
+          this.espEnCoursMap.adresse.lat,
+          this.espEnCoursMap.adresse.lng
       );
     },
     //affiche la modal pour le formulaire d'ajout d'esp
@@ -379,7 +380,7 @@ export default {
     },
     addMarker(event) {
       this.markerNewEsp = event.latlng;
-      this.newEspPosition = { lat: event.latlng.lat, lng: event.latlng.lng };
+      this.newEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
     },
     getMyEsps: async function () {
       this.showSpinner = true;
@@ -389,23 +390,43 @@ export default {
           "x-auth-token": this.$session.get("token"),
         },
       })
-        .then((res) => {
-          res.json().then((resJson) => {
-            //on cache le spinner
+          .then((res) => {
+            res.json().then((resJson) => {
+              //on cache le spinner
+              this.showSpinner = false;
+              this.listEsp = resJson;
+              //on recupere un code 200 mais on a pas d'esp, juste un objet "erreur" on remet donc la list vide
+              if (this.listEsp.erreur) {
+                this.listEsp = [];
+              }
+            });
             this.showSpinner = false;
-            this.listEsp = resJson;
-            //on recupere un code 200 mais on a pas d'esp, juste un objet "erreur" on remet donc la list vide
-            if (this.listEsp.erreur) {
-              this.listEsp = [];
-            }
+          })
+          .catch((err) => {
+            console.error(err);
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
+            this.showSpinner = false;
           });
-          this.showSpinner = false;
-        })
-        .catch((err) => {
-          console.error(err);
-          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
-          this.showSpinner = false;
-        });
+    },
+    deleteEsp(id) {
+      this.showSpinner = true;
+      const deleteMethod = {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": this.$session.get("token"),
+        },
+
+      }
+      fetch(`http://localhost:3000/esp/delete/${id}`, deleteMethod)
+          .then(response => response.json())
+          .then(data => {
+            this.showSpinner = false;
+            this.listEsp = this.listEsp.filter(esp => esp._id !== id)
+            console.log('delete: ', data)
+          })
+          .catch(err => console.log(err))
+
     },
     //permet d'ajouter l'esp
     validateNewEsp() {
@@ -454,11 +475,13 @@ en attendant de trouver une solution viable il faut bien baliser le css utilisé
 h3.capitalize {
   text-transform: capitalize;
 }
+
 .map {
   width: 0%;
   height: 0%;
   display: inline-block;
 }
+
 .pasCo {
   display: flex;
   justify-content: center;

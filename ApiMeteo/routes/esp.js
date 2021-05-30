@@ -5,7 +5,8 @@ const token = require('../auth');
 router.post('/addEsp', espController.newEsp); // créer un nouvel utilisateur (voir le model pour le body)
 
 router.get('/', espController.getAll);
-router.get('/getEsp/:id',token ,espController.getEspById);
-router.post('/addEsp', token,espController.newEsp);
+router.get('/getEsp/:id', token, espController.getEspById);
+router.post('/addEsp', token, espController.newEsp);
+router.delete('/delete/:id', token, espController.deleteEsp);
 
 module.exports = router;

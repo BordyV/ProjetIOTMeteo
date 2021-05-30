@@ -7,10 +7,10 @@ const fetch = require("node-fetch");
 
 
 const getMeteo = async (req, res) => {
-    console.log('alooo')
+
     await MeteoModel.find()
         .then(result => {
-            console.log(result);
+            //console.log(result);
             res.status(200).send(result)
         })
         .catch(error => {
