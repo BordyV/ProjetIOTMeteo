@@ -2,12 +2,12 @@
   <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
     <div>
       <v-tabs
-        v-model="tab"
-        show-arrows
-        background-color="deep-purple accent-4"
-        icons-and-text
-        dark
-        grow
+          v-model="tab"
+          show-arrows
+          background-color="deep-purple accent-4"
+          icons-and-text
+          dark
+          grow
       >
         <v-tabs-slider color="purple darken-4"></v-tabs-slider>
         <v-tab v-for="i in tabs" :key="i.icon">
@@ -21,35 +21,36 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="loginEmail"
-                      :rules="loginEmailRules"
-                      label="E-mail"
-                      required
+                        v-model="loginEmail"
+                        :rules="loginEmailRules"
+                        label="E-mail"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="loginPassword"
-                      :append-icon="show1 ? 'eye' : 'eye-off'"
-                      :rules="[rules.required, rules.min]"
-                      :type="show1 ? 'text' : 'password'"
-                      name="input-10-1"
-                      label="Mot de passe"
-                      hint="8 caractères minimum"
-                      counter
-                      @click:append="show1 = !show1"
+                        v-model="loginPassword"
+                        :append-icon="show1 ? 'eye' : 'eye-off'"
+                        :rules="[rules.required, rules.min]"
+                        :type="show1 ? 'text' : 'password'"
+                        name="input-10-1"
+                        label="Mot de passe"
+                        hint="8 caractères minimum"
+                        counter
+                        @click:append="show1 = !show1"
                     ></v-text-field>
                   </v-col>
-                  <v-col class="d-flex" cols="12" sm="6" xsm="12"> </v-col>
+                  <v-col class="d-flex" cols="12" sm="6" xsm="12"></v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex" cols="12" sm="4" xsm="12" align-end>
                     <v-btn
-                      x-large
-                      block
-                      :disabled="!valid"
-                      color="success"
-                      @click="checkConnection"
-                      >Connexion</v-btn
+                        x-large
+                        block
+                        :disabled="!valid"
+                        color="success"
+                        @click="checkConnection"
+                    >Connexion
+                    </v-btn
                     >
                   </v-col>
                 </v-row>
@@ -64,80 +65,81 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="lastName"
-                      :rules="[rules.required]"
-                      label="Nom"
-                      maxlength="20"
-                      required
+                        v-model="lastName"
+                        :rules="[rules.required]"
+                        label="Nom"
+                        maxlength="20"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="firstName"
-                      :rules="[rules.required]"
-                      label="Prénom"
-                      maxlength="20"
-                      required
+                        v-model="firstName"
+                        :rules="[rules.required]"
+                        label="Prénom"
+                        maxlength="20"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="email"
-                      :rules="emailRules"
-                      label="E-mail"
-                      required
+                        v-model="email"
+                        :rules="emailRules"
+                        label="E-mail"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="phone"
-                      label="Numéro de Téléphone"
-                      required
+                        v-model="phone"
+                        label="Numéro de Téléphone"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="address"
-                      :rules="[rules.required]"
-                      label="Adresse"
-                      required
+                        v-model="address"
+                        :rules="[rules.required]"
+                        label="Adresse"
+                        required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="password"
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required, rules.min]"
-                      :type="show1 ? 'text' : 'password'"
-                      name="input-10-1"
-                      label="Mot de passe"
-                      hint="At least 8 characters"
-                      counter
-                      @click:append="show1 = !show1"
+                        v-model="password"
+                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :rules="[rules.required, rules.min]"
+                        :type="show1 ? 'text' : 'password'"
+                        name="input-10-1"
+                        label="Mot de passe"
+                        hint="At least 8 characters"
+                        counter
+                        @click:append="show1 = !show1"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      block
-                      v-model="verify"
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required, passwordMatch]"
-                      :type="show1 ? 'text' : 'password'"
-                      name="input-10-1"
-                      label="Confirmer le Mot de passe"
-                      counter
-                      @click:append="show1 = !show1"
+                        block
+                        v-model="verify"
+                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :rules="[rules.required, passwordMatch]"
+                        :type="show1 ? 'text' : 'password'"
+                        name="input-10-1"
+                        label="Confirmer le Mot de passe"
+                        counter
+                        @click:append="show1 = !show1"
                     ></v-text-field>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
                     <v-btn
-                      x-large
-                      block
-                      :disabled="!valid"
-                      color="success"
-                      @click="register"
-                      >Envoyer</v-btn
+                        x-large
+                        block
+                        :disabled="!valid"
+                        color="success"
+                        @click="register"
+                    >Envoyer
+                    </v-btn
                     >
                   </v-col>
                 </v-row>
@@ -160,11 +162,11 @@
                   <v-spacer></v-spacer>
                   <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
                     <v-btn
-                      x-large
-                      block
-                      :disabled="!valid"
-                      color="success"
-                      @click="guest"
+                        x-large
+                        block
+                        :disabled="!valid"
+                        color="success"
+                        @click="guest"
                     >
                       Continuer
                     </v-btn>
@@ -226,22 +228,22 @@ export default {
       fetch("http://localhost:3000/user/isAlreadyRegistered", {
         method: "post",
         body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       }).then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           fetch("http://localhost:3000/user/addUser", {
             method: "post",
             body: JSON.stringify(body),
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
           });
           alert(
-            `Utilisateur ${
-              this.firstName + " " + this.lastName
-            } ajouté avec succès !`
+              `Utilisateur ${
+                  this.firstName + " " + this.lastName
+              } ajouté avec succès !`
           );
           this.$refs.registerForm.reset();
           this.$router.go("/");
-        } else if (res.status == 403) {
+        } else if (res.status === 403) {
           alert("Deja inscrit");
           this.$refs.registerForm.reset();
           this.$router.go("/");
@@ -250,7 +252,7 @@ export default {
     },
     guest() {
       console.log("redirected map");
-      this.$router.push({ name: "map" });
+      this.$router.push({name: "map"});
     },
     checkConnection: async function () {
       let body = {
@@ -260,7 +262,7 @@ export default {
       fetch("http://localhost:3000/user/connection", {
         method: "post",
         body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       }).then((res) => {
         if (res.ok) {
           // this.$router.push({name : `user/${res.json()}`});
@@ -270,7 +272,7 @@ export default {
             this.$session.set("token", data.token);
             this.$session.set("userId", data.userId);
             console.log(this.$session.get("token"));
-             this.$router.go('user/'+ data.userId)
+            this.$router.go('user/' + data.userId)
             /*this.$router.replace({
               name: `user`,
               params: {
@@ -296,9 +298,9 @@ export default {
     dialog: true,
     tab: 0,
     tabs: [
-      { name: "Se connecter", icon: "mdi-account-key" },
-      { name: "S'enregistrer", icon: "mdi-account-plus" },
-      { name: "Invité", icon: "mdi-account-search" },
+      {name: "Se connecter", icon: "mdi-account-key"},
+      {name: "S'enregistrer", icon: "mdi-account-plus"},
+      {name: "Invité", icon: "mdi-account-search"},
     ],
     valid: true,
 
@@ -326,7 +328,7 @@ export default {
       required: value => !!value || "Requis.",
       min: v => (v && v.length >= 8) || "Minimum de 8 caractères"
     }
-})
+  })
 }
 
 </script>
