@@ -231,33 +231,118 @@ void setup () {
     <title>Configuration ESP </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     </head><body>
-    <form action="/get">
-    SSID: <input type="text" name="ssid">
+    <form action="/get" class="form">
+        <label for="ssid">
+            SSID:
+        </label>
+    <input type="text" name="ssid" id="ssid">
     <br>
-    Mot de passe: <input type="text" name="mdp">
+    <label for="mdp">
+        Mot de passe:
+    </label><input type="text" name="mdp" id="mdp">
     <br>
-    ID de l'user sur le site web: <input type="text" name="userid">
+    <label for="userid">
+        ID de l'user sur le site web:
+    </label> <input type="text" name="userid" id="userid">
     <br>
-    Frequence d'envoie de l'ESP: <input type="number" name="freq">
+    <label for="freq">
+        Frequence d'envoie de l'ESP:
+    </label> <input type="number" name="freq" id="freq">
     <br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Envoyer" id="submit">
         </form><br>
     </body></html>
+    <style>
+       
+label, input, textarea{
+        display: block;
+            width: 100%;
+  font-size: 12pt;
+  line-height: 24pt;
+  font-family: 'Spartan';
+  }
+  .form{
+      background-color:#f8f4e5;
+      padding: 50px 100px;
+      border-top: 10px solid #f45702;
+
+  }
+  input{
+    margin-bottom: 24pt;
+    border: none;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 2px;
+  background: #f8f4e5;
+  padding-left: 5px;
+  outline: none;
+  }
+
+  
+
+  #submit{
+    display: block;
+  float: right;
+  line-height: 24pt;
+  padding: 0 20px;
+  border: none;
+  background: #f45702;
+  color: white;
+  letter-spacing: 2px;
+  transition: .2s all ease-in-out;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  
+  }
+  #submit:hover{
+    background: inherit;
+    color: #f45702;
+    border-bottom: 2px solid #f45702;
+  }
+    </style>
 
   )rawliteral";
 
 
     const char enregistre[] PROGMEM = R"rawliteral(
       <!DOCTYPE HTML><html><head>
-      <title>Configuration ESP </title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      </head><body>
-      Vos preferences ont bien ete sauvegardes
-      <br>
-      <a href="/">Retourner a l'accueil</a>
-      <br>
-      Appuyez sur le boutton "boot" de votre ESP pour quitter le mode configuration
-      </body></html>)rawliteral";
+    <title>Configuration ESP </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head><body>
+    <div>Vos preferences ont bien ete sauvegardes</div>
+    <br>
+    <a href="/">Retourner a l'accueil</a>
+    <br>
+    <div>Appuyez sur le boutton "boot" de votre ESP pour quitter le mode configuration</div>
+    </body></html>
+    <style>
+        div,a{
+            display: block;
+            width: 100%;
+  font-size: 12pt;
+  line-height: 24pt;
+  font-family: 'Spartan';
+  text-align: center;
+        }
+        body{
+            background-color:#f8f4e5;
+      padding: 50px 100px;
+        }
+        a{
+            display: block;
+    
+    line-height: 24pt;
+    
+    background: #f45702;
+    color: white;
+    letter-spacing: 2px;
+    transition: .2s all ease-in-out;
+    border-bottom: 2px solid transparent;
+  
+    width: 30%;
+   
+    margin: auto;
+        }
+    </style>)rawliteral";
 
       void loop () {
         if (button1.pressed) {
