@@ -91,13 +91,15 @@ export default {
       console.log(this.valEsp)
       this.dataType("lumiere");
       this.getName();
-      this.validationData();
+      //this.validationData();
       if (this.valEsp.length < 50) {
         this.nbValeur = 10;
       } else {
         this.nbValeur = 50;
       }
+      this.getMoyenneDataParSemaine('temperature');
     }
+
     console.log(this.valEsp);
   },
   methods: {
@@ -158,35 +160,116 @@ export default {
       );
     },
 
-    validationData() {
-      console.log('validation')
-      fetch(urlApi + "/meteo/verif", {
-        method: "post",
-        body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": this.$session.get("token"),
-        },
-      }).then((res) => {
-        try {
-          res.json().then((data) => {
-            console.log(data)
-            this.etatValiditeData = data;
-            this.aJour = true;
-            console.log(this.etatValiditeData.temperature, "test1");
-            console.log(this.etatValiditeData.pression, "test2");
-            console.log(this.etatValiditeData.humidity, "test3");
+    getMoyenneDataParSemaine(type) {
+      const moment = require('moment');
+      const dateFrom = moment().subtract(7, 'd').format('YYYY-MM-DD');
+      console.log('lw', moment().subtract(1, 'd').format('YYYY-MM-DD'))
+      const dataOfTheWeek = this.valEsp.filter(data => data.date > dateFrom);
+      console.log('test ', dataOfTheWeek[0].date)
+      const days = [[0], [0], [0], [0], [0], [0], [0]];
+      let cpt1 = 0;
+      let cpt2 = 0;
+      let cpt3 = 0;
+      let cpt4 = 0;
+      let cpt5 = 0;
+      let cpt6 = 0;
+      let cpt7 = 0;
+      dataOfTheWeek.forEach((e) => {
 
+        switch (moment(e.date).format('YYYY-MM-DD')) {
+          case moment().subtract(1, 'd').format('YYYY-MM-DD'):
+            cpt7 = cpt7 + 1;
+            days[6] = (Number(days[6]) + Number(e[type]))
+            break;
+          case moment().subtract(2, 'd').format('YYYY-MM-DD'):
+            cpt6 = cpt6 + 1;
+            days[5] = Number(days[5]) + Number(e[type])
+            break;
+          case moment().subtract(3, 'd').format('YYYY-MM-DD'):
+            cpt5 = cpt5 + 1;
+            days[4] = Number(days[4]) + Number(e[type])
+            break;
+          case moment().subtract(4, 'd').format('YYYY-MM-DD'):
+            cpt4 = cpt4 + 1;
+            days[3] = Number(days[3]) + Number(e[type])
+            break;
+          case moment().subtract(5, 'd').format('YYYY-MM-DD'):
+            cpt3 = cpt3 + 1;
+            days[2] = Number(days[2]) + Number(e[type])
+            break;
+          case moment().subtract(6, 'd').format('YYYY-MM-DD'):
+            cpt2 = cpt2 + 1;
+            days[1] = Number(days[1]) + Number(e[type])
+            break;
+          case moment().subtract(7, 'd').format('YYYY-MM-DD'):
+            cpt1 = cpt1 + 1;
+            days[0] = Number(days[0]) + Number(e[type])
+            break;
+        }
+      });
+      console.log(days,cpt1)/*
+        for (let i = 0; i < 7; i++) {
+          console.log('days',days[i][0])
+          console.log('cpt',cpt1)
+          //console.log(days[i][0]/cpt1)
+
+          switch (i) {
+            case 0:
+              days[i] = (days[i][0]/cpt1);
+              break;
+            case 1:
+              days[i] = (days[i][0]/cpt2).toFixed(2);
+              break;
+            case 2:
+              days[i] = (days[i][0]/cpt3).toFixed(2);
+              break;
+            case 3:
+              days[i] = (days[i][0]/cpt4).toFixed(2);
+              break;
+            case 4:
+              days[i] = (days[i][0]/cpt5).toFixed(2);
+              break;
+            case 5:
+              days[i] = (days[i][0]/cpt6).toFixed(2);
+              break;
+            case 6:
+              days[i] = (days[i][0] /cpt7).toFixed(2);
+              break;
+          }
+        }
+*/
+        return days;
+    },
+
+    /*
+        validationData() {
+          console.log('validation')
+          fetch(urlApi + "/meteo/verif", {
+            method: "post",
+            body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": this.$session.get("token"),
+            },
+          }).then((res) => {
+            try {
+              res.json().then((data) => {
+                //console.log(data)
+                this.etatValiditeData = data;
+                this.aJour = true;
+
+
+              });
+              //
+            } catch (err) {
+              this.aJour = false;
+              console.log('erreur')
+            }
 
           });
-          //
-        } catch (err) {
-          this.aJour = false;
-          console.log('erreur')
-        }
+        },
+        */
 
-      });
-    },
   },
   //permet de regarder la valeur d'une data dans le composant
   //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property

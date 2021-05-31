@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "leaflet": "^1.7.1",
     "leaflet-defaulticon-compatibility": "^0.1.1",
+    "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
     "sass-loader": "^10.0.3",
     "vue": "^2.6.11",

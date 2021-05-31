@@ -1,7 +1,7 @@
 const MeteoModel = require('../models/meteo.model.js');
 const openWeatherConfig = require('../config/openWeatherConfig');
 const weatherBitConfig = require('../config/weatherBitConfig');
-var moment = require('moment');
+const moment = require('moment');
 const userModel = require('../models/user.model.js');
 
 const fetch = require("node-fetch");
@@ -54,13 +54,13 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 //permet de récuperer les dernières datas de l'esp
 const getFreshMeteoById = async (req, res) => {
     //maximum de data par requete
-    const maxData = 10000; 
+    const maxData = 10000;
     const addMac = req.params.id;
     const today = new Date();
     today.setDate(today.getDate() - 14);
-    
+
     //.find permet de chercher dans le MeteoModel
-    //.limit permet de limiter le nombre de données à recup 
+    //.limit permet de limiter le nombre de données à recup
     //.sort permet de trier par date -1 signifie qu'on recup les données depuis la dernière insérée
     await MeteoModel.find({id: addMac, date: {$gte: today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}}).limit(maxData).sort( { date: -1 } )
         .then(rslt => {
