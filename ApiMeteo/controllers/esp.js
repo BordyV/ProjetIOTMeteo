@@ -1,5 +1,6 @@
 const EspModel = require('../models/esp.model');
 
+
 const getAll = async (req, res) => {
     console.log('alooo')
     await EspModel.find()

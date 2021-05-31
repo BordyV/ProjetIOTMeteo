@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 
-
+//structure de donnee d'une adresse Esp
 const adresseEspSchema = mongoose.Schema({
     lng: { type: Number, required: true },
     lat: { type: Number, required: true },
 
 });
 
+//structure de donnee d'un esp
 const EspSchema = mongoose.Schema({
     adresseMac: { type: String, required: true },
     adresse: {

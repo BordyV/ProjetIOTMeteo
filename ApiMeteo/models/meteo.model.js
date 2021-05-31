@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-
+//structure de donnee d'une adresse
 const adresseSchema = mongoose.Schema({
     lat: Number,
     lng: Number
 })
+//structure de donnee d'une donnee meteo
 const MeteoSchema = mongoose.Schema({
     temperature: {
         type: String,
