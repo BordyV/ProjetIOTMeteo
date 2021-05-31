@@ -7,7 +7,7 @@ const userModel = require('../models/user.model.js');
 const fetch = require("node-fetch");
 
 
-const getMeteo = async (req, res) => {//Requete qui get tous les meteos
+const getMeteo = async (req, res) => {//Requete qui get toutes les donnees meteo envoye par les esp
 
     await MeteoModel.find()
         .then(result => {
@@ -20,7 +20,7 @@ const getMeteo = async (req, res) => {//Requete qui get tous les meteos
         })
 }
 
-const getMeteoById = async (req, res) => {//Requete qui get tous les meteos par rapport à l'adresse mac
+const getMeteoById = async (req, res) => {//Requete qui get tous les meteos par rapport à l'adresse mac d'un certain esp
     const addMac = req.params.id;
     await MeteoModel.find({id: addMac})
         .then(rslt => {
@@ -31,7 +31,7 @@ const getMeteoById = async (req, res) => {//Requete qui get tous les meteos par 
         })
 }
 
-//Permet de récuperer les données de l'api openWeather
+//Permet de récuperer les données de l'api openWeather meteo actuelle
 const getMeteoOpenWeatherByAdress = async (req, res) => {//Requete qui get les données de l'api par rapport à son adresse
     //adresse envoyé par l'utilisateur
     const adress = req.params.adress;
@@ -48,19 +48,19 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {//Requete qui get les d
 
 
 }
-//https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
+
 
 
 //permet de récuperer les dernières datas de l'esp
 const getFreshMeteoById = async (req, res) => {
     //maximum de data par requete
-    const maxData = 10000; 
+    const maxData = 10000;
     const addMac = req.params.id;
     const today = new Date();
     today.setDate(today.getDate() - 14);
-    
+
     //.find permet de chercher dans le MeteoModel
-    //.limit permet de limiter le nombre de données à recup 
+    //.limit permet de limiter le nombre de données à recup
     //.sort permet de trier par date -1 signifie qu'on recup les données depuis la dernière insérée
     await MeteoModel.find({id: addMac, date: {$gte: today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}}).limit(maxData).sort( { date: -1 } )
         .then(rslt => {
@@ -74,7 +74,7 @@ const getFreshMeteoById = async (req, res) => {
 }
 
 
-function testHumidity(espH1, h2) {//Permet de comparer les données d'humidité de l'api et des esp
+function testHumidity(espH1, h2) {//Permet de comparer les données d'humidité des api et celle de l'esp
     //console.log('humid : ',espH1, h2)
     return (espH1 <= h2 + 10) && (espH1 >= h2 - 10);
 }
@@ -89,7 +89,8 @@ function testPression(espP1, p2) {//Permet de comparer les données de pression 
     return (espP1 <= p2 + 5) && (espP1 >= p2 - 5);
 }
 
-const previsionbyId = async (req, res) => {//Requete permettant de get les données prévision meteo par id
+const previsionbyId = async (req, res) => {//Requete permettant de get les données prévision meteo d'un certain user grace a l'id,
+    // et de recuperer son adresse et get la meteo a son adresse
     //adresse envoyé par l'utilisateur
     const id = req.params.id;
     console.log(id)
@@ -118,6 +119,7 @@ const previsionbyId = async (req, res) => {//Requete permettant de get les donn�
 
 
 }
+//get les donnees de prevision a une certaine adresse
 const prevision = async (req, res) => {
     //fetch sur l'api openWeatherMap
     const adress = req.params.adress;
@@ -133,7 +135,7 @@ const prevision = async (req, res) => {
 
 }
 
-
+//permet de comparer les donnees esp et celle 2 api afin de verifier la qualité des donnees
 const verificationDonnes = async (req, res) => {
     const esp = req.body;
     if (moment(esp.date).day() !== moment().day()) {
@@ -180,9 +182,9 @@ const verificationDonnes = async (req, res) => {
                                         let message = "Verification indisponible pour le moment. La limite de vérification a peut-être été atteinte.";
                                         res.status(400).send(message);
                                     }
-                                    
+
                                 }
-                                
+
                                 //console.log(objetValid);
                                 res.status(200).json(objetValid)
 
