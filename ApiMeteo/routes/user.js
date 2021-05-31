@@ -12,8 +12,6 @@ router.get('/',token, userController.getUsers); // renvoi tous les users
 router.get('/id/:id',token,userController.getUserById);
 router.get('/name/:id',userController.getUserNameById);
 
-//
-router.patch('/id/:id/setPic',token,userController.setUserPicture);
 
 
 module.exports = router;

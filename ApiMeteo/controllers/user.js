@@ -3,6 +3,7 @@ const {Mongoose} = require('mongoose');
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 
+//ajoute un nouvel utilisateur
 const newUser = async (req, res) => {
     const data = req.body;
     const newUser = new userModel({
@@ -22,7 +23,7 @@ const newUser = async (req, res) => {
             res.status(400).json({message: err.message});
         })
 }
-
+//recupere tout les utilisateurs
 const getUsers = async (req, res) => {
     await userModel.find()
         .then(result => {
@@ -33,6 +34,7 @@ const getUsers = async (req, res) => {
         })
 }
 
+//verifie sil est deja enregistré
 const isAlreadyRegistered = async (req, res) => {
     const body = req.body;
     await userModel.find({userEmail: body.userEmail})
@@ -44,6 +46,7 @@ const isAlreadyRegistered = async (req, res) => {
         })
 }
 
+//recupere un user grace a son id
 const getUserById = async (req, res) => {
     const id = req.params.id;
     await userModel.find({_id: id})
@@ -56,6 +59,7 @@ const getUserById = async (req, res) => {
 }
 
 
+//recupere le nom prenom d'un user grace son id
 const getUserNameById = async (req, res) => {
     const id = req.params.id;
     await userModel.find({_id: id})
@@ -77,6 +81,8 @@ const getUserNameById = async (req, res) => {
         })
 }
 
+//permet de connecter en verifiant le hash du mot de passe recu dans le body a celui enregistrer dans la bd, si oui on renvoie un succes et un jeton.
+//ce jeton permettra de securiser les appels a certaines route de l'api en l'exigeant dans le header de la requete.
 const connection = async (req, res) => {
     const data = req.body;
     console.log(process.env.JWT_SECRET);
@@ -115,14 +121,7 @@ const connection = async (req, res) => {
 }
 
 
-const setUserPicture = async (req, res) => {
-    const idUser = req.params.id;
-    const data = req.body;
-    console.log(data.picUrl)
-    await userModel.findOneAndUpdate({_id: idUser}, {picUrl: data.picUrl}, (err, rslt) => {
-        res.send({message: "Succesfully updated"})
-    })
-}
+
 
 
 module.exports = {
@@ -131,7 +130,6 @@ module.exports = {
     getUserById: getUserById,
     connection: connection,
     isAlreadyRegistered: isAlreadyRegistered,
-    setUserPicture: setUserPicture,
     getUserNameById: getUserNameById
 
 }

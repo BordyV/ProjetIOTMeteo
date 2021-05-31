@@ -7,7 +7,7 @@ const userModel = require('../models/user.model.js');
 const fetch = require("node-fetch");
 
 
-const getMeteo = async (req, res) => {
+const getMeteo = async (req, res) => {//Requete qui get toutes les donnees meteo envoye par les esp
 
     await MeteoModel.find()
         .then(result => {
@@ -20,7 +20,7 @@ const getMeteo = async (req, res) => {
         })
 }
 
-const getMeteoById = async (req, res) => {
+const getMeteoById = async (req, res) => {//Requete qui get tous les meteos par rapport à l'adresse mac d'un certain esp
     const addMac = req.params.id;
     await MeteoModel.find({id: addMac})
         .then(rslt => {
@@ -31,8 +31,8 @@ const getMeteoById = async (req, res) => {
         })
 }
 
-//Permet de récuperer les données de l'api openWeather
-const getMeteoOpenWeatherByAdress = async (req, res) => {
+//Permet de récuperer les données de l'api openWeather meteo actuelle
+const getMeteoOpenWeatherByAdress = async (req, res) => {//Requete qui get les données de l'api par rapport à son adresse
     //adresse envoyé par l'utilisateur
     const adress = req.params.adress;
     //fetch sur l'api openWeatherMap
@@ -48,7 +48,7 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 
 
 }
-//https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
+
 
 
 //permet de récuperer les dernières datas de l'esp
@@ -73,37 +73,24 @@ const getFreshMeteoById = async (req, res) => {
         })
 }
 
-function distance(lat1, lat2, lon1, lon2) {
-    const R = 6371e3; // metres
-    const p1 = lat1 * Math.PI / 180; // φ, λ in radians
-    const p2 = lat2 * Math.PI / 180;
-    const dp = (lat2 - lat1) * Math.PI / 180;
-    const dy = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin(dp / 2) * Math.sin(dp / 2) +
-        Math.cos(p1) * Math.cos(p2) *
-        Math.sin(dy / 2) * Math.sin(dy / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c; // in metres
-}
-
-function testHumidity(espH1, h2) {
+function testHumidity(espH1, h2) {//Permet de comparer les données d'humidité des api et celle de l'esp
     //console.log('humid : ',espH1, h2)
     return (espH1 <= h2 + 10) && (espH1 >= h2 - 10);
 }
 
-function testTemp(espT1, t2) {
+function testTemp(espT1, t2) {//Permet de comparer les données de la température de l'api et des esp
     //console.log('temp : ',espT1, t2)
     return (espT1 <= t2 + 2.5) && (espT1 >= t2 - 2.5);
 }
 
-function testPression(espP1, p2) {
+function testPression(espP1, p2) {//Permet de comparer les données de pression de l'api et des esp
     //console.log('pression: ',espP1, p2)
     return (espP1 <= p2 + 5) && (espP1 >= p2 - 5);
 }
 
-const previsionbyId = async (req, res) => {
+const previsionbyId = async (req, res) => {//Requete permettant de get les données prévision meteo d'un certain user grace a l'id,
+    // et de recuperer son adresse et get la meteo a son adresse
     //adresse envoyé par l'utilisateur
     const id = req.params.id;
     console.log(id)
@@ -132,6 +119,7 @@ const previsionbyId = async (req, res) => {
 
 
 }
+//get les donnees de prevision a une certaine adresse
 const prevision = async (req, res) => {
     //fetch sur l'api openWeatherMap
     const adress = req.params.adress;
@@ -147,7 +135,7 @@ const prevision = async (req, res) => {
 
 }
 
-
+//permet de comparer les donnees esp et celle 2 api afin de verifier la qualité des donnees
 const verificationDonnes = async (req, res) => {
     const esp = req.body;
     if (moment(esp.date).day() !== moment().day()) {
@@ -194,9 +182,9 @@ const verificationDonnes = async (req, res) => {
                                         let message = "Verification indisponible pour le moment. La limite de vérification a peut-être été atteinte.";
                                         res.status(400).send(message);
                                     }
-                                    
+
                                 }
-                                
+
                                 //console.log(objetValid);
                                 res.status(200).json(objetValid)
 

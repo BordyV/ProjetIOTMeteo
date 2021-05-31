@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-
+//structure de donnee d'un user
 const UserSchema = mongoose.Schema({
     userFirstName: {
         type: String,

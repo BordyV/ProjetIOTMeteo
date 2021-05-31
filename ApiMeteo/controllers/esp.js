@@ -1,6 +1,6 @@
 const EspModel = require('../models/esp.model');
 
-const getAll = async (req, res) => {
+const getAll = async (req, res) => {//Requete qui permet de get tous les esp
     console.log('alooo')
     await EspModel.find()
         .then(result => {
@@ -12,15 +12,15 @@ const getAll = async (req, res) => {
             res.send({message: error.message})
         })
 }
-const newEsp = async (req, res) => {
+const newEsp = async (req, res) => {//Requete qui permet d'ajouter un nouvel esp
     const data = req.body;
     console.log(data.adresseMac)
-    if (await EspModel.find({"adresseMac": data.adresseMac}).limit(1).length === 1) {
+    if (await EspModel.find({"adresseMac": data.adresseMac}).limit(1).length === 1) {//Si adresse mac de esp ajouté = esp existant, on ajoute pas l'esp
         console.log('---------esp existant-------')
 
         res.status(400).json({message: "il existe deja un esp avec la meme signature"});
 
-    } else {
+    } else {//Sinon on ajoute l'esp avec ses paramètres
         console.log('---------nouvel esp-------')
         const newEsp = new EspModel({
             adresseMac: data.adresseMac,
@@ -37,7 +37,7 @@ const newEsp = async (req, res) => {
     }
 }
 
-const deleteEsp = async (req, res) => {
+const deleteEsp = async (req, res) => {//Requête qui permet de supprimer un esp grace a id
     const id = req.params.id;
     await EspModel.deleteOne({_id: id})
         .then(rslt => {
@@ -48,7 +48,7 @@ const deleteEsp = async (req, res) => {
         })
 }
 
-const updateEsp = async (req, res) => {
+const updateEsp = async (req, res) => {//Requête qui permet de modifier les donnees  d'un esp via le body grace a son id
     let id = req.body._id;
     let update = req.body;
     if (!req.body) {
@@ -74,7 +74,7 @@ const updateEsp = async (req, res) => {
     });
 }
 
-const getEspById = async (req, res) => {
+const getEspById = async (req, res) => {//Requete qui permet de get un esp par rapport à son id
     const idUser = req.params.id;
     await EspModel.find({userId: idUser})
         .then(rslt => {
