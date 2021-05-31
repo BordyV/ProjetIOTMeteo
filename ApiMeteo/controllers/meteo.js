@@ -54,7 +54,7 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 //permet de récuperer les dernières datas de l'esp
 const getFreshMeteoById = async (req, res) => {
     //maximum de data par requete
-    const maxData = 10000;
+    const maxData = 7000;
     const addMac = req.params.id;
     const today = new Date();
     today.setDate(today.getDate() - 14);

@@ -22,10 +22,24 @@
                 {{ name }}
               </td>
               <td v-if="value">
-                <v-icon style="color: green">mdi-check-circle-outline</v-icon>
+                              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <span>
+                    <v-icon style="color: green" dark v-on="on">mdi-check-circle-outline</v-icon>
+                  </span>
+                </template>
+                <span>Les données sont fiables.</span>
+            </v-tooltip>
               </td>
               <td v-if="!value">
-                <v-icon style="color: red">mdi-alert-circle-outline</v-icon>
+                <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <span>
+                    <v-icon style="color: red" dark v-on="on">mdi-alert-circle-outline</v-icon>
+                  </span>
+                </template>
+                <span>Les données ne sont pas fiables.</span>
+            </v-tooltip>
               </td>
             </tr>
           </tbody>
@@ -58,16 +72,16 @@
         <thead>
           <th>Type/Date</th>
           <th
-            v-for="categorie in getMoyenneDataParSemaine(valeurSelec)"
-            :key="categorie"
+            v-for="(categorie, idx) in getMoyenneDataParSemaine(valeurSelec)"
+            :key="idx"
           >
             {{ categorie.jour }}
           </th>
           <tr>
             <td>{{ valeurSelec }}</td>
             <td
-              v-for="categorie in getMoyenneDataParSemaine(valeurSelec)"
-              :key="categorie"
+              v-for="(categorie, idx) in getMoyenneDataParSemaine(valeurSelec)"
+              :key="idx"
             >
               <span v-if="valeurSelec == 'pression' && categorie.moyenne != 'NaN'">
                 {{ (categorie.moyenne / 100).toFixed(2) }}
@@ -76,7 +90,12 @@
                 {{ categorie.moyenne }}
               </span>
               <span v-if="categorie.moyenne == 'NaN'">
-                  <v-icon style="color: red">mdi-alert-circle-outline</v-icon>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-icon style="color: red" dark v-on="on">mdi-alert-circle-outline</v-icon>
+                </template>
+                <span>Pas de données ce jour là.</span>
+            </v-tooltip>
               </span>
             </td>
           </tr>
