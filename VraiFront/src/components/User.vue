@@ -271,6 +271,7 @@
         </v-container>
       </v-main>
     </div>
+      
   </div>
 </template>
 
@@ -281,8 +282,9 @@ import {latLng} from "leaflet";
 import {LMap, LTileLayer, LMarker, LIcon} from "vue2-leaflet";
 import urlApi from './ConfApi.js';
 
+
 export default {
-  components: {Spinner, LMap, LTileLayer, LMarker, LIcon},
+  components: {Spinner, LMap, LTileLayer, LMarker, LIcon,  },
   name: "user",
 
   data() {
@@ -494,7 +496,7 @@ export default {
 
     getMyPrevision: async function () {//Permet de get les prevision de l'api
       this.showSpinner = true;
-      await fetch(`${urlApi}/previsionbyid/${this.userId}`, {
+      await fetch(`${urlApi}/meteo/previsionbyid/${this.userId}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": this.$session.get("token"),

@@ -107,6 +107,9 @@
         </v-btn>
       </template>
     </v-snackbar>
+    
+    <Psnack v-if="dataPrevision" v-bind:previsionbis="dataPrevision"></Psnack>
+    
    
   </div>
 </template>
@@ -117,6 +120,7 @@ import { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
+import Psnack from "./Psnack.vue";
 import Spinner from "./Spinner.vue";
 import urlApi from './ConfApi.js';
 
@@ -131,7 +135,9 @@ export default {
     LPopup,
     Pgraph,
     Pstat,
+    Psnack,
     Spinner,
+    
   },
 
   data() {

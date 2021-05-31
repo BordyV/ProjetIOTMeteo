@@ -103,14 +103,17 @@ export default defineComponent({
       //Ajout d'une icone correspondant à la méteo de la recherche
       if (this.weather.weather[0].main === "Clouds") {
         this.tempicon = "mdi-cloud";
-      } else if (this.weather.weather[0].main === "Sunny") {
-        this.tempicon = "mdi-white-balance-sunny";
+      } else if (this.weather.weather[0].main === "Thunderstorm") {
+        this.tempicon = "mdi-weather-lightning";
       } else if (this.weather.weather[0].main === "Rain") {
         this.tempicon = "mdi-weather-pouring";
       } else if (this.weather.weather[0].main === "Snow") {
         this.tempicon = "mdi-snowflake";
       } else if (this.weather.weather[0].main === "Clear") {
         this.tempicon = "mdi-weather-partly-cloudy";
+      }
+      else if (this.weather.weather[0].main === "Drizzle") {
+        this.tempicon = "mdi-weather-rainy";
       }
       this.forecast[1].value = this.weather.main.pressure + " hPa";
     },
