@@ -176,34 +176,3 @@ async function v0(){
 //==== Demarrage BD et MQTT =======================
 //================================================================
 v0().catch(console.error);
-
-//====================================
-// Utilisation du framework express
-// Notamment g�r�r les routes 
-const express = require('express');
-// et pour permettre de parcourir les body des requetes
-const bodyParser = require('body-parser');
-
-const app = express();
-
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, '/')));
-app.use(function(request, response, next) { //Pour eviter les problemes de CORS/REST
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "*");
-    response.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
-    next();
-});
-
-
-
-
-//================================================================
-//==== Demarrage du serveur Web  =======================
-//================================================================
-// L'application est accessible sur le port 3000
-
-app.listen(3001, () => {
-    console.log('Server listening on port 3000');
-});
