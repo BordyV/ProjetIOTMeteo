@@ -330,9 +330,9 @@ export default {
     };
   },
   mounted() {
-    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");
+    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");//On charge l'image depuis assets
     console.log("tokenSession", this.$session.get("token"));
-    if (this.$session.get("userId")) {
+    if (this.$session.get("userId")) {//Si on arrive a avoir l'id utilisateur de cette session alors on affecte ces valeurs
       this.token = this.$session.get("token");
       this.userId = this.$session.get("userId");
       this.message = this.userId;
@@ -423,7 +423,6 @@ export default {
       this.modalCarteNewEsp = true;
 
       //on centre sur paris pour ne pas avoir des coordonées dans l'océan si aucun marker n'est encore posé
-      //TODO FIX CENTRE LORS DE L'AJOUT D'UN ESP
       if (!this.markerNewEsp) {
         this.center = latLng(48.866667, 2.333333);
         this.zoom = 6;
@@ -433,17 +432,17 @@ export default {
       }
 
     },
-    addMarker(event) {
+    addMarker(event) {//On ajoute un marqueur 
       this.markerNewEsp = event.latlng;
       this.newEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
     },
-    addMarkerModif(event) {
+    addMarkerModif(event) {//Permet de modifier le marqueur
       if (this.modifierPosition) {
         this.markerModifEsp = event.latlng;
         this.modifEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
       }
     },
-    getMyEsps: async function () {
+    getMyEsps: async function () {//Permet de get les esp de l'utilisateur
       this.showSpinner = true;
       await fetch(`${urlApi}/esp/getEsp/${this.userId}`, {
         headers: {
@@ -469,7 +468,7 @@ export default {
             this.showSpinner = false;
           });
     },
-    deleteEsp(id) {
+    deleteEsp(id) {//Permet de supprimer un esp de l'utilisateur
       this.showSpinner = true;
       const deleteMethod = {
         method: 'DELETE',
@@ -493,7 +492,7 @@ export default {
 
     },
 
-    getMyPrevision: async function () {
+    getMyPrevision: async function () {//Permet de get les prevision de l'api
       this.showSpinner = true;
       await fetch(`${urlApi}/previsionbyid/${this.userId}`, {
         headers: {
@@ -524,7 +523,7 @@ export default {
           });
     },
 
-    modifierEsp(esp) {
+    modifierEsp(esp) {//Permet de modifier l'esp
       this.showSpinner = true;
       const putMethod = {
         method: 'PUT',

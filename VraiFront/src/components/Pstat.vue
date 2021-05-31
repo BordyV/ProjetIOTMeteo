@@ -76,7 +76,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    if(this.weatherbis)
+    if(this.weatherbis) //Si weatherbis est bien chargé alors 
     {
     this.setup();
     }
@@ -87,21 +87,21 @@ export default defineComponent({
       }
     },
   methods: {
-    setup() {
+    setup() {// Méthode permettant d'affecter à des variables certaines valeurs de l'api openWeather
       console.log("coucou");
       console.log(this.weatherbis);
-      this.weather = this.weatherbis;
-      this.temperature = this.weather.main.temp;
-      this.city = this.weather.name;
-      this.latitude = this.weather.coord.lat;
-      this.longitude = this.weather.coord.lon;
-      this.forecast[0].value = this.weather.main.feels_like + " \xB0";
-      this.humidity = this.weather.main.humidity + " %";
-      this.wind = this.weather.wind.speed + " km";
+      this.weather = this.weatherbis;//Le body des données de l'api
+      this.temperature = this.weather.main.temp;//La température de la recherche
+      this.city = this.weather.name;//La vile de la recherche
+      this.latitude = this.weather.coord.lat;//L'altitude de la recherche
+      this.longitude = this.weather.coord.lon;//Longitude de la recherche
+      this.forecast[0].value = this.weather.main.feels_like + " \xB0";//La température ressentie de la recherche
+      this.humidity = this.weather.main.humidity + " %";//L'humidité' de la recherche
+      this.wind = this.weather.wind.speed + " km";//La vitesse du vent de la recherche
 
+      //Ajout d'une icone correspondant à la méteo de la recherche
       if (this.weather.weather[0].main === "Clouds") {
         this.tempicon = "mdi-cloud";
-
       } else if (this.weather.weather[0].main === "Sunny") {
         this.tempicon = "mdi-white-balance-sunny";
       } else if (this.weather.weather[0].main === "Rain") {
