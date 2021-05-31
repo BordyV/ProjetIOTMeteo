@@ -103,6 +103,9 @@ mounted(){
 </script>
 
 <style>
+.page {
+color: rgb(255 255 255 / 87%);
+}
 .titleguide{
     text-align: center;
     margin-top: 20px;
