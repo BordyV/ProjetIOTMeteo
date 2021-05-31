@@ -107,7 +107,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <!--<bootstrap-dropdown(:options="options" @select="selected = $event" ) name="input-name">  -->
+   
   </div>
 </template>
 
@@ -164,7 +164,7 @@ export default {
   },
 
   mounted() {
-    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");
+    this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");// On charge l'image du marqueur rouge
     this.getInfoEsp();
   },
   computed: {
@@ -176,7 +176,7 @@ export default {
     },
   },
   methods: {
-    dataEspFetcherbyId: async function (mac) {
+    dataEspFetcherbyId: async function (mac) {//Méthode permettant d'envoyer les données météo de notre esp
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       console.log("ESP ID: ", mac);
@@ -202,7 +202,7 @@ export default {
           });
     },
 
-    fetchApiWeather: async function () {
+    fetchApiWeather: async function () {//Méthode permettant de charger les données météo de l'api OpenWeather
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       await fetch(urlApi + 
@@ -256,7 +256,8 @@ export default {
       this.showParagraph = !this.showParagraph;
     },
 
-    getPrevision: async function () {
+    getPrevision: async function () {//Méthode permmettant d'obtenir la prévision météo de la recherche
+      //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       await fetch(`${urlApi}/meteo/prevision/${this.position}`, {
         headers: {
@@ -273,6 +274,7 @@ export default {
                 this.dataPrevision = body;
               }
               console.log(body);
+              //on cache le spinner une fois qu'on a les données
               this.showSpinner = false;
             });
           })
@@ -284,7 +286,7 @@ export default {
     },
 
 
-    loca: async function () {
+    loca: async function () {//Permet a la recherche d'obtenir les données méteo actuelle et futures
       this.show = true;
       this.fetchApiWeather();
       this.getPrevision();

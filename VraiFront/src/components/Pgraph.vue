@@ -17,6 +17,7 @@
         humidity: {{ etatValiditeData.humidity }}
 
       </div>
+      
     </div>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative</v-icon>
@@ -67,6 +68,8 @@ export default {
     valEsp: {},
   },
   mounted() {
+    
+    
     if (this.valEsp) {
       console.log(this.valEsp)
       this.dataType("lumiere");
@@ -149,6 +152,9 @@ export default {
             console.log(data)
             this.etatValiditeData = data;
             this.aJour = true;
+            console.log(this.etatValiditeData.temperature,"test1");
+            console.log(this.etatValiditeData.pression,"test2");
+            console.log(this.etatValiditeData.humidity,"test3");
 
           });
           //
