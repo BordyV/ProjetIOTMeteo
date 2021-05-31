@@ -51,13 +51,21 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {
 //https://api.weatherbit.io/v2.0/current?lat=35.7796&lon=-78.6382&key=API_KEY&include=minutely
 
 
+//permet de récuperer les dernières datas de l'esp
 const getFreshMeteoById = async (req, res) => {
+    //maximum de data par requete
+    const maxData = 10000; 
     const addMac = req.params.id;
     const today = new Date();
     today.setDate(today.getDate() - 14);
-    await MeteoModel.find({id: addMac, date: {$gte: today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}})
+    
+    //.find permet de chercher dans le MeteoModel
+    //.limit permet de limiter le nombre de données à recup 
+    //.sort permet de trier par date -1 signifie qu'on recup les données depuis la dernière insérée
+    await MeteoModel.find({id: addMac, date: {$gte: today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}}).limit(maxData).sort( { date: -1 } )
         .then(rslt => {
-
+            //.reverse permet d'inverser le tableau
+            rslt.reverse();
             rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur: "ESP inconnu ...."})
         })
         .catch(err => {
