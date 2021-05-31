@@ -13,12 +13,14 @@
 #include "DHT.h"
 #include <Preferences.h>
 #define DHTTYPE DHT11
+//Pour les capteurs BMP
 #define BMP_SCK  (13)
 #define BMP_MISO (12)
 #define BMP_MOSI (11)
 #define BMP_CS   (10)
 #define ONBOARD_LED  2
 
+//les préférences
 Preferences preferences;
 const int buttonPin = 0;
 bool isEmit = false;
@@ -38,13 +40,15 @@ struct Button {
 };
 
 
+//la structure pour le bouton BOOT
 Button button1 = {0, 0, false};
+
+//Quand le bouton est pressé on appel cette méthode qui va changer l'état du bouton, on peut alors savoir si celui-ci a été appelé et changer le comportement de l'ESP
 void IRAM_ATTR isr() {
   button1.numberKeyPresses += 1;
   button1.pressed = true;
 }
 
-// variables will change:
 int buttonState = 0;
 
 /*============= GPIO ======================*/
@@ -54,6 +58,7 @@ const int photo_resistor_pin = A5;
 // DHT Sensor
 uint8_t DHTPin = 4;
 DHT dht(DHTPin, DHTTYPE);
+//user du mqtt
 const char* mqttUser = "iot";
 const char* mqttPassword = "salutcestleprojetiot";
 float Temperature;
@@ -66,7 +71,7 @@ DallasTemperature tempSensor(&oneWire);
 WiFiClient espClient; // Wifi
 PubSubClient client(espClient) ; // MQTT client
 
-String whoami; // Identification de CET ESP au sein de la flotte
+String whoami; // ID de CET ESP au sein de la flotte (adresse MAC)
 
 //StaticJsonBuffer<200> jsonBuffer;
 /*===== MQTT broker/server and TOPICS ========*/
@@ -79,12 +84,13 @@ void setup () {
   Serial.begin (9600);
   pinMode(ONBOARD_LED,OUTPUT);
 
+//le code erreur si le capteur bmp plante (surtout nécessaire pour le dev)
   if (!bmp.begin(0x76)) {
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring or "
     "try a different address!"));
     while (1) delay(10);
   }
-
+//conf capteur bmp
   bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
     Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
     Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
@@ -97,25 +103,20 @@ void setup () {
     pinMode (ledPin , OUTPUT);
     attachInterrupt(button1.PIN, isr, FALLING);
     pinMode(DHTPin, INPUT);
-    /* Wifi */
+
     dht.begin();
     connect_wifi();
 
-    /*  L'ESP est un client du mqtt_server */
-    client.setServer(mqtt_server, 8883);
-    //client.setServer(mqtt_server, 8883); // securite !!!
 
-    // set callback when publishes arrive for the subscribed topic
-    // methode a effet local => on n'a pas a initier/verifier la connection.
+    client.setServer(mqtt_server, 8883);
+
     client.setCallback(mqtt_pubcallback);
 
-    /* Choix d'une identification pour cet ESP ---*/
-    // whoami = "esp1";
+
     whoami =  String(WiFi.macAddress());
   }
 
   /*============== MQTT CALLBACK ===================*/
-
 
   void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
     /*
@@ -226,6 +227,7 @@ void setup () {
   /*================= LOOP ======================*/
 
 
+//la page locale que l'on envoie pour configurer l'ESP
   const char index_html[] PROGMEM = R"rawliteral(
     <!DOCTYPE HTML><html><head>
     <title>Configuration ESP </title>
@@ -350,6 +352,7 @@ label, input, textarea{
         }
     </style>)rawliteral";
 
+//la fonction loop qui va vérifier si le bouton a été pressé, elle envoie les données ou passe le wifi en mode emetteur.
       void loop () {
         if (button1.pressed) {
           isEmit = !isEmit;
@@ -377,11 +380,6 @@ label, input, textarea{
             mqtt_mysubscribe((char*) (TOPIC_LED));
           }
 
-
-          /* char tempString[8];
-          dtostrf(temperature, 1, 2, tempString);
-          client.publish(TOPIC_TEMP, tempString); */
-
           /* Publish Light periodically */
           payload = "{\"id\": \"" + whoami + "\", \"userId\": \"" + userID + "\", \"lumiere\": \"" + get_light() + "\", \"pression\": \"" + get_pressure() + "\", \"altitude\": \"" + get_alt() + "\", \"humidite\": \"" + get_humidity() + "\", \"temperature\": \"" + get_temperature() +"\"" + "}";
           payload.toCharArray(data, (payload.length() + 1));
@@ -392,25 +390,27 @@ label, input, textarea{
           // Process MQTT ... obligatoire une fois par loop()
         }
 
+//configuration de l'esp32
         else {
           if (!configured)
           {
+          //on emmet du wifi
             Serial.print("Setting AP (Access Point)…");
             WiFi.softAP("Esp32", NULL);
-
             IPAddress IP = WiFi.softAPIP();
+
             Serial.print("AP IP address: ");
             Serial.println(IP);
-            // Send web page with input fields to client
+              //on envoie la page web au client
             server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
               request->send_P(200, "text/html", index_html);
             });
-            // Send a GET request to <ESP_IP>/get?ssid=<inputMessage>
+           //Quand le client a sauvegardé ses datas on les recoit ici
             server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
               String inputMessage;
               int inputMessageFreq;
               String inputParam;
-              // GET ssid value on <ESP_IP>/get?ssid=<inputMessage>
+     //pour chaque if on enregistre le paramètre dans la mémoire morte si le paramètre a bien été changé
               if (request->hasParam(SSID)) {
                 inputMessage = request->getParam(SSID)->value();
                 if (inputMessage[0] != '\0')
@@ -424,7 +424,7 @@ label, input, textarea{
                 preferences.end();
               }
               }
-              // GET mdp value on <ESP_IP>/get?mdp=<inputMessage>
+
               if (request->hasParam(MDP) ) {
                 inputMessage = request->getParam(MDP)->value();
                 if (inputMessage[0] != '\0')
@@ -493,6 +493,7 @@ label, input, textarea{
             configured = true;
 
           }
+          //met la led bleu à fond les bananes
           digitalWrite(ONBOARD_LED,HIGH);
 
         }
