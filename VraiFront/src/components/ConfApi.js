@@ -1,9 +1,9 @@
 
 //environnement de dev
-const uriApi = 'http://localhost:3000';
+//const uriApi = 'http://localhost:3000';
 
 //environnement de prod 
-//const uriApi = 'https://valentinbordy.fr/meteo';
+const uriApi = 'https://valentinbordy.fr/meteo';
 
 //2nd environnement de prod (heroku)
 //const uriApi = 'https://iotmeteobordy.herokuapp.com';

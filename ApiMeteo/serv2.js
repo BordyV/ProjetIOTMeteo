@@ -52,10 +52,10 @@ mongoose.connect(DB_URI,{
 console.log(uri)
 app.get('/',  (req, res) => res.send('Hellow World!'));
 
-//const options = {
-//    key: fs.readFileSync('./key.pem'),
-//    cert: fs.readFileSync('./cert.pem'),
-//    passphrase: 'salut_timmy_mon_ami_pour_la_vie_tmtc_1214_bitch'
-//  };
-//https.createServer(options, app).listen(port);
-app.listen(port, () => console.log(`http://localhost:${port}/`));
+const options = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem'),
+    passphrase: 'salut_timmy_mon_ami_pour_la_vie_tmtc_1214_bitch'
+  };
+https.createServer(options, app).listen(port);
+//app.listen(port, () => console.log(`http://localhost:${port}/`));
