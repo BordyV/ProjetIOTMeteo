@@ -333,7 +333,6 @@ export default {
   },
   mounted() {
     this.iconOpenWeatherRed = require("@/assets/marker-icon-red.png");//On charge l'image depuis assets
-    console.log("tokenSession", this.$session.get("token"));
     if (this.$session.get("userId")) {//Si on arrive a avoir l'id utilisateur de cette session alors on affecte ces valeurs
       this.token = this.$session.get("token");
       this.userId = this.$session.get("userId");
@@ -363,8 +362,6 @@ export default {
           .then((e) => {
             e.json().then((json) => {
               this.userInfos = json[0];
-              console.log("les donnees user: ", this.userInfos);
-
               this.nom = this.capitalizeFirstLetter(json[0].userFirstName);
               this.nom = json[0].userLastName;
               this.showSpinner = false;
@@ -429,7 +426,6 @@ export default {
         this.center = latLng(48.866667, 2.333333);
         this.zoom = 6;
       } else {
-        console.log(this.markerNewEsp);
         this.center = latLng(this.markerNewEsp.lat, this.markerNewEsp.lng);
       }
 
@@ -510,7 +506,6 @@ export default {
               res.json().then((resJson) => {
                 //on cache le spinner
                 this.showSpinner = false;
-                console.log(resJson);
                 this.myPrevision = resJson;
                 //on recupere un code 200 mais on a pas d'esp, juste un objet "erreur" on remet donc la list vide
               });
@@ -540,13 +535,11 @@ export default {
           userId: esp.userId,
         })
       }
-      console.log(putMethod.body)
       fetch(`${urlApi}/esp/put`, putMethod)
           .then(response => response.json())
-          .then(data => {
+          .then(() => {
             this.showSpinner = false;
             alert('la position de votre esp a bien été modifié.')
-            console.log('put: ', data);
             //on remet tout a 0
             this.markerModifEsp = null;
             this.modifEspPosition = false;
@@ -573,7 +566,6 @@ export default {
         adresse: this.newEspPosition,
         userId: this.userId,
       };
-      console.log("body du nouveau ESP", body);
       fetch(urlApi + "/esp/addEsp", {
         method: "post",
         body: JSON.stringify(body),

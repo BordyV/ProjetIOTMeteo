@@ -133,7 +133,6 @@ export default {
   },
   mounted() {
     if (this.valEsp) {
-      console.log(this.valEsp);
       this.dataType("lumiere");
       this.getName();
       this.validationData();
@@ -144,8 +143,6 @@ export default {
       }
       this.getMoyenneDataParSemaine("temperature");
     }
-
-    console.log(this.valEsp);
   },
   methods: {
     //permet d'actualiser le Graph en fonction du type de data
@@ -215,12 +212,13 @@ export default {
       );
     },
 
+    //Recupere les données et fait une moyenne en fonction du type de donnée passé en param
+    //données possiblent en param: lumiere, pression, humidite, temperature
     getMoyenneDataParSemaine(type) {
       const moment = require("moment");
-      const dateFrom = moment().subtract(7, "d").format("YYYY-MM-DD");
-      console.log("lw", moment().subtract(1, "d").format("YYYY-MM-DD"));
-      const dataOfTheWeek = this.valEsp.filter((data) => data.date > dateFrom);
-      console.log("test ", dataOfTheWeek[0].date);
+      const dateFrom = moment().subtract(4, "d").format("YYYY-MM-DD");
+      //filtre pour récuperer les données jusqu'a il y a 4 jours sans prendre la date du jour
+      const dataOfTheWeek = this.valEsp.filter((data) => data.date > dateFrom).filter((data) => data.date != moment() );
       const days = [
         { moyenne: 0, jour: moment().subtract(1, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(2, "d").format("YYYY-MM-DD") },
@@ -233,6 +231,7 @@ export default {
       let cpt3 = 0;
       let cpt4 = 0;
 
+      //pour chaque data de la semaine (4 jours) on cpt et on additionne pour la moyenne plus tard 
       dataOfTheWeek.forEach((e) => {
         switch (moment(e.date).format("YYYY-MM-DD")) {
           
@@ -254,8 +253,9 @@ export default {
             break;
         }
       });
-      console.log(days, cpt1);
-      for (let i = 0; i < 7; i++) {
+
+      //pour chaque jour de la semaine (4 jours) on calcule la moyenne à 2 décimals 
+      for (let i = 0; i < 4; i++) {
         switch (i) {
           case 0:
             days[i].moyenne = (days[i].moyenne / cpt1).toFixed(2);
@@ -275,6 +275,7 @@ export default {
       return days;
     },
 
+    //appel de l'api pour verifier les datas
     validationData() {
       console.log("validation");
       fetch(urlApi + "/meteo/verif", {
@@ -287,7 +288,6 @@ export default {
       }).then((res) => {
         try {
           res.json().then((data) => {
-            //console.log(data)
             this.etatValiditeData = data;
             this.aJour = true;
           });

@@ -240,7 +240,6 @@ export default {
           latitude: 0.0,
         },
       };
-      console.log("creation", body);
       fetch(urlApi + "/user/isAlreadyRegistered", {//Si l'utilisateur a déjà été crée 
         method: "post",
         body: JSON.stringify(body),
@@ -287,7 +286,6 @@ export default {
             this.$session.start();
             this.$session.set("token", data.token);
             this.$session.set("userId", data.userId);
-            console.log(this.$session.get("token"));
             this.$router.go("user/" + data.userId);
             /*this.$router.replace({
               name: `user`,
