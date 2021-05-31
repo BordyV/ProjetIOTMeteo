@@ -174,11 +174,29 @@ const verificationDonnes = async (req, res) => {
                             resFetch.json().then((body) => {
                                 //console.log(body)
                                 dataApi1 = body;
-                                let objetValid = {
-                                    temperature: testTemp(esp.temperature, dataApi1.data[0].temp) || testTemp(esp.temperature, dataApi2.main.temp),
-                                    pression: testPression(esp.pression, dataApi1.data[0].pres) || testPression(esp.temperature, dataApi2.main.pressure),
-                                    humidite: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
+                                console.log(body)
+                                let objetValid;
+                                try {
+
+                                    objetValid = {
+                                        temperature: testTemp(esp.temperature, dataApi1.data[0].temp) || testTemp(esp.temperature, dataApi2.main.temp),
+                                        pression: testPression(esp.pression, dataApi1.data[0].pres) || testPression(esp.temperature, dataApi2.main.pressure),
+                                        humidite: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
+                                    }
+                                } catch(e) {
+                                    try {
+                                        objetValid = {
+                                            temperature: testTemp(esp.temperature, dataApi2.main.temp),
+                                            pression:  testPression(esp.temperature, dataApi2.main.pressure),
+                                            humidite:  testHumidity(esp.humidite, dataApi2.main.humidity) ,
+                                        }
+                                    } catch(e) {
+                                        let message = "Verification indisponible pour le moment. La limite de vérification a peut-être été atteinte.";
+                                        res.status(400).send(message);
+                                    }
+                                    
                                 }
+                                
                                 //console.log(objetValid);
                                 res.status(200).json(objetValid)
 
