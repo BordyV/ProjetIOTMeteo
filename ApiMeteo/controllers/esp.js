@@ -37,7 +37,7 @@ const newEsp = async (req, res) => {//Requete qui permet d'ajouter un nouvel esp
     }
 }
 
-const deleteEsp = async (req, res) => {//Requête qui permet de supprimer un esp
+const deleteEsp = async (req, res) => {//Requête qui permet de supprimer un esp grace a id
     const id = req.params.id;
     await EspModel.deleteOne({_id: id})
         .then(rslt => {
@@ -48,7 +48,7 @@ const deleteEsp = async (req, res) => {//Requête qui permet de supprimer un esp
         })
 }
 
-const updateEsp = async (req, res) => {//Requête qui permet de modifier un esp
+const updateEsp = async (req, res) => {//Requête qui permet de modifier les donnees  d'un esp via le body grace a son id
     let id = req.body._id;
     let update = req.body;
     if (!req.body) {
@@ -74,7 +74,7 @@ const updateEsp = async (req, res) => {//Requête qui permet de modifier un esp
     });
 }
 
-const getEspById = async (req, res) => {//Requete qui permet de get un esp par rapport à son id utilisateur
+const getEspById = async (req, res) => {//Requete qui permet de get un esp par rapport à son id
     const idUser = req.params.id;
     await EspModel.find({userId: idUser})
         .then(rslt => {
