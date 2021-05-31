@@ -318,7 +318,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 th,
 td {
   border-bottom: 1px solid #ddd;
