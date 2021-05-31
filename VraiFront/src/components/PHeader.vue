@@ -5,6 +5,7 @@
         style="background-color:#191970"
 
     >
+    <!-- Drawer avec les différentes pages-->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>PROJET METEO</v-toolbar-title>
@@ -86,7 +87,7 @@ export default {
     },
   },
   methods: {
-    logout: function () {
+    logout: function () {//Méthode pour se déconnecter
       this.$session.destroy();
       console.log("cancel")
       this.$router.replace('login');

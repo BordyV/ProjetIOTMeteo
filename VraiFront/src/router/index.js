@@ -12,7 +12,7 @@ Vue.use(VueSession)
 Vue.use(VueRouter);
 
 export default new VueRouter({
-    routes: [
+    routes: [//Les routes avec les components et les différents paths
         {
           path: '/',
           redirect: {

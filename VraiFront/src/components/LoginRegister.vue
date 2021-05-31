@@ -1,4 +1,6 @@
 <template>
+
+<!-- FORMULAIRE -->
   <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
     <div>
       <v-tabs
@@ -14,6 +16,8 @@
           <v-icon large>{{ i.icon }}</v-icon>
           <div class="caption py-1">{{ i.name }}</div>
         </v-tab>
+
+        <!-- CONNEXION AVEC COMPTE-->
         <v-tab-item>
           <v-card class="px-4">
             <v-card-text>
@@ -57,6 +61,9 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+        <!-- END CONNEXION AVEC COMPTE-->
+
+        <!-- CREATION COMPTE-->
         <v-tab-item>
           <v-card class="px-4">
             <v-card-text>
@@ -145,6 +152,10 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
+        <!-- END CREATION COMPTE-->
+
+        <!-- CONNEXION INVITE-->
         <v-tab-item>
           <v-card class="px-12">
             <v-card-text>
@@ -174,9 +185,13 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
+        <!-- END CONNEXION INVITE-->
       </v-tabs>
     </div>
   </v-dialog>
+
+  <!-- END FORMULAIRE -->
 </template>
 
 <script>
@@ -185,7 +200,7 @@ import urlApi from './ConfApi.js';
 export default {
   name: "login",
   mounted() {
-    if (this.$session.get("userId")) {
+    if (this.$session.get("userId")) {//Si la session get l'id de l'utilisateur, alors on change la route en ajoutant l'iduser
       this.$router.replace({
         name: `user`,
         params: {
@@ -195,7 +210,7 @@ export default {
     }
   },
   computed: {
-    passwordMatch() {
+    passwordMatch() {//Méthode pour comparer si les mots de passe sont les memes
       return () =>
         this.password === this.verify || "Le mot de passe n'est pas le meme.";
     },
@@ -209,7 +224,7 @@ export default {
     isAlreadyLogged: () => {
       //
     },
-    register: async function () {
+    register: async function () {//Sauvegarder les données de l'utilisateur lors de sa création
       let body = {
         userFirstName: this.firstName,
         userLastName: this.lastName,
@@ -226,13 +241,13 @@ export default {
         },
       };
       console.log("creation", body);
-      fetch(urlApi + "/user/isAlreadyRegistered", {
+      fetch(urlApi + "/user/isAlreadyRegistered", {//Si l'utilisateur a déjà été crée 
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
         if (res.status === 200) {
-          fetch(urlApi +"/user/addUser", {
+          fetch(urlApi +"/user/addUser", {//Sinon on ajoute l'user
             method: "post",
             body: JSON.stringify(body),
             headers: { "Content-Type": "application/json" },
@@ -244,7 +259,7 @@ export default {
           );
           this.$refs.registerForm.reset();
           this.$router.go("/");
-        } else if (res.status === 403) {
+        } else if (res.status === 403) {//Sinon on ne fait rien si il est deja inscrit
           alert("Deja inscrit");
           this.$refs.registerForm.reset();
           this.$router.go("/");
@@ -255,20 +270,20 @@ export default {
       console.log("redirected map");
       this.$router.push({ name: "map" });
     },
-    checkConnection: async function () {
+    checkConnection: async function () {//Méthode permettant de se connecter
       let body = {
         userEmail: this.loginEmail,
         userPassword: this.loginPassword,
       };
-      fetch(urlApi + "/user/connection", {
+      fetch(urlApi + "/user/connection", {//Permet de faire appel à la requete connection qui nous permet de vérifier si l'email et password sont bons
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
-        if (res.ok) {
+        if (res.ok) {//Si les informations sont bonnes
           // this.$router.push({name : `user/${res.json()}`});
 
-          res.json().then((data) => {
+          res.json().then((data) => {//On start la session 
             this.$session.start();
             this.$session.set("token", data.token);
             this.$session.set("userId", data.userId);
