@@ -11,13 +11,28 @@
       <line-chart :chart-data="datacollection" id="graph"></line-chart>
       <div class="liStyle" v-if="etatValiditeData">
 
-
-        temperature: {{ etatValiditeData.temperature }}
-        pression: {{ etatValiditeData.pression }}
-        humidity: {{ etatValiditeData.humidity }}
+        <table>
+          <thead>
+          <th>Type</th>
+          <th>Fiabilité</th>
+          </thead>
+          <tbody>
+          <tr v-for="(value, name) in etatValiditeData" :key="name">
+            <td>
+              {{ name }}
+            </td>
+            <td v-if="value">
+              <v-icon style="color: green">mdi-check-circle-outline</v-icon>
+            </td>
+            <td v-if="!value">
+              <v-icon style="color: red">mdi-alert-circle-outline</v-icon>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
       </div>
-      
+
     </div>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative</v-icon>
@@ -61,15 +76,17 @@ export default {
       nom: undefined,
       selection: 0,
       nbValeur: undefined, //A changer pour changer le nb de valeur du graph
-      typeDataActuel: undefined
+      typeDataActuel: undefined,
+
+
     };
   },
   props: {
     valEsp: {},
   },
   mounted() {
-    
-    
+
+
     if (this.valEsp) {
       console.log(this.valEsp)
       this.dataType("lumiere");
@@ -77,8 +94,7 @@ export default {
       this.validationData();
       if (this.valEsp.length < 50) {
         this.nbValeur = 10;
-      }
-      else{
+      } else {
         this.nbValeur = 50;
       }
     }
@@ -90,7 +106,7 @@ export default {
     dataType(typeData) {
       //permet de définir quel est le type de données en fonction du label
       let labelData = typeData === 'lumiere' ? 'Lumière en Lumens' : typeData === 'pression' ?
-          'Pression en Pascal' : typeData === 'humidite' ? 'Humidité en %' : 'Température en °C';
+          'Pression en hectoPascal' : typeData === 'humidite' ? 'Humidité en %' : 'Température en °C';
       //défini le type de data en cours d'utilisation
       this.typeDataActuel = typeData;
       this.datacollection = {
@@ -112,7 +128,12 @@ export default {
       let i = this.valEsp.length - this.nbValeur;
       let imax = this.valEsp.length;
       for (let index = i; index < imax; index++) {
-        res.push(this.valEsp[index][typeData]);
+        //on divise la valeur recue par 100 pour la pression car on recoit les valeurs sous forme de Pascal tandis que la norme et l'hectoPascal
+        if (typeData === "pression") {
+          res.push((this.valEsp[index][typeData]) / 100);
+        } else {
+          res.push(this.valEsp[index][typeData]);
+        }
       }
       return res;
     },
@@ -152,9 +173,10 @@ export default {
             console.log(data)
             this.etatValiditeData = data;
             this.aJour = true;
-            console.log(this.etatValiditeData.temperature,"test1");
-            console.log(this.etatValiditeData.pression,"test2");
-            console.log(this.etatValiditeData.humidity,"test3");
+            console.log(this.etatValiditeData.temperature, "test1");
+            console.log(this.etatValiditeData.pression, "test2");
+            console.log(this.etatValiditeData.humidity, "test3");
+
 
           });
           //
@@ -164,7 +186,7 @@ export default {
         }
 
       });
-    }
+    },
   },
   //permet de regarder la valeur d'une data dans le composant
   //https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property
@@ -179,7 +201,6 @@ export default {
         this.getName();
         this.validationData();
       }
-
       console.log(val);
     }
   }
@@ -187,6 +208,16 @@ export default {
 </script>
 
 <style>
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 15px;
+  text-align: left;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
 #graph {
   width: 60%;
 }
