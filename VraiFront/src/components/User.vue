@@ -109,9 +109,9 @@
                               </l-marker>
                               <l-marker v-if="modifEspPosition" :lat-lng="markerModifEsp">
                                 <l-icon
-                                  :icon-size="dynamicSize"
-                                  :icon-anchor="dynamicAnchor"
-                                  :icon-url="iconOpenWeatherRed"
+                                    :icon-size="dynamicSize"
+                                    :icon-anchor="dynamicAnchor"
+                                    :icon-url="iconOpenWeatherRed"
                                 />
                               </l-marker>
                             </l-map>
@@ -131,7 +131,7 @@
                       Modifier
                     </v-btn>
                     <v-btn
-                    v-if="modifierPosition"
+                        v-if="modifierPosition"
                         color="blue darken-1"
                         text
                         @click="modifierEsp(espEnCoursMap)"
@@ -237,9 +237,9 @@
                                   :lat-lng="markerNewEsp"
                               >
                                 <l-icon
-                                  :icon-size="dynamicSize"
-                                  :icon-anchor="dynamicAnchor"
-                                  :icon-url="iconOpenWeatherRed"
+                                    :icon-size="dynamicSize"
+                                    :icon-anchor="dynamicAnchor"
+                                    :icon-url="iconOpenWeatherRed"
                                 />
                               </l-marker>
                             </l-map>
@@ -314,10 +314,11 @@ export default {
       newEspPosition: null, //second champ du formulaire d'ajout d'esp champ position ( latlng )
       modalCarteNewEsp: false, //modal a afficher ou non pour l'esp
       markerNewEsp: null,
-      //partie modif position esp: 
+      //partie modif position esp:
       markerModifEsp: null,
-      modifEspPosition : null,
+      modifEspPosition: null,
       modifierPosition: false,
+      myPrevision: undefined,
     };
   },
   mounted() {
@@ -328,6 +329,7 @@ export default {
       this.userId = this.$session.get("userId");
       this.getMyEsps();
       this.getUserInfos();
+      this.getMyPrevision();
     }
   },
   computed: {
@@ -392,7 +394,7 @@ export default {
       }, 250);
       this.espEnCoursMap = esp;
       this.afficherCarte = true;
-      this.modifierPosition = false; 
+      this.modifierPosition = false;
       //on set la position du marker
       this.markerEspEnCoursMap = latLng(
           this.espEnCoursMap.adresse.lat,
@@ -420,17 +422,16 @@ export default {
         console.log(this.markerNewEsp);
         this.center = latLng(this.markerNewEsp.lat, this.markerNewEsp.lng);
       }
-      
+
     },
     addMarker(event) {
       this.markerNewEsp = event.latlng;
       this.newEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
     },
     addMarkerModif(event) {
-      if(this.modifierPosition)
-      {
-      this.markerModifEsp = event.latlng;
-      this.modifEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
+      if (this.modifierPosition) {
+        this.markerModifEsp = event.latlng;
+        this.modifEspPosition = {lat: event.latlng.lat, lng: event.latlng.lng};
       }
     },
     getMyEsps: async function () {
@@ -476,13 +477,44 @@ export default {
             this.listEsp = this.listEsp.filter(esp => esp._id !== id)
             console.log('delete: ', data)
           })
-          .catch(err =>  {
+          .catch(err => {
             console.log(err);
             this.showSpinner = false;
-})
+          })
 
     },
-    modifierEsp(esp) {      
+    getMyPrevision: async function () {
+      this.showSpinner = true;
+      await fetch(`http://localhost:3000/meteo/previsionbyid/${this.userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+           "x-auth-token": this.$session.get("token"),
+        },
+      })
+          .then((res) => {
+
+            if (res.status === 404) {
+              console.log('ville inconnu');
+            } else {
+              res.json().then((resJson) => {
+                //on cache le spinner
+                this.showSpinner = false;
+                console.log(resJson);
+                this.myPrevision = resJson;
+                //on recupere un code 200 mais on a pas d'esp, juste un objet "erreur" on remet donc la list vide
+              });
+              this.showSpinner = false;
+            }
+
+          })
+          .catch((err) => {
+            console.error(err);
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
+            this.showSpinner = false;
+          });
+    },
+
+    modifierEsp(esp) {
       this.showSpinner = true;
       const putMethod = {
         method: 'PUT',
@@ -505,13 +537,13 @@ export default {
             alert('la position de votre esp a bien été modifié.')
             console.log('put: ', data);
             //on remet tout a 0
-            this.markerModifEsp = null; 
+            this.markerModifEsp = null;
             this.modifEspPosition = false;
             this.afficherCarte = false;
             this.getMyEsps();
           })
           .catch(err => {
-            this.showSpinner=false;
+            this.showSpinner = false;
             console.log(err)
           })
     },

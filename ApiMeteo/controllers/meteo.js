@@ -2,6 +2,7 @@ const MeteoModel = require('../models/meteo.model.js');
 const openWeatherConfig = require('../config/openWeatherConfig');
 const weatherBitConfig = require('../config/weatherBitConfig');
 var moment = require('moment');
+const userModel = require('../models/user.model.js');
 
 const fetch = require("node-fetch");
 
@@ -94,6 +95,51 @@ function testPression(espP1, p2) {
     return (espP1 <= p2 + 5) && (espP1 >= p2 - 5);
 }
 
+const previsionbyId = async (req, res) => {
+    //adresse envoyé par l'utilisateur
+    const id = req.params.id;
+    console.log(id)
+    //fetch sur l'api openWeatherMap
+    //
+
+    await userModel.find({_id: id})
+        .then(rslt => {
+
+            console.log(rslt);
+            if (rslt.length) {
+                fetch(
+                    `${openWeatherConfig.openWeather_url}forecast?q=${rslt[0].userAddress}&units=metric&APPID=${openWeatherConfig.openWeatherKey}`)
+                    .then((resFetch) => {
+                        resFetch.json().then((body) => {
+                            res.status(200).send(body)
+                        });
+                    }).catch(err => {
+                    res.send(err);
+                });
+            }
+        })
+        .catch(err => {
+            res.status(400).send({message: err.message});
+        })
+
+
+}
+const prevision = async (req, res) => {
+    //fetch sur l'api openWeatherMap
+    const adress = req.params.adress;
+    await fetch(
+        `${openWeatherConfig.openWeather_url}forecast?q=${adress}&units=metric&APPID=${openWeatherConfig.openWeatherKey}`)
+        .then((resFetch) => {
+            resFetch.json().then((body) => {
+                res.status(200).send(body);
+            });
+        }).catch(err => {
+            res.send(err);
+        });
+
+}
+
+
 const verificationDonnes = async (req, res) => {
     const esp = req.body;
     if (moment(esp.date).day() !== moment().day()) {
@@ -143,5 +189,7 @@ module.exports = {
     getMeteoById: getMeteoById,
     getFreshMeteoById: getFreshMeteoById,
     getMeteoOpenWeatherByAdress: getMeteoOpenWeatherByAdress,
-    verificationDonnes: verificationDonnes
+    verificationDonnes: verificationDonnes,
+    previsionbyId: previsionbyId,
+    prevision: prevision
 }

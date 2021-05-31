@@ -5,7 +5,6 @@ const token = require('../auth');
 
 // POST
 router.post('/addUser', userController.newUser); // créer un nouvel utilisateur (voir le model pour le body)
-
 router.post('/connection', userController.connection); //connection
 router.post('/isAlreadyRegistered', userController.isAlreadyRegistered);
 // GET

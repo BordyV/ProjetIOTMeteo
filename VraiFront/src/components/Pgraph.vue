@@ -138,7 +138,10 @@ export default {
       fetch("http://localhost:3000/meteo/verif", {
         method: "post",
         body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": this.$session.get("token"),
+        },
       }).then((res) => {
         try {
           res.json().then((data) => {

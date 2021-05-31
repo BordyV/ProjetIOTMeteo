@@ -136,6 +136,7 @@ export default {
   data() {
     return {
       esp: "",
+      dataPrevision: undefined,
       position: "",
       zoom: 5,
       weather: undefined,
@@ -150,7 +151,7 @@ export default {
       center: latLng(46.232192999999995, 2.209666999999996),
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 
       currentZoom: 11.5,
 
@@ -179,70 +180,69 @@ export default {
       this.showSpinner = true;
       console.log("ESP ID: ", mac);
       await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
-        .then((res) => {
-          res.json().then((body) => { 
-            if(body.erreur)
-            {
-              this.dataEsp = null;
-            }
-            else {
-              this.dataEsp = body;
-            }
-            console.log(body);
-            //on cache le spinner une fois qu'on a les données
+          .then((res) => {
+            res.json().then((body) => {
+              if (body.erreur) {
+                this.dataEsp = null;
+              } else {
+                this.dataEsp = body;
+              }
+              console.log(body);
+              //on cache le spinner une fois qu'on a les données
+              this.showSpinner = false;
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            //on set les data de l'esp qu'on veut recup a null pour désactiver le bouton si aucune données trouvés
+            this.dataEsp = null;
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
             this.showSpinner = false;
           });
-        })
-        .catch((err) => {
-          console.error(err);
-          //on set les data de l'esp qu'on veut recup a null pour désactiver le bouton si aucune données trouvés
-          this.dataEsp = null;
-          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
-          this.showSpinner = false;
-        });
     },
 
     fetchApiWeather: async function () {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       await fetch(
-        "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
+          "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
       )
-        .then((res) => {
-          console.log("prout", res);
-          res.json().then((body) => {
-            if (body.cod === "404") {
-              this.snackbarErrorCity = true;
-              //on cache le spinner avant de sortir
+          .then((res) => {
+            console.log("prout", res);
+            res.json().then((body) => {
+              if (body.cod === "404") {
+                this.snackbarErrorCity = true;
+                //on cache le spinner avant de sortir
+                this.showSpinner = false;
+                //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
+                return;
+              }
+              console.log(body);
+
+              this.weather = body;
+
+              //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
+              this.markerOpenWeather = latLng(
+                  this.weather.coord.lat,
+                  this.weather.coord.lon
+              );
+              this.center = latLng(
+                  this.weather.coord.lat,
+                  this.weather.coord.lon
+              );
+
+              //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
               this.showSpinner = false;
-              //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
-              return;
-            }
-            console.log(body);
-            
-            this.weather = body;
-            
-            //On ajoute a markerOpenWeather la longitude et la latitude de la position exacte de la station météo
-            this.markerOpenWeather = latLng(
-              this.weather.coord.lat,
-              this.weather.coord.lon
-            );
-            this.center = latLng(
-              this.weather.coord.lat,
-              this.weather.coord.lon
-            );
-            
-            //on cache le spinner une fois qu'on a les données ( obligé de le faire une seconde fois car on sort prématurement avec la 404)
+
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
             this.showSpinner = false;
-            
           });
-        })
-        .catch((err) => {
-          console.error(err);
-          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
-          this.showSpinner = false;
-        });
-        this.zoom = 12;
+      this.zoom = 12;
+
     },
 
     zoomUpdate(zoom) {
@@ -255,36 +255,67 @@ export default {
       this.showParagraph = !this.showParagraph;
     },
 
+    getPrevision: async function () {
+      this.showSpinner = true;
+      await fetch(`http://localhost:3000/meteo/prevision/${this.position}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": this.$session.get("token"),
+        }
+      })
+          .then((res) => {
+            res.json().then((body) => {
+              if (body.erreur) {
+                this.dataPrevision = null;
+              } else {
+                console.log('prevision: ', body);
+                this.dataPrevision = body;
+              }
+              console.log(body);
+              this.showSpinner = false;
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.dataPrevision = null;
+            this.showSpinner = false;
+          });
+    },
+
+
     loca: async function () {
       this.show = true;
       this.fetchApiWeather();
+      this.getPrevision();
     },
+
 
     getInfoEsp() {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       fetch("http://localhost:3000/esp/")
-        .then((response) => {
-          response.json().then((res) => {
-            console.log(res);
+          .then((response) => {
+            response.json().then((res) => {
+              console.log(res);
 
-            res.forEach((e) => {
-              this.listMarkersESP.push({
-                id: e.adresseMac,
-                position: e.adresse,
+              res.forEach((e) => {
+                this.listMarkersESP.push({
+                  id: e.adresseMac,
+                  position: e.adresse,
+                });
+                //on cache le spinner une fois qu'on a les données
+                this.showSpinner = false;
               });
-              //on cache le spinner une fois qu'on a les données
-              this.showSpinner = false;
             });
+          })
+          .catch((err) => {
+            console.error(err);
+            //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
+            this.showSpinner = false;
           });
-        })
-        .catch((err) => {
-          console.error(err);
-          //on cache le spinner si on arrive pas àa récupèrer les données pour ne pas géner l'utilisateur
-          this.showSpinner = false;
-        });
     },
-  },
+
+  }
 };
 </script>
 <style>
