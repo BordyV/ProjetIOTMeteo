@@ -14,16 +14,16 @@
         <table>
           <thead>
           <th>Type</th>
-          <th>fiabilité</th>
+          <th>Fiabilité</th>
           </thead>
           <tbody>
           <tr v-for="(value, name) in etatValiditeData" :key="name">
-            <td >
-              {{name}}
+            <td>
+              {{ name }}
             </td>
-             <td v-if="value">
-               <v-icon style="color: green">mdi-check-circle</v-icon>
-             </td>
+            <td v-if="value">
+              <v-icon style="color: green">mdi-check-circle-outline</v-icon>
+            </td>
             <td v-if="!value">
               <v-icon style="color: red">mdi-alert-circle-outline</v-icon>
             </td>
@@ -32,7 +32,7 @@
         </table>
 
       </div>
-      
+
     </div>
     <v-app-bar color="rgba(0,0,0,0)" flat class="ma-8">
       <v-icon large>mdi-chart-bell-curve-cumulative</v-icon>
@@ -85,8 +85,8 @@ export default {
     valEsp: {},
   },
   mounted() {
-    
-    
+
+
     if (this.valEsp) {
       console.log(this.valEsp)
       this.dataType("lumiere");
@@ -129,10 +129,9 @@ export default {
       let imax = this.valEsp.length;
       for (let index = i; index < imax; index++) {
         //on divise la valeur recue par 100 pour la pression car on recoit les valeurs sous forme de Pascal tandis que la norme et l'hectoPascal
-        if(typeData === "pression"){
-          res.push((this.valEsp[index][typeData])/100);
-        }
-        else{
+        if (typeData === "pression") {
+          res.push((this.valEsp[index][typeData]) / 100);
+        } else {
           res.push(this.valEsp[index][typeData]);
         }
       }
@@ -174,9 +173,9 @@ export default {
             console.log(data)
             this.etatValiditeData = data;
             this.aJour = true;
-            console.log(this.etatValiditeData.temperature,"test1");
-            console.log(this.etatValiditeData.pression,"test2");
-            console.log(this.etatValiditeData.humidity,"test3");
+            console.log(this.etatValiditeData.temperature, "test1");
+            console.log(this.etatValiditeData.pression, "test2");
+            console.log(this.etatValiditeData.humidity, "test3");
 
 
           });
@@ -214,7 +213,10 @@ th, td {
   padding: 15px;
   text-align: left;
 }
-tr:hover {background-color: #f5f5f5;}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
 
 #graph {
   width: 60%;
