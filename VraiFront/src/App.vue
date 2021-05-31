@@ -1,58 +1,48 @@
 <template>
   <v-app>
-      
+
     <PHeader/>
     <router-view/>
-    
 
-    
-  
+
   </v-app>
-  
+
 </template>
 
 <script>
 
- import PHeader from "./components/PHeader";
-
-
-
-
-
-
+import PHeader from "./components/PHeader";
 
 export default {
   name: "App",
-  mounted(){
-    if(!this.authenticated) {
-                // this.$router.replace({ name: "login" });
+  mounted() {
+    if (!this.authenticated) {
+      // this.$router.replace({ name: "login" });
 
-            }else{
-                this.$router.replace({ name: "map" });
-                
-            }
+    } else {
+      this.$router.replace({name: "map"});
+
+    }
   },
   components: {
-    "PHeader" : PHeader,
-    
+    "PHeader": PHeader,
+
   },
-  data () {
+  data() {
     return {
-     
-      authenticated : false,
-      userId : ''
+
+      authenticated: false,
+      userId: ''
     }
   }
-,
-methods :
-{
-
-}
+  ,
+  methods:
+      {}
 }
 </script>
 
 <style>
-#app{
+#app {
   background-color: #4299e1;
 }
 </style>
