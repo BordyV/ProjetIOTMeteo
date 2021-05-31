@@ -169,7 +169,7 @@ const verificationDonnes = async (req, res) => {
                                 let objetValid = {
                                     temperature: testTemp(esp.temperature, dataApi1.data[0].temp) || testTemp(esp.temperature, dataApi2.main.temp),
                                     pression: testPression(esp.pression, dataApi1.data[0].pres) || testPression(esp.temperature, dataApi2.main.pressure),
-                                    humidity: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
+                                    humidite: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
                                 }
                                 //console.log(objetValid);
                                 res.status(200).json(objetValid)
