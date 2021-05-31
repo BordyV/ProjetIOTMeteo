@@ -99,7 +99,7 @@
                     <v-text-field
                       v-model="address"
                       :rules="[rules.required]"
-                      label="Adresse"
+                      label="Ville de référence"
                       required
                     ></v-text-field>
                   </v-col>
