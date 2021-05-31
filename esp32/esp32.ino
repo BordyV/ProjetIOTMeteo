@@ -72,6 +72,7 @@ WiFiClient espClient; // Wifi
 PubSubClient client(espClient) ; // MQTT client
 
 String whoami; // ID de CET ESP au sein de la flotte (adresse MAC)
+  char whoamiChar[17];
 
 //StaticJsonBuffer<200> jsonBuffer;
 /*===== MQTT broker/server and TOPICS ========*/
@@ -114,6 +115,9 @@ void setup () {
 
 
     whoami =  String(WiFi.macAddress());
+      for (int i = 0; i < whoami.length(); i++) {
+            whoamiChar[i] = whoami.charAt(i);
+        }
   }
 
   /*============== MQTT CALLBACK ===================*/
@@ -225,18 +229,21 @@ void setup () {
   }
 
   /*================= LOOP ======================*/
-
+String processor(const String& var)
+{
+  if(var == "TEMPLATE")
+    return F(whoamiChar);
+  return String();
+}
 
 //la page locale que l'on envoie pour configurer l'ESP
-  const char index_html[] PROGMEM = R"rawliteral(
+   char index_html[] = R"rawliteral(
     <!DOCTYPE HTML><html><head>
     <title>Configuration ESP </title>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     </head><body>
     <H1>Configurez votre station météo</H1>
-    Adresse MAC: )rawliteral";
-      PROGMEM = PROGMEM+whoami;
-    PROGMEM = PROGMEM+R"rawliteral(
+    Adresse MAC: %TEMPLATE%
     <br>
     <br>
     <form action="/get" class="form">
@@ -403,7 +410,7 @@ label, input, textarea{
             Serial.println(IP);
               //on envoie la page web au client
             server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-              request->send_P(200, "text/html", index_html);
+              request->send_P(200, "text/html", index_html, processor);
             });
            //Quand le client a sauvegardé ses datas on les recoit ici
             server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
