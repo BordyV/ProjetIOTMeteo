@@ -66,7 +66,7 @@
         <v-chip><input v-model="nbValeur" />Nb de Val</v-chip>
       </v-chip-group>
     </v-app-bar>
-    <h3 style="color: black">Historique des 7 derniers jours :</h3>
+    <h3 style="color: black">Historique des 4 derniers jours :</h3>
     <div>
       <table>
         <thead>
@@ -226,31 +226,16 @@ export default {
         { moyenne: 0, jour: moment().subtract(2, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(3, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(4, "d").format("YYYY-MM-DD") },
-        { moyenne: 0, jour: moment().subtract(5, "d").format("YYYY-MM-DD") },
-        { moyenne: 0, jour: moment().subtract(6, "d").format("YYYY-MM-DD") },
-        { moyenne: 0, jour: moment().subtract(7, "d").format("YYYY-MM-DD") },
+
       ];
       let cpt1 = 0;
       let cpt2 = 0;
       let cpt3 = 0;
       let cpt4 = 0;
-      let cpt5 = 0;
-      let cpt6 = 0;
-      let cpt7 = 0;
+
       dataOfTheWeek.forEach((e) => {
         switch (moment(e.date).format("YYYY-MM-DD")) {
-          case moment().subtract(1, "d").format("YYYY-MM-DD"):
-            cpt7 = cpt7 + 1;
-            days[6].moyenne = Number(days[6].moyenne) + Number(e[type]);
-            break;
-          case moment().subtract(2, "d").format("YYYY-MM-DD"):
-            cpt6 = cpt6 + 1;
-            days[5].moyenne = Number(days[5].moyenne) + Number(e[type]);
-            break;
-          case moment().subtract(3, "d").format("YYYY-MM-DD"):
-            cpt5 = cpt5 + 1;
-            days[4].moyenne = Number(days[4].moyenne) + Number(e[type]);
-            break;
+          
           case moment().subtract(4, "d").format("YYYY-MM-DD"):
             cpt4 = cpt4 + 1;
             days[3].moyenne = Number(days[3].moyenne) + Number(e[type]);
@@ -283,15 +268,6 @@ export default {
             break;
           case 3:
             days[i].moyenne = (days[i].moyenne / cpt4).toFixed(2);
-            break;
-          case 4:
-            days[i].moyenne = (days[i].moyenne / cpt5).toFixed(2);
-            break;
-          case 5:
-            days[i].moyenne = (days[i].moyenne / cpt6).toFixed(2);
-            break;
-          case 6:
-            days[i].moyenne = (days[i].moyenne / cpt7).toFixed(2);
             break;
         }
       }
