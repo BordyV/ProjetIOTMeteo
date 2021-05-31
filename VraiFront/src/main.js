@@ -13,7 +13,11 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 
 
+import VueClipboard from 'vue-clipboard2'
 
+VueClipboard.config.autoSetContainer = true // add this line
+
+Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 Vue.use(vuetify);
 Vue.use(VueGeolocation);

@@ -31,6 +31,11 @@
                     {{ userInfos.userAddress }}<br/>
                     {{ userInfos.userPhoneNumber }}
                   </div>
+
+
+                  <button type="button" @click="doCopy"><u>Copier votre ID</u></button>
+
+
                 </v-card-text>
               </v-card>
 
@@ -283,6 +288,8 @@ export default {
   data() {
     return {
       listEsp: [],
+      message: '',
+      copiedText: '',
       iconOpenWeatherRed: null,
       showSpinner: false,
       dialog: false,
@@ -328,6 +335,7 @@ export default {
     if (this.$session.get("userId")) {
       this.token = this.$session.get("token");
       this.userId = this.$session.get("userId");
+      this.message = this.userId;
       this.getMyEsps();
       this.getUserInfos();
       this.getMyPrevision();
@@ -484,12 +492,13 @@ export default {
           })
 
     },
+
     getMyPrevision: async function () {
       this.showSpinner = true;
       await fetch(`${urlApi}/previsionbyid/${this.userId}`, {
         headers: {
           "Content-Type": "application/json",
-           "x-auth-token": this.$session.get("token"),
+          "x-auth-token": this.$session.get("token"),
         },
       })
           .then((res) => {
@@ -585,6 +594,17 @@ export default {
         }
       });
     },
+    doCopy: function () {
+      this.$copyText(this.message).then(function (e) {
+        alert('Copie reussi')
+        console.log(e)
+      }, function (e) {
+        alert('echec de la copie')
+        console.log(e)
+      })
+    }
+
+
   },
 };
 </script>
