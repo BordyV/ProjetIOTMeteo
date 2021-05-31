@@ -194,7 +194,6 @@ export default {
               } else {
                 this.dataEsp = body;
               }
-              console.log(body);
               //on cache le spinner une fois qu'on a les données
               this.showSpinner = false;
             });
@@ -215,7 +214,6 @@ export default {
           "/meteo/openWeatherMeteo/" + this.position
       )
           .then((res) => {
-            console.log("prout", res);
             res.json().then((body) => {
               if (body.cod === "404") {
                 this.snackbarErrorCity = true;
@@ -224,7 +222,6 @@ export default {
                 //permet de quitter la fonction prématurement et ne pas continuer et initialiser weather
                 return;
               }
-              console.log(body);
 
               this.weather = body;
 
@@ -279,7 +276,6 @@ export default {
                 console.log('prevision: ', body);
                 this.dataPrevision = body;
               }
-              console.log(body);
               //on cache le spinner une fois qu'on a les données
               this.showSpinner = false;
             });
@@ -305,7 +301,6 @@ export default {
       fetch(urlApi + "/esp/")
           .then((response) => {
             response.json().then((res) => {
-              console.log(res);
 
               res.forEach((e) => {
                 this.listMarkersESP.push({

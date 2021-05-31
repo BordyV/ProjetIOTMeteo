@@ -98,14 +98,10 @@ export default defineComponent({
 
     
      setup() {// Méthode permettant d'affecter à des variables certaines valeurs de l'api openWeather
-      console.log("coucou");
       console.log(this.previsionbis);
       
       this.dataPrevision = this.previsionbis;//Le body des données de l'api
-      console.log("heho");
-      console.log(this.dataPrevision);
-       console.log(this.dataPrevision.list[0].dt_txt);
-        console.log(this.dataPrevision.list[0].weather[0].description);
+
       //direct Jour meme
        //this.previsiontestdate = this.dataPrevision.list[0].dt_txt;
        this.previsions[0].donnee = this.dataPrevision.list[0].weather[0].main;

@@ -89,8 +89,6 @@ export default defineComponent({
   },
   methods: {
     setup() {// Méthode permettant d'affecter à des variables certaines valeurs de l'api openWeather
-      console.log("coucou");
-      console.log(this.weatherbis);
       this.weather = this.weatherbis;//Le body des données de l'api
       this.temperature = this.weather.main.temp;//La température de la recherche
       this.city = this.weather.name;//La vile de la recherche
