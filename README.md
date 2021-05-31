@@ -7,11 +7,59 @@ Notre projet consiste en la creation d'une plateforme de partage de donnees mete
 Nous pourrons ajouter quelques fonctionnalités suplémentaires comme l'ajout de certains esp a nos favoris ce qui les fera apparaitre dans un composant spécifique.<br>
 L'ajout d'une application bureau est aussi débattu en interne.
 
+# Ou trouver le projet ?
+
+Le projet se trouve actuellement sur https://valentinbordy.fr/iotMeteo/ et est pleinement fonctionnel.
+
+Si vous souhaitez le déployer sur heroku voici la doc : https://github.com/BordyV/ProjetIOTMeteoDeplHeroku ( sans la partie script broker comme parlé par avec vous par message ).
+
+Si vous souhaitez le lancer en local, n'oubliez pas de vérifier les connections aux bases de données dans ./ApiMeteo/config/dbConfig.js
+
+Il faut vérifier que  app.listen est bien décommentez et que https.createServer soit commenté comme ceci: 
+
+```js 
+//const options = {
+//    key: fs.readFileSync('./key.pem'),
+//  cert: fs.readFileSync('./cert.pem'),
+//  passphrase: 'xxxxh'
+//};
+//https.createServer(options, app).listen(port);
+app.listen(port, () => console.log(`http://localhost:${port}/`));
+```
+
+et aussi le lien de l'api dans ./VraiFront/src/component/confApi.js 
+
+Après vérification il faut installer les packages npm et lancer l'api et le VraiFront dans 2 terminaux différents:
+
+dans ./ApiMeteo/* faire :
+
+```sh
+npm i
+```
+
+puis: 
+```sh
+npm run dev
+```
+dans ./VraiFront/* faire : 
+
+```sh
+npm i
+```
+
+puis: 
+```sh
+npm run serve
+```
+
+Vous aurez donc accès au projet.
+
+Pour la partie broker c'est pareil il faut executer via pm2 ( gestionnaire de processus node ) le script node_iot_prod. A noter qu'il faut vérifier la configuration du broker.
 
 # PLAN
 
 ## Etape 1:
-Realisation de l'esp qui recoltera les donnees meteo. L'esp contiendra un capteur de température, un capteur d'humidité, un anémomètre.
+Realisation de l'esp qui recoltera les donnees meteo. L'esp contiendra un capteur de température, un capteur de lumière, un capteur d'humidité et un capteur de pression.
 
 ## Etape 2:
 Realisation d'une api qui recupere les donnees et les stock en base.
@@ -50,9 +98,4 @@ Les données seront récupéré sous format json et stocké dans une base de don
 
 # ATTRIBUTION
 
-Responsables des taches : 
-- **Alaedine Karouia** Code / Architecture
-- **Guilhem Fabre** Rapport / Commentaires de code
-- **Mathieu Birger** User Interface / Description fonctionnelle
-- **Yohann Laurendeau** Déploiement / "Mise en Galerie"
-- **Valentin Bordy** Sécurité
+Voir CSV
