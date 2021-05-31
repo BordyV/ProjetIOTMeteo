@@ -1,7 +1,7 @@
 const MeteoModel = require('../models/meteo.model.js');
 const openWeatherConfig = require('../config/openWeatherConfig');
 const weatherBitConfig = require('../config/weatherBitConfig');
-var moment = require('moment');
+const moment = require('moment');
 const userModel = require('../models/user.model.js');
 
 const fetch = require("node-fetch");
@@ -54,7 +54,7 @@ const getMeteoOpenWeatherByAdress = async (req, res) => {//Requete qui get les d
 //permet de récuperer les dernières datas de l'esp
 const getFreshMeteoById = async (req, res) => {
     //maximum de data par requete
-    const maxData = 10000;
+    const maxData = 7000;
     const addMac = req.params.id;
     const today = new Date();
     today.setDate(today.getDate() - 14);
