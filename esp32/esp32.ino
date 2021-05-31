@@ -231,6 +231,12 @@ void setup () {
     <title>Configuration ESP </title>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     </head><body>
+    <H1>Configurez votre station météo</H1>
+    Adresse MAC: )rawliteral";
+      PROGMEM = PROGMEM+whoami;
+    PROGMEM = PROGMEM+R"rawliteral(
+    <br>
+    <br>
     <form action="/get" class="form">
         <label for="ssid">
             SSID:
@@ -246,7 +252,7 @@ void setup () {
     </label> <input type="text" name="userid" id="userid">
     <br>
     <label for="freq">
-        Frequence d'envoie de l'ESP:
+        Frequence d'envoie de l'ESP en secondes:
     </label> <input type="number" name="freq" id="freq">
     <br>
     <input type="submit" value="Envoyer" id="submit">
@@ -261,7 +267,7 @@ label, input, textarea{
   line-height: 24pt;
   font-family: 'Spartan';
   }
-  .form{
+  body{
       background-color:#f8f4e5;
       padding: 50px 100px;
       border-top: 10px solid #f45702;
