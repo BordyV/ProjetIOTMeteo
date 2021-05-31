@@ -23,7 +23,8 @@ async function onConnect() {
   console.log("onConnect");
   while (true)
   {
-   await sleep(5000);
+   //temps entre chaque envoie en l'occurrence 10min 
+   await sleep(600000);
 let i = 0;
    for (var esp in esps) {
        console.log("envoie");
