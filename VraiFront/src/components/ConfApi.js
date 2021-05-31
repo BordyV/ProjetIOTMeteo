@@ -6,5 +6,5 @@ const uriApi = 'http://localhost:3000';
 //const uriApi = 'https://valentinbordy.fr/meteo';
 
 //2nd environnement de prod (heroku)
-//const uriApi = 'https://iotmeteobordy.herokuapp.com/';
+//const uriApi = 'https://iotmeteobordy.herokuapp.com';
 module.exports = uriApi;
