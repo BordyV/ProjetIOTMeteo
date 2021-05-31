@@ -44,6 +44,7 @@
 <script>
 import {Line} from "vue-chartjs";
 import LineChart from "./LineChart.js";
+import urlApi from './ConfApi.js';
 
 export default {
   extends: Line,
@@ -124,7 +125,7 @@ export default {
     },
 
     getName() {
-      fetch(`http://localhost:3000/user/name/${this.valEsp[this.valEsp.length - 1].userId}`).then((res) =>
+      fetch(`${urlApi}/user/name/${this.valEsp[this.valEsp.length - 1].userId}`).then((res) =>
           res.json().then((e) => {
             console.log('user: ', e);
             this.prenom = e.userFirstName;
@@ -135,7 +136,7 @@ export default {
 
     validationData() {
       console.log('validation')
-      fetch("http://localhost:3000/meteo/verif", {
+      fetch(urlApi + "/meteo/verif", {
         method: "post",
         body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),
         headers: {

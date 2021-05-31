@@ -118,6 +118,7 @@ import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "vue2-leaflet";
 import Pgraph from "./Pgraph.vue";
 import Pstat from "./Pstat.vue";
 import Spinner from "./Spinner.vue";
+import urlApi from './ConfApi.js';
 
 export default {
   name: "Pmap",
@@ -179,7 +180,7 @@ export default {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
       console.log("ESP ID: ", mac);
-      await fetch(`http://localhost:3000/meteo/freshData/${mac}`)
+      await fetch(`${urlApi}/meteo/freshData/${mac}`)
           .then((res) => {
             res.json().then((body) => {
               if (body.erreur) {
@@ -204,8 +205,8 @@ export default {
     fetchApiWeather: async function () {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
-      await fetch(
-          "http://localhost:3000/meteo/openWeatherMeteo/" + this.position
+      await fetch(urlApi + 
+          "/meteo/openWeatherMeteo/" + this.position
       )
           .then((res) => {
             console.log("prout", res);
@@ -257,7 +258,7 @@ export default {
 
     getPrevision: async function () {
       this.showSpinner = true;
-      await fetch(`http://localhost:3000/meteo/prevision/${this.position}`, {
+      await fetch(`${urlApi}/meteo/prevision/${this.position}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": this.$session.get("token"),
@@ -293,7 +294,7 @@ export default {
     getInfoEsp() {
       //on affiche le spinner qui sert de loader
       this.showSpinner = true;
-      fetch("http://localhost:3000/esp/")
+      fetch(urlApi + "/esp/")
           .then((response) => {
             response.json().then((res) => {
               console.log(res);

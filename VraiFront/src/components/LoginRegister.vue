@@ -180,6 +180,8 @@
 </template>
 
 <script>
+import urlApi from './ConfApi.js';
+
 export default {
   name: "login",
   mounted() {
@@ -224,13 +226,13 @@ export default {
         },
       };
       console.log("creation", body);
-      fetch("http://localhost:3000/user/isAlreadyRegistered", {
+      fetch(urlApi + "/user/isAlreadyRegistered", {
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
         if (res.status === 200) {
-          fetch("http://localhost:3000/user/addUser", {
+          fetch(urlApi +"/user/addUser", {
             method: "post",
             body: JSON.stringify(body),
             headers: { "Content-Type": "application/json" },
@@ -258,7 +260,7 @@ export default {
         userEmail: this.loginEmail,
         userPassword: this.loginPassword,
       };
-      fetch("http://localhost:3000/user/connection", {
+      fetch(urlApi + "/user/connection", {
         method: "post",
         body: JSON.stringify(body),
         headers: { "Content-Type": "application/json" },

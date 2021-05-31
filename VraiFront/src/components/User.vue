@@ -274,6 +274,7 @@
 import Spinner from "@/components/Spinner";
 import {latLng} from "leaflet";
 import {LMap, LTileLayer, LMarker, LIcon} from "vue2-leaflet";
+import urlApi from './ConfApi.js';
 
 export default {
   components: {Spinner, LMap, LTileLayer, LMarker, LIcon},
@@ -343,7 +344,7 @@ export default {
   methods: {
     getUserInfos: function () {
       this.showSpinner = true;
-      fetch(`http://localhost:3000/user/id/${this.userId}`, {
+      fetch(`${urlApi}/user/id/${this.userId}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": this.$session.get("token"),
@@ -436,7 +437,7 @@ export default {
     },
     getMyEsps: async function () {
       this.showSpinner = true;
-      await fetch(`http://localhost:3000/esp/getEsp/${this.userId}`, {
+      await fetch(`${urlApi}/esp/getEsp/${this.userId}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": this.$session.get("token"),
@@ -470,7 +471,7 @@ export default {
         },
 
       }
-      fetch(`http://localhost:3000/esp/delete/${id}`, deleteMethod)
+      fetch(`${urlApi}/esp/delete/${id}`, deleteMethod)
           .then(response => response.json())
           .then(data => {
             this.showSpinner = false;
@@ -485,7 +486,7 @@ export default {
     },
     getMyPrevision: async function () {
       this.showSpinner = true;
-      await fetch(`http://localhost:3000/meteo/previsionbyid/${this.userId}`, {
+      await fetch(`${urlApi}/previsionbyid/${this.userId}`, {
         headers: {
           "Content-Type": "application/json",
            "x-auth-token": this.$session.get("token"),
@@ -530,7 +531,7 @@ export default {
         })
       }
       console.log(putMethod.body)
-      fetch(`http://localhost:3000/esp/put`, putMethod)
+      fetch(`${urlApi}/esp/put`, putMethod)
           .then(response => response.json())
           .then(data => {
             this.showSpinner = false;
@@ -563,7 +564,7 @@ export default {
         userId: this.userId,
       };
       console.log("body du nouveau ESP", body);
-      fetch("http://localhost:3000/esp/addEsp", {
+      fetch(urlApi + "/esp/addEsp", {
         method: "post",
         body: JSON.stringify(body),
         headers: {
