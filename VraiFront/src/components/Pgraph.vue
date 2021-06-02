@@ -232,22 +232,22 @@ export default {
       let cpt4 = 0;
 
       //pour chaque data de la semaine (4 jours) on cpt et on additionne pour la moyenne plus tard 
-      dataOfTheWeek.forEach((e) => {
+      dataOfTheWeek.forEach((e) => {debugger
         switch (moment(e.date).format("YYYY-MM-DD")) {
           
           case moment().subtract(4, "d").format("YYYY-MM-DD"):
             cpt4 = cpt4 + 1;
             days[3].moyenne = Number(days[3].moyenne) + Number(e[type]);
             break;
-          case moment().subtract(5, "d").format("YYYY-MM-DD"):
+          case moment().subtract(3, "d").format("YYYY-MM-DD"):
             cpt3 = cpt3 + 1;
             days[2].moyenne = Number(days[2].moyenne) + Number(e[type]);
             break;
-          case moment().subtract(6, "d").format("YYYY-MM-DD"):
+          case moment().subtract(2, "d").format("YYYY-MM-DD"):
             cpt2 = cpt2 + 1;
             days[1].moyenne = Number(days[1].moyenne) + Number(e[type]);
             break;
-          case moment().subtract(7, "d").format("YYYY-MM-DD"):
+          case moment().subtract(1, "d").format("YYYY-MM-DD"):
             cpt1 = cpt1 + 1;
             days[0].moyenne = Number(days[0].moyenne) + Number(e[type]);
             break;
@@ -256,6 +256,7 @@ export default {
 
       //pour chaque jour de la semaine (4 jours) on calcule la moyenne à 2 décimals 
       for (let i = 0; i < 4; i++) {
+        
         switch (i) {
           case 0:
             days[i].moyenne = (days[i].moyenne / cpt1).toFixed(2);
@@ -311,6 +312,7 @@ export default {
         this.dataType("lumiere");
         this.getName();
         this.validationData();
+        
       }
       console.log(val);
     },
