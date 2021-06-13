@@ -16,18 +16,18 @@ const getMeteo = async (req, res) => {//Requete qui get toutes les donnees meteo
         })
         .catch(error => {
             console.log(error)
-            res.send({message: error.message})
+            res.send({ message: error.message })
         })
 }
 
 const getMeteoById = async (req, res) => {//Requete qui get tous les meteos par rapport à l'adresse mac d'un certain esp
     const addMac = req.params.id;
-    await MeteoModel.find({id: addMac})
+    await MeteoModel.find({ id: addMac })
         .then(rslt => {
-            rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur: "ESP inconnu ...."})
+            rslt.length ? res.status(200).json(rslt) : res.status(200).json({ erreur: "ESP inconnu ...." })
         })
         .catch(err => {
-            res.status(400).send({message: err.message});
+            res.status(400).send({ message: err.message });
         })
 }
 
@@ -62,14 +62,14 @@ const getFreshMeteoById = async (req, res) => {
     //.find permet de chercher dans le MeteoModel
     //.limit permet de limiter le nombre de données à recup
     //.sort permet de trier par date -1 signifie qu'on recup les données depuis la dernière insérée
-    await MeteoModel.find({id: addMac, date: {$gte: today.toLocaleString("sv-SE", {timeZone: "Europe/Paris"})}}).limit(maxData).sort( { date: -1 } )
+    await MeteoModel.find({ id: addMac, date: { $gte: today.toLocaleString("sv-SE", { timeZone: "Europe/Paris" }) } }).limit(maxData).sort({ date: -1 })
         .then(rslt => {
             //.reverse permet d'inverser le tableau
             rslt.reverse();
-            rslt.length ? res.status(200).json(rslt) : res.status(200).json({erreur: "ESP inconnu ...."})
+            rslt.length ? res.status(200).json(rslt) : res.status(200).json({ erreur: "ESP inconnu ...." })
         })
         .catch(err => {
-            res.status(400).send({message: err.message});
+            res.status(400).send({ message: err.message });
         })
 }
 
@@ -97,7 +97,7 @@ const previsionbyId = async (req, res) => {//Requete permettant de get les donn�
     //fetch sur l'api openWeatherMap
     //
 
-    await userModel.find({_id: id})
+    await userModel.find({ _id: id })
         .then(rslt => {
 
             console.log(rslt);
@@ -109,12 +109,12 @@ const previsionbyId = async (req, res) => {//Requete permettant de get les donn�
                             res.status(200).send(body)
                         });
                     }).catch(err => {
-                    res.send(err);
-                });
+                        res.send(err);
+                    });
             }
         })
         .catch(err => {
-            res.status(400).send({message: err.message});
+            res.status(400).send({ message: err.message });
         })
 
 
@@ -138,9 +138,13 @@ const prevision = async (req, res) => {
 //permet de comparer les donnees esp et celle 2 api afin de verifier la qualité des donnees
 const verificationDonnes = async (req, res) => {
     const esp = req.body;
-    if (moment(esp.date).day() !== moment().day()) {
+    //on précise le format de la date qu'on a dans esp.date et ensuite on le formate.
+    let dateEsp = moment(esp.date, "YYYY-MM-DD hh:mm:ss").format("MM-DD-YYYY");
+    let dateJour = moment().format("MM-DD-YYYY");
+    //si la date de l'esp est différente de la date du jour
+    if (dateEsp != dateJour) {
         console.log('pas frais')
-        res.status(400).json({data: 'data de l esp pas a jour'})
+        res.status(400).json({ data: 'data de l esp pas a jour' })
     } else {
         console.log(esp);
         const adresse = {
@@ -171,14 +175,14 @@ const verificationDonnes = async (req, res) => {
                                         pression: testPression(esp.pression, dataApi1.data[0].pres) || testPression(esp.temperature, dataApi2.main.pressure),
                                         humidite: testHumidity(esp.humidite, dataApi1.data[0].rh) || testHumidity(esp.humidite, dataApi2.main.humidity)
                                     }
-                                } catch(e) {
+                                } catch (e) {
                                     try {
                                         objetValid = {
                                             temperature: testTemp(esp.temperature, dataApi2.main.temp),
-                                            pression:  testPression(esp.temperature, dataApi2.main.pressure),
-                                            humidite:  testHumidity(esp.humidite, dataApi2.main.humidity) ,
+                                            pression: testPression(esp.temperature, dataApi2.main.pressure),
+                                            humidite: testHumidity(esp.humidite, dataApi2.main.humidity),
                                         }
-                                    } catch(e) {
+                                    } catch (e) {
                                         let message = "Verification indisponible pour le moment. La limite de vérification a peut-être été atteinte.";
                                         res.status(400).send(message);
                                     }
@@ -190,8 +194,8 @@ const verificationDonnes = async (req, res) => {
 
                             });
                         }).catch(err => {
-                        console.log(err)
-                    });
+                            console.log(err)
+                        });
 
                 })
             });

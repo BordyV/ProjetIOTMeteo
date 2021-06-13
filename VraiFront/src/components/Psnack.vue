@@ -15,7 +15,7 @@
      
      
     >
-    <span  v-for="prevision in previsions" :key="prevision.donnee">{{ "La météo "+ prevision.time + " sera" + prevision.donnee}}<br></span>
+    <span  v-for="(prevision, idx) in previsions" :key="idx">{{ "La météo "+ prevision.time + " sera" + prevision.donnee}}<br></span>
       
 
       <template v-slot:action="{ attrs }">

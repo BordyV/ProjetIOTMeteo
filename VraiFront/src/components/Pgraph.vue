@@ -22,24 +22,28 @@
                 {{ name }}
               </td>
               <td v-if="value">
-                              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <span>
-                    <v-icon style="color: green" dark v-on="on">mdi-check-circle-outline</v-icon>
-                  </span>
-                </template>
-                <span>Les données sont fiables.</span>
-            </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <span>
+                      <v-icon style="color: green" dark v-on="on"
+                        >mdi-check-circle-outline</v-icon
+                      >
+                    </span>
+                  </template>
+                  <span>Les données sont fiables.</span>
+                </v-tooltip>
               </td>
               <td v-if="!value">
                 <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <span>
-                    <v-icon style="color: red" dark v-on="on">mdi-alert-circle-outline</v-icon>
-                  </span>
-                </template>
-                <span>Les données ne sont pas fiables.</span>
-            </v-tooltip>
+                  <template #activator="{ on }">
+                    <span>
+                      <v-icon style="color: red" dark v-on="on"
+                        >mdi-alert-circle-outline</v-icon
+                      >
+                    </span>
+                  </template>
+                  <span>Les données ne sont pas fiables.</span>
+                </v-tooltip>
               </td>
             </tr>
           </tbody>
@@ -83,19 +87,25 @@
               v-for="(categorie, idx) in getMoyenneDataParSemaine(valeurSelec)"
               :key="idx"
             >
-              <span v-if="valeurSelec == 'pression' && categorie.moyenne != 'NaN'">
+              <span
+                v-if="valeurSelec == 'pression' && categorie.moyenne != 'NaN'"
+              >
                 {{ (categorie.moyenne / 100).toFixed(2) }}
               </span>
-              <span v-if="valeurSelec != 'pression' && categorie.moyenne != 'NaN'">
+              <span
+                v-if="valeurSelec != 'pression' && categorie.moyenne != 'NaN'"
+              >
                 {{ categorie.moyenne }}
               </span>
               <span v-if="categorie.moyenne == 'NaN'">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-icon style="color: red" dark v-on="on">mdi-alert-circle-outline</v-icon>
-                </template>
-                <span>Pas de données ce jour là.</span>
-            </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-icon style="color: red" dark v-on="on"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                  </template>
+                  <span>Pas de données ce jour là.</span>
+                </v-tooltip>
               </span>
             </td>
           </tr>
@@ -218,23 +228,23 @@ export default {
       const moment = require("moment");
       const dateFrom = moment().subtract(4, "d").format("YYYY-MM-DD");
       //filtre pour récuperer les données jusqu'a il y a 4 jours sans prendre la date du jour
-      const dataOfTheWeek = this.valEsp.filter((data) => data.date > dateFrom).filter((data) => data.date != moment() );
+      const dataOfTheWeek = this.valEsp
+        .filter((data) => data.date > dateFrom)
+        .filter((data) => data.date != moment());
       const days = [
         { moyenne: 0, jour: moment().subtract(1, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(2, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(3, "d").format("YYYY-MM-DD") },
         { moyenne: 0, jour: moment().subtract(4, "d").format("YYYY-MM-DD") },
-
       ];
       let cpt1 = 0;
       let cpt2 = 0;
       let cpt3 = 0;
       let cpt4 = 0;
 
-      //pour chaque data de la semaine (4 jours) on cpt et on additionne pour la moyenne plus tard 
-      dataOfTheWeek.forEach((e) => {debugger
+      //pour chaque data de la semaine (4 jours) on cpt et on additionne pour la moyenne plus tard
+      dataOfTheWeek.forEach((e) => {
         switch (moment(e.date).format("YYYY-MM-DD")) {
-          
           case moment().subtract(4, "d").format("YYYY-MM-DD"):
             cpt4 = cpt4 + 1;
             days[3].moyenne = Number(days[3].moyenne) + Number(e[type]);
@@ -254,9 +264,8 @@ export default {
         }
       });
 
-      //pour chaque jour de la semaine (4 jours) on calcule la moyenne à 2 décimals 
+      //pour chaque jour de la semaine (4 jours) on calcule la moyenne à 2 décimals
       for (let i = 0; i < 4; i++) {
-        
         switch (i) {
           case 0:
             days[i].moyenne = (days[i].moyenne / cpt1).toFixed(2);
@@ -278,7 +287,6 @@ export default {
 
     //appel de l'api pour verifier les datas
     validationData() {
-      console.log("validation");
       fetch(urlApi + "/meteo/verif", {
         method: "post",
         body: JSON.stringify(this.valEsp[this.valEsp.length - 1]),
@@ -289,8 +297,13 @@ export default {
       }).then((res) => {
         try {
           res.json().then((data) => {
-            this.etatValiditeData = data;
-            this.aJour = true;
+            if (!data.data) {
+              this.etatValiditeData = data;
+              this.aJour = true;
+            } else {
+              this.etatValiditeData = null;
+              this.aJour = false;
+            }
           });
           //
         } catch (err) {
@@ -312,7 +325,6 @@ export default {
         this.dataType("lumiere");
         this.getName();
         this.validationData();
-        
       }
       console.log(val);
     },
@@ -348,7 +360,7 @@ h2 {
   margin-top: 50px;
   margin-left: 50px;
 }
-span{
+span {
   display: flex;
   justify-content: center;
 }
