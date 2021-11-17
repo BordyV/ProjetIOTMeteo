@@ -7,11 +7,11 @@ Notre projet consiste en la creation d'une plateforme de partage de donnees mete
 Nous pourrons ajouter quelques fonctionnalités suplémentaires comme l'ajout de certains esp a nos favoris ce qui les fera apparaitre dans un composant spécifique.<br>
 L'ajout d'une application bureau est aussi débattu en interne.
 
+Pour une explication complète du projet n'hésitez pas à lire le [rapport](https://github.com/BordyV/ProjetIOTMeteo/blob/main/docs/rapport_projet_METEO_grp_13.pdf). 
 # Ou trouver le projet ?
 
 Le projet se trouve actuellement sur https://valentinbordy.fr/iotMeteo/ et est pleinement fonctionnel.
 
-Si vous souhaitez le déployer sur heroku voici la doc : https://github.com/BordyV/ProjetIOTMeteoDeplHeroku ( sans la partie script broker comme parlé par avec vous par message ).
 
 Si vous souhaitez le lancer en local, n'oubliez pas de vérifier les connections aux bases de données dans ./ApiMeteo/config/dbConfig.js
 
@@ -91,11 +91,22 @@ XX/04 Reception du nouveau matériel, ajout des nouveaux capteurs <br>
 
 # TECHNOLOGIE
 
-Pour ce projet nous utiliserons pour le front, vue.js, une technologie facile d'accés et maitrisé par les membres du groupe.<br> 
+Pour ce projet nous utiliserons pour le front, vue.js, une technologie facile d'accès et maitrisé par les membres du groupe.<br> 
 Pour l'API nous utiliserons Node.js couplé a Express.<br>
-Les données seront récupéré sous format json et stocké dans une base de donnée MongoDB.
+Les données seront récupérées sous format json et stocké dans une base de données MongoDB.
 
 
 # ATTRIBUTION
 
 Voir CSV
+
+## disclaimer
+tous les mots de passe apparents ont été changés, les mots de passe présents sont les anciens pour expliquer comment cela fonctionne ( de même pour le secret JWT ).
+
+## Groupe de projet : 
+
+  * [Bordy Valentin](https://github.com/bordyV)
+  * [Birger Mathieu](https://github.com/MathieuBirger)
+  * [Fabre--Sauterey Guilhem](https://github.com/Guilhem-Fabre)
+  * [Karouia Alaedine](https://github.com/Alaedinekar)
+  * [Laureandeau Yohann](https://github.com/yohannlaurendeau)
